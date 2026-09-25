@@ -1,0 +1,109 @@
+{
+  "case_id": "SGD70597",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 23110.0,
+  "probabilite_fraude": 0.9999,
+  "resume": "Déclaration SGD70597 (IMPNEW003, SH 870333) orientée en voie Rouge par le scoreur. Principal facteur : Taux de fraude lissé de l'importateur IMPNEW003 : 70,3 % (sur les contrôles passés révélés).",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 99,99 %, montant en jeu (P × revenu attendu) = 23 110 TND simulés.",
+      "evidence_ids": [
+        "RISK-SGD70597"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMPNEW003 : 70,3 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD70597-risk_importer"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 69,0 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD70597-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "13 contrôles passés de cet importateur avec résultat connu.",
+      "evidence_ids": [
+        "SHAP-SGD70597-n_inspected_importer"
+      ]
+    },
+    {
+      "texte": "28 déclarations passées de cet importateur.",
+      "evidence_ids": [
+        "SHAP-SGD70597-hist_count_importer"
+      ]
+    },
+    {
+      "texte": "Prix unitaire déclaré 426,80 contre une médiane de 1 793,80 sur 322 déclarations passées comparables.",
+      "evidence_ids": [
+        "DECL-SGD70597",
+        "PEER-870333-CNTRY376"
+      ]
+    },
+    {
+      "texte": "L'importateur IMPNEW003 a 28 déclarations passées ; 13 contrôles avec résultat connu, dont 13 fraudes confirmées.",
+      "evidence_ids": [
+        "HIST-importer-IMPNEW003"
+      ]
+    },
+    {
+      "texte": "Le déclarant DEC9697 présente un taux de fraude lissé de 48,1 % sur 7 contrôles révélés.",
+      "evidence_ids": [
+        "LINK-IMPNEW003"
+      ]
+    },
+    {
+      "texte": "Fraude confirmée similaire : SGD67872 (semaine 38, SH 870432), revenu redressé 4 756 TND simulés.",
+      "evidence_ids": [
+        "SIM-SGD67872"
+      ]
+    },
+    {
+      "texte": "Fraude confirmée similaire : SGD60437 (semaine 35, SH 870323), revenu redressé 2 069 TND simulés.",
+      "evidence_ids": [
+        "SIM-SGD60437"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "sous-évaluation",
+      "justification": "Prix unitaire déclaré 426,80, inférieur à la médiane 1 793,80 des déclarations comparables.",
+      "evidence_ids": [
+        "DECL-SGD70597",
+        "PEER-870333-CNTRY376"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "Historique de fraudes révélées sur l'importateur et/ou ses déclarants liés (voir taux de fraude lissés).",
+      "evidence_ids": [
+        "LINK-IMPNEW003",
+        "SHAP-SGD70597-risk_importer",
+        "SHAP-SGD70597-risk_imp_hs4"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+  ],
+  "incertitudes": [
+    "Base légale : à confirmer par l'agent (aucun texte juridique chargé dans le corpus).",
+    "Données synthétiques (BACUDA) et montants simulés : aucune conclusion sur des cas réels.",
+    "Les fraudes connues ne proviennent que des déclarations inspectées par le passé (étiquettes sélectives)."
+  ],
+  "niveau_confiance": "élevé",
+  "_mode": "fallback",
+  "_modele": null,
+  "_raison_fallback": "généré sans LLM",
+  "_validation": [
+    {
+      "fallback": true,
+      "erreurs": []
+    }
+  ],
+  "_demo_injection": false
+}

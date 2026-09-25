@@ -1,0 +1,95 @@
+{
+  "case_id": "SGD71348",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 2429.0,
+  "probabilite_fraude": 0.9999,
+  "resume": "Déclaration SGD71348 (IMPNEW001, SH 870323) orientée en voie Rouge par le scoreur. Principal facteur : Taux de fraude lissé de l'importateur IMPNEW001 : 78,7 % (sur les contrôles passés révélés).",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 99,99 %, montant en jeu (P × revenu attendu) = 2 429 TND simulés.",
+      "evidence_ids": [
+        "RISK-SGD71348"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMPNEW001 : 78,7 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD71348-risk_importer"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 76,5 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD71348-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "22 contrôles passés de cet importateur avec résultat connu.",
+      "evidence_ids": [
+        "SHAP-SGD71348-n_inspected_importer"
+      ]
+    },
+    {
+      "texte": "Prix unitaire déclaré 4 676,80 contre une médiane de 2 421,00 sur 2240 déclarations passées comparables.",
+      "evidence_ids": [
+        "DECL-SGD71348",
+        "PEER-870323-CNTRY759"
+      ]
+    },
+    {
+      "texte": "L'importateur IMPNEW001 a 42 déclarations passées ; 22 contrôles avec résultat connu, dont 22 fraudes confirmées.",
+      "evidence_ids": [
+        "HIST-importer-IMPNEW001"
+      ]
+    },
+    {
+      "texte": "Le déclarant DEC2342 présente un taux de fraude lissé de 50,8 % sur 12 contrôles révélés.",
+      "evidence_ids": [
+        "LINK-IMPNEW001"
+      ]
+    },
+    {
+      "texte": "Fraude confirmée similaire : SGD68114 (semaine 38, SH 870324), revenu redressé 283 TND simulés.",
+      "evidence_ids": [
+        "SIM-SGD68114"
+      ]
+    },
+    {
+      "texte": "Fraude confirmée similaire : SGD67587 (semaine 38, SH 870324), revenu redressé 746 TND simulés.",
+      "evidence_ids": [
+        "SIM-SGD67587"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "réseau",
+      "justification": "Historique de fraudes révélées sur l'importateur et/ou ses déclarants liés (voir taux de fraude lissés).",
+      "evidence_ids": [
+        "LINK-IMPNEW001",
+        "SHAP-SGD71348-risk_importer",
+        "SHAP-SGD71348-risk_imp_hs4"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Contrôle documentaire standard"
+  ],
+  "incertitudes": [
+    "Base légale : à confirmer par l'agent (aucun texte juridique chargé dans le corpus).",
+    "Données synthétiques (BACUDA) et montants simulés : aucune conclusion sur des cas réels.",
+    "Les fraudes connues ne proviennent que des déclarations inspectées par le passé (étiquettes sélectives)."
+  ],
+  "niveau_confiance": "élevé",
+  "_mode": "fallback",
+  "_modele": null,
+  "_raison_fallback": "généré sans LLM",
+  "_validation": [
+    {
+      "fallback": true,
+      "erreurs": []
+    }
+  ],
+  "_demo_injection": false
+}

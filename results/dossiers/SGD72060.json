@@ -1,0 +1,101 @@
+{
+  "case_id": "SGD72060",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 1571.0,
+  "probabilite_fraude": 0.9999,
+  "resume": "Déclaration SGD72060 (IMP919308, SH 842890) orientée en voie Rouge par le scoreur. Principal facteur : Taux de fraude lissé du couple importateur × SH4 8428 : 31,8 % (sur les contrôles passés révélés).",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 99,99 %, montant en jeu (P × revenu attendu) = 1 571 TND simulés.",
+      "evidence_ids": [
+        "RISK-SGD72060"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8428 : 31,8 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD72060-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de la sous-position SH 842890 : 28,9 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD72060-risk_hs6"
+      ]
+    },
+    {
+      "texte": "Quantité déclarée : 13.",
+      "evidence_ids": [
+        "SHAP-SGD72060-l_qty"
+      ]
+    },
+    {
+      "texte": "Score d'anomalie multivariée (Isolation Forest) : 0,46.",
+      "evidence_ids": [
+        "SHAP-SGD72060-iso_score"
+      ]
+    },
+    {
+      "texte": "Taux de taxation déclaré 0,4 écarts robustes sous la médiane des déclarations comparables (même SH4, SH 842890) : 4,1 % contre une médiane de 11,8 %.",
+      "evidence_ids": [
+        "SHAP-SGD72060-z_tax_rt"
+      ]
+    },
+    {
+      "texte": "Prix unitaire déclaré 2 516,62 contre une médiane de 688,56 sur 10 déclarations passées comparables.",
+      "evidence_ids": [
+        "DECL-SGD72060",
+        "PEER-842890-CNTRY376"
+      ]
+    },
+    {
+      "texte": "L'importateur IMP919308 a 1 déclarations passées ; 0 contrôles avec résultat connu, dont 0 fraudes confirmées.",
+      "evidence_ids": [
+        "HIST-importer-IMP919308"
+      ]
+    },
+    {
+      "texte": "Fraude confirmée similaire : SGD18180 (semaine 12, SH 591190), revenu redressé 643 TND simulés.",
+      "evidence_ids": [
+        "SIM-SGD18180"
+      ]
+    },
+    {
+      "texte": "Fraude confirmée similaire : SGD44584 (semaine 26, SH 847310), revenu redressé 790 TND simulés.",
+      "evidence_ids": [
+        "SIM-SGD44584"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "réseau",
+      "justification": "Historique de fraudes révélées sur l'importateur et/ou ses déclarants liés (voir taux de fraude lissés).",
+      "evidence_ids": [
+        "LINK-IMP919308",
+        "SHAP-SGD72060-risk_imp_hs4"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)",
+    "Vérification de l'identité et de l'activité déclarée de l'importateur"
+  ],
+  "incertitudes": [
+    "Base légale : à confirmer par l'agent (aucun texte juridique chargé dans le corpus).",
+    "Données synthétiques (BACUDA) et montants simulés : aucune conclusion sur des cas réels.",
+    "Les fraudes connues ne proviennent que des déclarations inspectées par le passé (étiquettes sélectives)."
+  ],
+  "niveau_confiance": "élevé",
+  "_mode": "fallback",
+  "_modele": null,
+  "_raison_fallback": "généré sans LLM",
+  "_validation": [
+    {
+      "fallback": true,
+      "erreurs": []
+    }
+  ],
+  "_demo_injection": false
+}

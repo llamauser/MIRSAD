@@ -1,0 +1,95 @@
+{
+  "case_id": "SGD70538",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 7510.0,
+  "probabilite_fraude": 0.9999,
+  "resume": "Déclaration SGD70538 (IMPNEW015, SH 870323) orientée en voie Rouge par le scoreur. Principal facteur : Taux de fraude lissé de l'importateur IMPNEW015 : 65,9 % (sur les contrôles passés révélés).",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 99,99 %, montant en jeu (P × revenu attendu) = 7 510 TND simulés.",
+      "evidence_ids": [
+        "RISK-SGD70538"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMPNEW015 : 65,9 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD70538-risk_importer"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 65,9 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD70538-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de la sous-position SH 870323 : 39,5 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD70538-risk_hs6"
+      ]
+    },
+    {
+      "texte": "Prix unitaire déclaré 81 486,40 contre une médiane de 2 437,50 sur 3624 déclarations passées comparables.",
+      "evidence_ids": [
+        "DECL-SGD70538",
+        "PEER-870323-CNTRY680"
+      ]
+    },
+    {
+      "texte": "L'importateur IMPNEW015 a 35 déclarations passées ; 10 contrôles avec résultat connu, dont 10 fraudes confirmées.",
+      "evidence_ids": [
+        "HIST-importer-IMPNEW015"
+      ]
+    },
+    {
+      "texte": "Le déclarant DEC1451 présente un taux de fraude lissé de 47,9 % sur 5 contrôles révélés.",
+      "evidence_ids": [
+        "LINK-IMPNEW015"
+      ]
+    },
+    {
+      "texte": "Fraude confirmée similaire : SGD70144 (semaine 39, SH 870210), revenu redressé 2 221 TND simulés.",
+      "evidence_ids": [
+        "SIM-SGD70144"
+      ]
+    },
+    {
+      "texte": "Fraude confirmée similaire : SGD66875 (semaine 38, SH 870323), revenu redressé 2 597 TND simulés.",
+      "evidence_ids": [
+        "SIM-SGD66875"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "réseau",
+      "justification": "Historique de fraudes révélées sur l'importateur et/ou ses déclarants liés (voir taux de fraude lissés).",
+      "evidence_ids": [
+        "LINK-IMPNEW015",
+        "SHAP-SGD70538-risk_importer",
+        "SHAP-SGD70538-risk_imp_hs4"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+  ],
+  "incertitudes": [
+    "Base légale : à confirmer par l'agent (aucun texte juridique chargé dans le corpus).",
+    "Données synthétiques (BACUDA) et montants simulés : aucune conclusion sur des cas réels.",
+    "Les fraudes connues ne proviennent que des déclarations inspectées par le passé (étiquettes sélectives)."
+  ],
+  "niveau_confiance": "élevé",
+  "_mode": "fallback",
+  "_modele": null,
+  "_raison_fallback": "généré sans LLM",
+  "_validation": [
+    {
+      "fallback": true,
+      "erreurs": []
+    }
+  ],
+  "_demo_injection": false
+}

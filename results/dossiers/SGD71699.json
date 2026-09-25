@@ -1,0 +1,96 @@
+{
+  "case_id": "SGD71699",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 1843.0,
+  "probabilite_fraude": 0.9999,
+  "resume": "Déclaration SGD71699 (IMP147898, SH 843699) orientée en voie Rouge par le scoreur. Principal facteur : Taux de fraude lissé du couple importateur × SH4 8436 : 31,8 % (sur les contrôles passés révélés).",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 99,99 %, montant en jeu (P × revenu attendu) = 1 843 TND simulés.",
+      "evidence_ids": [
+        "RISK-SGD71699"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8436 : 31,8 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD71699-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de la sous-position SH 843699 : 26,5 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD71699-risk_hs6"
+      ]
+    },
+    {
+      "texte": "3 déclarations passées de cet importateur.",
+      "evidence_ids": [
+        "SHAP-SGD71699-hist_count_importer"
+      ]
+    },
+    {
+      "texte": "Prix unitaire déclaré 28,89 contre une médiane de 179,87 sur 12 déclarations passées comparables.",
+      "evidence_ids": [
+        "DECL-SGD71699",
+        "PEER-843699-CNTRY429"
+      ]
+    },
+    {
+      "texte": "L'importateur IMP147898 a 3 déclarations passées ; 0 contrôles avec résultat connu, dont 0 fraudes confirmées.",
+      "evidence_ids": [
+        "HIST-importer-IMP147898"
+      ]
+    },
+    {
+      "texte": "Fraude confirmée similaire : SGD54957 (semaine 32, SH 870323), revenu redressé 2 840 TND simulés.",
+      "evidence_ids": [
+        "SIM-SGD54957"
+      ]
+    },
+    {
+      "texte": "Fraude confirmée similaire : SGD53821 (semaine 31, SH 870332), revenu redressé 4 360 TND simulés.",
+      "evidence_ids": [
+        "SIM-SGD53821"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "sous-évaluation",
+      "justification": "Prix unitaire déclaré 28,89, inférieur à la médiane 179,87 des déclarations comparables.",
+      "evidence_ids": [
+        "DECL-SGD71699",
+        "PEER-843699-CNTRY429"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "Historique de fraudes révélées sur l'importateur et/ou ses déclarants liés (voir taux de fraude lissés).",
+      "evidence_ids": [
+        "LINK-IMP147898",
+        "SHAP-SGD71699-risk_imp_hs4"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+  ],
+  "incertitudes": [
+    "Base légale : à confirmer par l'agent (aucun texte juridique chargé dans le corpus).",
+    "Données synthétiques (BACUDA) et montants simulés : aucune conclusion sur des cas réels.",
+    "Les fraudes connues ne proviennent que des déclarations inspectées par le passé (étiquettes sélectives)."
+  ],
+  "niveau_confiance": "élevé",
+  "_mode": "fallback",
+  "_modele": null,
+  "_raison_fallback": "généré sans LLM",
+  "_validation": [
+    {
+      "fallback": true,
+      "erreurs": []
+    }
+  ],
+  "_demo_injection": false
+}

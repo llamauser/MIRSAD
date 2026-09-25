@@ -1,0 +1,89 @@
+{
+  "case_id": "SGD72407",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 2757.0,
+  "probabilite_fraude": 0.9999,
+  "resume": "Déclaration SGD72407 (IMPNEW012, SH 870390) orientée en voie Rouge par le scoreur. Principal facteur : Taux de fraude lissé de l'importateur IMPNEW012 : 77,3 % (sur les contrôles passés révélés).",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 99,99 %, montant en jeu (P × revenu attendu) = 2 757 TND simulés.",
+      "evidence_ids": [
+        "RISK-SGD72407"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMPNEW012 : 77,3 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD72407-risk_importer"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 72,7 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD72407-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Prix unitaire déclaré 52 511,60 contre une médiane de 2 552,30 sur 1422 déclarations passées comparables.",
+      "evidence_ids": [
+        "DECL-SGD72407",
+        "PEER-870390-CNTRY680"
+      ]
+    },
+    {
+      "texte": "L'importateur IMPNEW012 a 48 déclarations passées ; 20 contrôles avec résultat connu, dont 20 fraudes confirmées.",
+      "evidence_ids": [
+        "HIST-importer-IMPNEW012"
+      ]
+    },
+    {
+      "texte": "Le déclarant DEC6300 présente un taux de fraude lissé de 51,1 % sur 6 contrôles révélés.",
+      "evidence_ids": [
+        "LINK-IMPNEW012"
+      ]
+    },
+    {
+      "texte": "Fraude confirmée similaire : SGD68216 (semaine 38, SH 870323), revenu redressé 2 243 TND simulés.",
+      "evidence_ids": [
+        "SIM-SGD68216"
+      ]
+    },
+    {
+      "texte": "Fraude confirmée similaire : SGD69032 (semaine 39, SH 870210), revenu redressé 2 969 TND simulés.",
+      "evidence_ids": [
+        "SIM-SGD69032"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "réseau",
+      "justification": "Historique de fraudes révélées sur l'importateur et/ou ses déclarants liés (voir taux de fraude lissés).",
+      "evidence_ids": [
+        "LINK-IMPNEW012",
+        "SHAP-SGD72407-risk_importer",
+        "SHAP-SGD72407-risk_imp_hs4"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Contrôle documentaire standard"
+  ],
+  "incertitudes": [
+    "Base légale : à confirmer par l'agent (aucun texte juridique chargé dans le corpus).",
+    "Données synthétiques (BACUDA) et montants simulés : aucune conclusion sur des cas réels.",
+    "Les fraudes connues ne proviennent que des déclarations inspectées par le passé (étiquettes sélectives)."
+  ],
+  "niveau_confiance": "élevé",
+  "_mode": "fallback",
+  "_modele": null,
+  "_raison_fallback": "généré sans LLM",
+  "_validation": [
+    {
+      "fallback": true,
+      "erreurs": []
+    }
+  ],
+  "_demo_injection": false
+}

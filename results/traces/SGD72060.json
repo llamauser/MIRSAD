@@ -1,0 +1,289 @@
+[
+  {
+    "step": 1,
+    "tool": "get_risk_assessment",
+    "args": {
+      "case_id": "SGD72060"
+    },
+    "output": {
+      "evidence_id": "RISK-SGD72060",
+      "case_id": "SGD72060",
+      "voie": "Rouge",
+      "probabilite_fraude": 0.9999,
+      "revenu_attendu_si_fraude_TND": 1571.0,
+      "montant_en_jeu_TND": 1571.0,
+      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 99,99 %, montant en jeu (P × revenu attendu) = 1 571 TND simulés.",
+      "facteurs_shap": [
+        {
+          "evidence_id": "SHAP-SGD72060-risk_imp_hs4",
+          "variable": "risk_imp_hs4",
+          "valeur": 0.3178,
+          "contribution_shap": 2.038,
+          "sens": "augmente le risque",
+          "texte": "Taux de fraude lissé du couple importateur × SH4 8428 : 31,8 % (sur les contrôles passés révélés)."
+        },
+        {
+          "evidence_id": "SHAP-SGD72060-risk_hs6",
+          "variable": "risk_hs6",
+          "valeur": 0.2889,
+          "contribution_shap": 0.1835,
+          "sens": "augmente le risque",
+          "texte": "Taux de fraude lissé de la sous-position SH 842890 : 28,9 % (sur les contrôles passés révélés)."
+        },
+        {
+          "evidence_id": "SHAP-SGD72060-l_qty",
+          "variable": "l_qty",
+          "valeur": 2.6391,
+          "contribution_shap": 0.1522,
+          "sens": "augmente le risque",
+          "texte": "Quantité déclarée : 13."
+        },
+        {
+          "evidence_id": "SHAP-SGD72060-iso_score",
+          "variable": "iso_score",
+          "valeur": 0.4595,
+          "contribution_shap": 0.1343,
+          "sens": "augmente le risque",
+          "texte": "Score d'anomalie multivariée (Isolation Forest) : 0,46."
+        },
+        {
+          "evidence_id": "SHAP-SGD72060-z_tax_rt",
+          "variable": "z_tax_rt",
+          "valeur": -0.4476,
+          "contribution_shap": 0.1032,
+          "sens": "augmente le risque",
+          "texte": "Taux de taxation déclaré 0,4 écarts robustes sous la médiane des déclarations comparables (même SH4, SH 842890) : 4,1 % contre une médiane de 11,8 %."
+        }
+      ],
+      "controles_recommandes_regles": [
+        "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)",
+        "Vérification de l'identité et de l'activité déclarée de l'importateur"
+      ],
+      "note": "Scores issus du modèle LightGBM calibré ; l'agent ne peut pas modifier la voie."
+    },
+    "duree_ms": 10
+  },
+  {
+    "step": 2,
+    "tool": "get_declaration",
+    "args": {
+      "case_id": "SGD72060"
+    },
+    "output": {
+      "evidence_id": "DECL-SGD72060",
+      "case_id": "SGD72060",
+      "date": "2013-10-07",
+      "semaine": 40,
+      "importateur": "IMP919308",
+      "declarant": "DEC1704",
+      "pays_origine": "CNTRY376",
+      "bureau": "OFFICE35",
+      "code_sh10": "8428900000",
+      "sh6": "842890",
+      "sh4": "8428",
+      "quantite": 13.0,
+      "poids_brut_kg": 1536.0,
+      "valeur_fob": 23480.0,
+      "valeur_cif": 32716.0,
+      "taxes": 1343.0,
+      "prix_unitaire": 2516.62,
+      "unite_monetaire": "TND simulés (données synthétiques)"
+    },
+    "duree_ms": 0
+  },
+  {
+    "step": 3,
+    "tool": "get_entity_history",
+    "args": {
+      "kind": "importateur",
+      "entity_id": "IMP919308"
+    },
+    "output": {
+      "evidence_id": "HIST-importer-IMP919308",
+      "type": "importer",
+      "id": "IMP919308",
+      "declarations_passees": 1,
+      "premiere_declaration": "2013-08-06",
+      "valeur_cif_totale": 71517.0,
+      "principales_positions_sh4": {
+        "8517": 1
+      },
+      "controles_passes_reveles": 0,
+      "fraudes_confirmees": 0,
+      "taux_fraude_lisse": 0.3178,
+      "revenu_redresse_passe_TND": 0.0,
+      "note": "Historique limité aux semaines passées ; fraudes connues uniquement pour les déclarations inspectées."
+    },
+    "duree_ms": 4
+  },
+  {
+    "step": 4,
+    "tool": "find_links",
+    "args": {
+      "importer_id": "IMP919308",
+      "declarant_id": "DEC1704"
+    },
+    "output": {
+      "importateur": "IMP919308",
+      "degre": 2,
+      "nouvel_importateur": false,
+      "declarants": [
+        {
+          "declarant": "DEC6087",
+          "taux_fraude_lisse": 0.3699,
+          "controles_reveles": 4,
+          "degre_importateurs": 34
+        },
+        {
+          "declarant": "DEC1704",
+          "taux_fraude_lisse": 0.227,
+          "controles_reveles": 4,
+          "degre_importateurs": 47
+        }
+      ],
+      "importateurs_lies_via_declarant": [
+        {
+          "importer": "IMPNEW011",
+          "taux_fraude_lisse": 0.7564,
+          "controles_reveles": 18
+        },
+        {
+          "importer": "IMP710989",
+          "taux_fraude_lisse": 0.4315,
+          "controles_reveles": 2
+        },
+        {
+          "importer": "IMP568004",
+          "taux_fraude_lisse": 0.3799,
+          "controles_reveles": 1
+        },
+        {
+          "importer": "IMP893597",
+          "taux_fraude_lisse": 0.3482,
+          "controles_reveles": 2
+        },
+        {
+          "importer": "IMP660556",
+          "taux_fraude_lisse": 0.3482,
+          "controles_reveles": 2
+        }
+      ],
+      "n_importateurs_lies": 77,
+      "taux_fraude_voisins_moyen": 0.4528,
+      "declarant_risque_eleve": false,
+      "nouvel_importateur_lie_a_declarant_risque": false,
+      "seuil_risque_declarant": 0.25,
+      "evidence_id": "LINK-IMP919308"
+    },
+    "duree_ms": 6
+  },
+  {
+    "step": 5,
+    "tool": "get_peer_prices",
+    "args": {
+      "hs6": "842890",
+      "country": "CNTRY376"
+    },
+    "output": {
+      "evidence_id": "PEER-842890-CNTRY376",
+      "sh6": "842890",
+      "pays": "CNTRY376",
+      "meme_sh6_meme_pays": {
+        "n": 0,
+        "prix_unitaire_median": null,
+        "prix_unitaire_p10": null,
+        "prix_unitaire_p90": null,
+        "taux_taxation_median_pct": null
+      },
+      "meme_sh6_tous_pays": {
+        "n": 10,
+        "prix_unitaire_median": 688.56,
+        "prix_unitaire_p10": 1.08,
+        "prix_unitaire_p90": 13584.97,
+        "taux_taxation_median_pct": 9.2
+      }
+    },
+    "duree_ms": 6
+  },
+  {
+    "step": 6,
+    "tool": "find_similar_cases",
+    "args": {
+      "case_id": "SGD72060",
+      "k": 3
+    },
+    "output": {
+      "evidence_id": "SIMSET-SGD72060",
+      "base": "fraudes confirmées lors de contrôles passés",
+      "n_base": 1169,
+      "resultats_similaires": [
+        {
+          "evidence_id": "SIM-SGD18180",
+          "case_id": "SGD18180",
+          "semaine": 12,
+          "importateur": "IMP700836",
+          "sh6": "591190",
+          "pays": "CNTRY393",
+          "revenu_redresse_TND": 643.0,
+          "distance": 1.08
+        },
+        {
+          "evidence_id": "SIM-SGD44584",
+          "case_id": "SGD44584",
+          "semaine": 26,
+          "importateur": "IMP756503",
+          "sh6": "847310",
+          "pays": "CNTRY976",
+          "revenu_redresse_TND": 790.0,
+          "distance": 1.28
+        },
+        {
+          "evidence_id": "SIM-SGD44881",
+          "case_id": "SGD44881",
+          "semaine": 26,
+          "importateur": "IMP857248",
+          "sh6": "853661",
+          "pays": "CNTRY622",
+          "revenu_redresse_TND": 1340.0,
+          "distance": 1.44
+        }
+      ]
+    },
+    "duree_ms": 4
+  },
+  {
+    "step": 7,
+    "tool": "get_mirror_evidence",
+    "args": {
+      "hs_code": "84"
+    },
+    "output": {
+      "evidence_id": "MIRROR-84",
+      "disponible": false,
+      "raison": "données miroir indisponibles"
+    },
+    "duree_ms": 0
+  },
+  {
+    "step": 8,
+    "tool": "search_regulations",
+    "args": {
+      "query": "contrôle douanier déclaration fraude 842890",
+      "k": 4
+    },
+    "output": {
+      "evidence_id": "REG-f0adefe0",
+      "requete": "contrôle douanier déclaration fraude 842890",
+      "corpus_juridique_disponible": false,
+      "resultats": [
+        {
+          "chunk_id": "HS-842890",
+          "source": "Système harmonisé 2022 (datasets/harmonized-system, ODC-PDDL)",
+          "text": "842890 Lifting, handling, loading or unloading machinery; n.e.c. in heading no. 8425, 8426, 8427 or 8428"
+        }
+      ],
+      "note": "Aucun texte juridique n'a été chargé : base légale à confirmer par l'agent."
+    },
+    "duree_ms": 7
+  }
+]

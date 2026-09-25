@@ -119,6 +119,8 @@ def recommended_checks(row: pd.Series, facts: list[dict], links: dict | None = N
                    "Comparer le prix avec les déclarations comparables (même SH6, même origine)"]
     if pos & {"risk_hs6", "z_tax_rt", "tax_rt"} or abs(row.get("z_tax_rt", 0)) > 2:
         checks += ["Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"]
+    if row.get("z_uv", 0) > 2:
+        checks += ["Vérifier la quantité et l'espèce déclarées (valeur unitaire anormalement élevée)"]
     if abs(row.get("z_kg_unit", 0)) > 2 or pos & {"z_kg_unit", "l_kg_unit"}:
         checks += ["Pesage de la marchandise"]
     if row.get("is_new_importer", 0) and links and links.get("declarant_risque_eleve"):

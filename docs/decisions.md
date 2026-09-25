@@ -8,3 +8,4 @@
 - **Sanity split** risk profiles: training rows get the prior only (no in-sample target encoding).
 - **Seeds 3 → 10**: the first 3-seed grid showed bimodal outcomes on the injected scheme (either locked-on within a few weeks or missed entirely: e.g. MIRSAD ε=0.1, r=5%: 0.77 / 0.58 / 0.00). 3 seeds cannot estimate that; we increased measurement to seeds 0–9. No method or scenario parameter was changed.
 - **ε = 0 is `model_er`** (identical code path), so the mirsad grid only runs ε ∈ {0.1, 0.2}.
+- **Dossiers**: top 20 red cases by ER of demo week 40 (all from the injected scheme in seed 0) + the 5 best-ranked red cases not from the scheme (variety) + 1 injection demo case (team-built description).
