@@ -1,0 +1,21 @@
+{
+  "annees_essayees": [
+    2024,
+    2023
+  ],
+  "c_cif_fob": 0.07,
+  "seuil_usd": 1000000,
+  "mode": "previewFinalData AG2",
+  "paires": {
+    "China": 2024,
+    "Türkiye": 2024,
+    "Italy": 2024,
+    "France": 2024,
+    "Germany": 2024,
+    "Spain": 2024,
+    "Algeria": 2024
+  },
+  "statut": "ok",
+  "n_lignes": 366,
+  "fuite_totale_usd": 3009634562.494795
+}
