@@ -91,7 +91,7 @@
       "prix_unitaire": 276.18,
       "unite_monetaire": "TND simulés (données synthétiques)"
     },
-    "duree_ms": 2
+    "duree_ms": 0
   },
   {
     "step": 3,
@@ -114,7 +114,7 @@
       "revenu_redresse_passe_TND": 0.0,
       "note": "Historique limité aux semaines passées ; fraudes connues uniquement pour les déclarations inspectées."
     },
-    "duree_ms": 3
+    "duree_ms": 2
   },
   {
     "step": 4,
@@ -169,7 +169,7 @@
       "seuil_risque_declarant": 0.25,
       "evidence_id": "LINK-IMP432786"
     },
-    "duree_ms": 5
+    "duree_ms": 7
   },
   {
     "step": 5,
@@ -243,7 +243,7 @@
         }
       ]
     },
-    "duree_ms": 3
+    "duree_ms": 4
   },
   {
     "step": 7,
@@ -253,10 +253,52 @@
     },
     "output": {
       "evidence_id": "MIRROR-40",
-      "disponible": false,
-      "raison": "données miroir indisponibles"
+      "disponible": true,
+      "nature": "indicateur macro de priorisation (Tunisie réelle, UN Comtrade), pas une preuve pour cette déclaration",
+      "flux": [
+        {
+          "partner": "Germany",
+          "year": 2024,
+          "M_cif_usd": 17283933.577,
+          "X_fob_usd": 24095141.634,
+          "gap_log": 0.4,
+          "leak_usd": 7941932.684
+        },
+        {
+          "partner": "Italy",
+          "year": 2024,
+          "M_cif_usd": 34862920.967,
+          "X_fob_usd": 35804963.777,
+          "gap_log": 0.094,
+          "leak_usd": 3222794.649
+        },
+        {
+          "partner": "France",
+          "year": 2024,
+          "M_cif_usd": 27876089.53,
+          "X_fob_usd": 26913722.429,
+          "gap_log": 0.033,
+          "leak_usd": 861302.308
+        },
+        {
+          "partner": "China",
+          "year": 2024,
+          "M_cif_usd": 19899039.775,
+          "X_fob_usd": 16116681.0,
+          "gap_log": -0.143,
+          "leak_usd": 0.0
+        },
+        {
+          "partner": "Türkiye",
+          "year": 2024,
+          "M_cif_usd": 22219876.727,
+          "X_fob_usd": 19084253.0,
+          "gap_log": -0.084,
+          "leak_usd": 0.0
+        }
+      ]
     },
-    "duree_ms": 0
+    "duree_ms": 6
   },
   {
     "step": 8,
@@ -272,6 +314,6 @@
       "resultats": [],
       "note": "Aucun texte juridique n'a été chargé : base légale à confirmer par l'agent."
     },
-    "duree_ms": 8
+    "duree_ms": 6
   }
 ]

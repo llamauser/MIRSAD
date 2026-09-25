@@ -158,12 +158,12 @@
           "controles_reveles": 1
         },
         {
-          "importer": "IMP893597",
+          "importer": "IMP660556",
           "taux_fraude_lisse": 0.3482,
           "controles_reveles": 2
         },
         {
-          "importer": "IMP660556",
+          "importer": "IMP893597",
           "taux_fraude_lisse": 0.3482,
           "controles_reveles": 2
         }
@@ -259,10 +259,52 @@
     },
     "output": {
       "evidence_id": "MIRROR-84",
-      "disponible": false,
-      "raison": "données miroir indisponibles"
+      "disponible": true,
+      "nature": "indicateur macro de priorisation (Tunisie réelle, UN Comtrade), pas une preuve pour cette déclaration",
+      "flux": [
+        {
+          "partner": "France",
+          "year": 2024,
+          "M_cif_usd": 193471392.304,
+          "X_fob_usd": 319991199.005,
+          "gap_log": 0.571,
+          "leak_usd": 139176813.674
+        },
+        {
+          "partner": "Italy",
+          "year": 2024,
+          "M_cif_usd": 309341432.443,
+          "X_fob_usd": 362864017.348,
+          "gap_log": 0.227,
+          "leak_usd": 73759874.878
+        },
+        {
+          "partner": "Germany",
+          "year": 2024,
+          "M_cif_usd": 188776422.936,
+          "X_fob_usd": 231762955.692,
+          "gap_log": 0.273,
+          "leak_usd": 55336392.2
+        },
+        {
+          "partner": "Türkiye",
+          "year": 2024,
+          "M_cif_usd": 104969711.9,
+          "X_fob_usd": 108996394.0,
+          "gap_log": 0.105,
+          "leak_usd": 10893859.514
+        },
+        {
+          "partner": "Spain",
+          "year": 2024,
+          "M_cif_usd": 59931381.496,
+          "X_fob_usd": 62715902.961,
+          "gap_log": 0.113,
+          "leak_usd": 6705266.049
+        }
+      ]
     },
-    "duree_ms": 0
+    "duree_ms": 6
   },
   {
     "step": 8,
@@ -284,6 +326,6 @@
       ],
       "note": "Aucun texte juridique n'a été chargé : base légale à confirmer par l'agent."
     },
-    "duree_ms": 7
+    "duree_ms": 8
   }
 ]

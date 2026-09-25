@@ -60,7 +60,7 @@
       ],
       "note": "Scores issus du modèle LightGBM calibré ; l'agent ne peut pas modifier la voie."
     },
-    "duree_ms": 12
+    "duree_ms": 10
   },
   {
     "step": 2,
@@ -88,7 +88,7 @@
       "prix_unitaire": 28.89,
       "unite_monetaire": "TND simulés (données synthétiques)"
     },
-    "duree_ms": 0
+    "duree_ms": 3
   },
   {
     "step": 3,
@@ -115,7 +115,7 @@
       "revenu_redresse_passe_TND": 0.0,
       "note": "Historique limité aux semaines passées ; fraudes connues uniquement pour les déclarations inspectées."
     },
-    "duree_ms": 5
+    "duree_ms": 2
   },
   {
     "step": 4,
@@ -166,12 +166,12 @@
           "controles_reveles": 17
         },
         {
-          "importer": "IMPNEW008",
+          "importer": "IMPNEW023",
           "taux_fraude_lisse": 0.7473,
           "controles_reveles": 17
         },
         {
-          "importer": "IMPNEW023",
+          "importer": "IMPNEW008",
           "taux_fraude_lisse": 0.7473,
           "controles_reveles": 17
         },
@@ -216,7 +216,7 @@
         "taux_taxation_median_pct": 9.1
       }
     },
-    "duree_ms": 4
+    "duree_ms": 6
   },
   {
     "step": 6,
@@ -262,7 +262,7 @@
         }
       ]
     },
-    "duree_ms": 4
+    "duree_ms": 5
   },
   {
     "step": 7,
@@ -272,10 +272,52 @@
     },
     "output": {
       "evidence_id": "MIRROR-84",
-      "disponible": false,
-      "raison": "données miroir indisponibles"
+      "disponible": true,
+      "nature": "indicateur macro de priorisation (Tunisie réelle, UN Comtrade), pas une preuve pour cette déclaration",
+      "flux": [
+        {
+          "partner": "France",
+          "year": 2024,
+          "M_cif_usd": 193471392.304,
+          "X_fob_usd": 319991199.005,
+          "gap_log": 0.571,
+          "leak_usd": 139176813.674
+        },
+        {
+          "partner": "Italy",
+          "year": 2024,
+          "M_cif_usd": 309341432.443,
+          "X_fob_usd": 362864017.348,
+          "gap_log": 0.227,
+          "leak_usd": 73759874.878
+        },
+        {
+          "partner": "Germany",
+          "year": 2024,
+          "M_cif_usd": 188776422.936,
+          "X_fob_usd": 231762955.692,
+          "gap_log": 0.273,
+          "leak_usd": 55336392.2
+        },
+        {
+          "partner": "Türkiye",
+          "year": 2024,
+          "M_cif_usd": 104969711.9,
+          "X_fob_usd": 108996394.0,
+          "gap_log": 0.105,
+          "leak_usd": 10893859.514
+        },
+        {
+          "partner": "Spain",
+          "year": 2024,
+          "M_cif_usd": 59931381.496,
+          "X_fob_usd": 62715902.961,
+          "gap_log": 0.113,
+          "leak_usd": 6705266.049
+        }
+      ]
     },
-    "duree_ms": 0
+    "duree_ms": 5
   },
   {
     "step": 8,
@@ -297,6 +339,6 @@
       ],
       "note": "Aucun texte juridique n'a été chargé : base légale à confirmer par l'agent."
     },
-    "duree_ms": 8
+    "duree_ms": 7
   }
 ]
