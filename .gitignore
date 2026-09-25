@@ -1,0 +1,9 @@
+.env
+*.env
+__pycache__/
+*.pyc
+.pytest_cache/
+data/raw/*
+!data/raw/.gitkeep
+data/processed/features_*.parquet
+.venv/

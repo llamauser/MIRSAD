@@ -1,0 +1,74 @@
+# MIRSAD configuration
+paths:
+  raw_csv: data/raw/synthetic-imports-declarations.csv
+  processed: data/processed
+  results: results
+  legal: data/legal
+  hs: data/hs
+  espece: data/espece
+
+source_url: https://raw.githubusercontent.com/Seondong/Customs-Fraud-Detection/master/data/synthetic-imports-declarations.csv
+source_repo: https://github.com/Seondong/Customs-Fraud-Detection
+
+# canonical_name: source_column  (null = absent)
+columns:
+  id: sgd.id
+  date: sgd.date
+  importer: importer.id
+  declarant: declarant.id
+  country: country
+  office: office.id
+  hs10: tariff.code
+  quantity: quantity
+  weight: gross.weight
+  fob: fob.value
+  cif: cif.value
+  taxes: total.taxes
+  label_fraud: illicit
+  label_revenue: revenue
+date_format: "%y-%m-%d"
+
+features:
+  min_group_n: 30
+  alpha: 10
+
+model:
+  n_estimators: 200
+  learning_rate: 0.05
+  num_leaves: 31
+  seed: 42
+
+drift:
+  enabled: true
+  start_week: 26
+  hs2: auto          # auto = highest-volume chapter with below-median fraud rate
+  n_new_importers: 25
+  share: 0.15
+  undervaluation_factor: 0.4
+
+simulation:
+  warm_weeks: 2
+  warm_reveal_share: 0.10
+  start_week: 3
+  end_week: 52
+  retrain_every: 1
+  r_grid: [0.02, 0.05, 0.10, 0.20]
+  eps_grid: [0.0, 0.1, 0.2]
+  seeds: [0, 1, 2]
+  policies: [random, rules, model_p, model_er, mirsad]
+  default_eps: 0.1
+  demo_r: 0.05
+
+llm:
+  model: gpt-4o-mini
+  temperature: 0
+  max_steps: 8
+
+mirror:
+  reporter: 788          # Tunisia
+  cif_fob_c: 0.07
+  min_flow_usd: 1000000
+  partners: [China, Türkiye, Italy, France, Germany, Spain, Algeria, Libya]
+
+espece:
+  conf_threshold: 0.7
