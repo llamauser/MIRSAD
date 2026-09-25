@@ -44,7 +44,7 @@ def load(config: dict | None = None, path: str | None = None) -> pd.DataFrame:
     df["date"] = pd.to_datetime(df["date"], format=cfg.get("date_format"), errors="coerce")
     for c in NUMERIC:
         if c in df.columns:
-            df[c] = pd.to_numeric(df[c], errors="coerce")
+            df[c] = pd.to_numeric(df[c], errors="coerce").astype(float)
     df["hs10"] = normalize_hs(df["hs10"])
     df["hs6"], df["hs4"], df["hs2"] = df.hs10.str[:6], df.hs10.str[:4], df.hs10.str[:2]
     for c in ["importer", "declarant", "country", "office", "id"]:

@@ -1,0 +1,12 @@
+{
+  "enabled": true,
+  "start_week": 26,
+  "hs2": "87",
+  "n_rows": 1918,
+  "share_of_chapter_rows_from_w0": 0.05,
+  "n_new_importers": 25,
+  "undervaluation_factor": 0.4,
+  "injected_revenue_total": 7873173.0,
+  "rows_per_week_mean": 71.03703703703704,
+  "note": "Scénario de fraude simulé (ajouté par l'équipe), pas une donnée réelle."
+}

@@ -43,7 +43,7 @@ drift:
   start_week: 26
   hs2: auto          # auto = highest-volume chapter with below-median fraud rate
   n_new_importers: 25
-  share: 0.15
+  share: 0.05         # adjusted from 0.15, see docs/decisions.md
   undervaluation_factor: 0.4
 
 simulation:
