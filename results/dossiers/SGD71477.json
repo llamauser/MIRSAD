@@ -1,0 +1,133 @@
+{
+  "case_id": "SGD71477",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 5559.0,
+  "probabilite_fraude": 0.2857,
+  "resume": "Déclaration SGD71477 classée voie Rouge avec un risque de fraude de 28,6 %, montant en jeu de 5 559 TND simulés.",
+  "faits": [
+    {
+      "texte": "Importateur connu depuis 255 jours.",
+      "evidence_ids": [
+        "SHAP-SGD71477-days_since_first"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMP140113 : 29,5 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD71477-risk_importer"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 29,5 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD71477-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Poids par unité : 238 272,0 kg.",
+      "evidence_ids": [
+        "SHAP-SGD71477-l_kg_unit"
+      ]
+    },
+    {
+      "texte": "Valeur déclarée par kg : 0,01.",
+      "evidence_ids": [
+        "SHAP-SGD71477-l_uv_kg"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "sous-évaluation",
+      "justification": "Valeur déclarée par kg (0,01) inférieure aux prix unitaires médians (2 271,58) pour le SH6 870322 en CNTRY376.",
+      "evidence_ids": [
+        "PEER-870322-CNTRY376"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "Le déclarant DEC3197 est lié à des importateurs à risque (taux de fraude lissé > 0,758).",
+      "evidence_ids": [
+        "LINK-IMP140113"
+      ]
+    },
+    {
+      "type": "fausse origine",
+      "justification": "Origine déclarée CNTRY376, mais les prix unitaires médians pour le SH6 870322 en CNTRY376 sont plus élevés que la valeur déclarée.",
+      "evidence_ids": [
+        "PEER-870322-CNTRY376"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+  ],
+  "incertitudes": [
+    "Données synthétiques sur les TND",
+    "Absence de données sur la description commerciale",
+    "Limites de l'historique des importateurs"
+  ],
+  "niveau_confiance": "moyen",
+  "_mode": "llm_local_valide",
+  "_modele": "mirsad-qwen3:8b",
+  "_fournisseur": "LLM local (mirsad-qwen3:8b)",
+  "_duree_s": 29.5,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 1,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.2,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.4,
+          "tokens_sortie": 38
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 25
+        },
+        {
+          "type": "dossier",
+          "s": 20.6,
+          "tokens_sortie": 719
+        }
+      ],
+      "duree_s": 29.5
+    }
+  ],
+  "_demo_injection": false
+}

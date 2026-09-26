@@ -1,0 +1,126 @@
+{
+  "case_id": "SGD70613",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 3450.0,
+  "probabilite_fraude": 0.2857,
+  "resume": "Déclaration SGD70613 classée en voie Rouge avec un risque de fraude de 28,6 %, montant en jeu de 3 450 TND simulés.",
+  "faits": [
+    {
+      "texte": "Importateur connu depuis 246 jours.",
+      "evidence_ids": [
+        "SHAP-SGD70613-days_since_first"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du déclarant DEC9013 : 43,4 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD70613-risk_declarant"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMP200652 : 29,5 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD70613-risk_importer"
+      ]
+    },
+    {
+      "texte": "Poids par unité : 358 672,0 kg.",
+      "evidence_ids": [
+        "SHAP-SGD70613-l_kg_unit"
+      ]
+    },
+    {
+      "texte": "L'importateur a déjà déclaré en SH4 8703.",
+      "evidence_ids": [
+        "SHAP-SGD70613-is_new_combo"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "réseau",
+      "justification": "L'importateur IMP200652 est lié à des déclarants à risque (DEC7291, DEC2342, DEC9013) avec un taux de fraude lissé élevé.",
+      "evidence_ids": [
+        "LINK-IMP200652"
+      ]
+    },
+    {
+      "type": "sous-évaluation",
+      "justification": "Le prix unitaire déclaré (4 096 TND) est inférieur au prix unitaire médian des comparables (2 471,5 TND) pour le SH6 870324 en CNTRY680.",
+      "evidence_ids": [
+        "PEER-870324-CNTRY680"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+  ],
+  "incertitudes": [
+    "Données synthétiques (TND simulés)",
+    "Étiquettes sélectives (SH6 870324)",
+    "Limites de l'historique des importateurs"
+  ],
+  "niveau_confiance": "moyen",
+  "_mode": "llm_local_valide",
+  "_modele": "mirsad-qwen3:8b",
+  "_fournisseur": "LLM local (mirsad-qwen3:8b)",
+  "_duree_s": 28.2,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 1,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 1.3,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.2,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.2,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 25
+        },
+        {
+          "type": "dossier",
+          "s": 19.3,
+          "tokens_sortie": 668
+        }
+      ],
+      "duree_s": 28.2
+    }
+  ],
+  "_demo_injection": false
+}

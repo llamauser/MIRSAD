@@ -1,0 +1,262 @@
+{
+  "case_id": "SGD72936",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 1968.0,
+  "probabilite_fraude": 0.2857,
+  "resume": "Déclaration SGD72936 classée voie Rouge avec un risque de fraude de 28,6 %, montant en jeu de 1 968 TND simulés.",
+  "faits": [
+    {
+      "texte": "Importateur connu depuis 274 jours.",
+      "evidence_ids": [
+        "SHAP-SGD72936-days_since_first"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 32,5 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD72936-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMP442440 : 29,5 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD72936-risk_importer"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du déclarant DEC5242 : 36,2 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD72936-risk_declarant"
+      ]
+    },
+    {
+      "texte": "Valeur déclarée par kg : 0,00.",
+      "evidence_ids": [
+        "SHAP-SGD72936-l_uv_kg"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "sous-évaluation",
+      "justification": "Valeur déclarée par kg : 0,00.",
+      "evidence_ids": [
+        "SHAP-SGD72936-l_uv_kg"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "Déclarant DEC5242 lié à des importateurs à risque (taux de fraude lissé de 29,5 %).",
+      "evidence_ids": [
+        "LINK-IMP442440"
+      ]
+    },
+    {
+      "type": "autre",
+      "justification": "Indice sur le pays d'origine (CNTRY759) avec un taux de fraude lissé de 29,5 %.",
+      "evidence_ids": [
+        "SHAP-SGD72936-risk_importer"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+  ],
+  "incertitudes": [
+    "Données synthétiques (TND simulés), étiquettes sélectives, limites de l'historique des importateurs"
+  ],
+  "niveau_confiance": "moyen",
+  "_mode": "llm_local_valide_apres_correction",
+  "_modele": "mirsad-qwen3:8b",
+  "_fournisseur": "LLM local (mirsad-qwen3:8b)",
+  "_duree_s": 46.7,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 1,
+      "erreurs": [
+        "hypotheses: nombre '0,75' introuvable dans les sorties d'outils",
+        "hypotheses: « fausse origine » sans preuve compatible (attendu : DECL-, MIRROR-, PEER-)"
+      ],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 1.2,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 35
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.4,
+          "tokens_sortie": 38
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 25
+        },
+        {
+          "type": "dossier",
+          "s": 19.8,
+          "tokens_sortie": 681
+        }
+      ],
+      "duree_s": 28.7,
+      "brouillon_rejete": {
+        "case_id": "SGD72936",
+        "voie": "Rouge",
+        "montant_en_jeu_TND": 1968.0,
+        "probabilite_fraude": 0.2857,
+        "resume": "Déclaration SGD72936 classée voie Rouge avec un risque de fraude de 28,6 %, montant en jeu de 1 968 TND simulés.",
+        "faits": [
+          {
+            "texte": "Importateur connu depuis 274 jours.",
+            "evidence_ids": [
+              "SHAP-SGD72936-days_since_first"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 32,5 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD72936-risk_imp_hs4"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé de l'importateur IMP442440 : 29,5 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD72936-risk_importer"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé du déclarant DEC5242 : 36,2 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD72936-risk_declarant"
+            ]
+          },
+          {
+            "texte": "Valeur déclarée par kg : 0,00.",
+            "evidence_ids": [
+              "SHAP-SGD72936-l_uv_kg"
+            ]
+          }
+        ],
+        "hypotheses": [
+          {
+            "type": "sous-évaluation",
+            "justification": "Valeur déclarée par kg : 0,00.",
+            "evidence_ids": [
+              "SHAP-SGD72936-l_uv_kg"
+            ]
+          },
+          {
+            "type": "réseau",
+            "justification": "Déclarant DEC5242 lié à des importateurs à risque (taux de fraude lissé > 0,75).",
+            "evidence_ids": [
+              "LINK-IMP442440"
+            ]
+          },
+          {
+            "type": "fausse origine",
+            "justification": "Indice sur le pays d'origine (CNTRY759) avec un taux de fraude lissé de 29,5 %.",
+            "evidence_ids": [
+              "SHAP-SGD72936-risk_importer"
+            ]
+          }
+        ],
+        "base_legale": [],
+        "controles_recommandes": [
+          "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+        ],
+        "incertitudes": [
+          "Données synthétiques (TND simulés), étiquettes sélectives, limites de l'historique des importateurs"
+        ],
+        "niveau_confiance": "moyen"
+      }
+    },
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 2,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 1.2,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 35
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.4,
+          "tokens_sortie": 38
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 25
+        },
+        {
+          "type": "dossier",
+          "s": 19.8,
+          "tokens_sortie": 681
+        },
+        {
+          "type": "dossier",
+          "s": 18.1,
+          "tokens_sortie": 654
+        }
+      ],
+      "duree_s": 46.7
+    }
+  ],
+  "_demo_injection": false
+}

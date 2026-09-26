@@ -1,0 +1,133 @@
+{
+  "case_id": "SGD72769",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 4180.0,
+  "probabilite_fraude": 0.9999,
+  "resume": "Déclaration à haut risque (voie Rouge) avec un taux de fraude estimé à 99,99 %, montant en jeu de 4 180 TND simulés.",
+  "faits": [
+    {
+      "texte": "Déclaration de l'importateur IMPNEW019, déclarant DEC9723, SH4 8703, SH6 870332, valeur CIF 1 154 TND simulés.",
+      "evidence_ids": [
+        "DECL-SGD72769"
+      ]
+    },
+    {
+      "texte": "L'importateur IMPNEW019 a déclaré 37 fois, avec 13 contrôles passés révélés et 13 fraudes confirmées.",
+      "evidence_ids": [
+        "HIST-importer-IMPNEW019"
+      ]
+    },
+    {
+      "texte": "Le prix unitaire déclaré est de 1 154 TND simulés, sans comparables pour le SH6 8703 dans le pays d'origine CNTRY277.",
+      "evidence_ids": [
+        "DECL-SGD72769",
+        "PEER-8703-CNTRY277"
+      ]
+    },
+    {
+      "texte": "Le déclarant DEC9723 a un taux de fraude lissé de 37,5 %, mais son impact réduit le risque.",
+      "evidence_ids": [
+        "DECL-SGD72769",
+        "SHAP-SGD72769-risk_declarant"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "sous-évaluation",
+      "justification": "Le prix unitaire déclaré est de 1 154 TND simulés, sans comparables pour le SH6 8703 dans le pays d'origine CNTRY277.",
+      "evidence_ids": [
+        "DECL-SGD72769",
+        "PEER-8703-CNTRY277"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "L'importateur IMPNEW019 est lié à des déclarants à risque, notamment DEC9723, avec un taux de fraude lissé de 37,5 %.",
+      "evidence_ids": [
+        "LINK-IMPNEW019"
+      ]
+    },
+    {
+      "type": "fausse origine",
+      "justification": "L'origine déclarée est CNTRY277, mais aucun comparatif de prix n'a été trouvé pour ce SH6 dans ce pays.",
+      "evidence_ids": [
+        "DECL-SGD72769",
+        "PEER-8703-CNTRY277"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Demander le contrat de vente et la facture commerciale",
+    "Exiger la preuve de paiement (virement bancaire)",
+    "Comparer le prix avec les déclarations comparables (même SH6, même origine)",
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+  ],
+  "incertitudes": [
+    "Aucune donnée sur la description commerciale pour vérifier la classification tarifaire",
+    "Aucun prix comparable trouvé pour le SH6 8703 dans le pays d'origine CNTRY277"
+  ],
+  "niveau_confiance": "élevé",
+  "_mode": "llm_local_valide",
+  "_modele": "mirsad-qwen3:8b",
+  "_fournisseur": "LLM local (mirsad-qwen3:8b)",
+  "_duree_s": 32.9,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 1,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 1.3,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 31
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 35
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.3,
+          "tokens_sortie": 35
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 25
+        },
+        {
+          "type": "dossier",
+          "s": 23.9,
+          "tokens_sortie": 832
+        }
+      ],
+      "duree_s": 32.9
+    }
+  ],
+  "_demo_injection": false
+}

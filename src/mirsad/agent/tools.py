@@ -195,16 +195,15 @@ def search_regulations(query: str, k: int = 4) -> dict:
     """Legal chunks first (data/legal), then HS descriptions. Texts are verbatim corpus chunks."""
     k = max(1, min(int(k), 8))
     corpus = get_corpus()
-    legal = corpus.search(query, k=k, kind="legal")
-    hs = corpus.search(query, k=max(1, k - len(legal)) if legal else k, kind="hs")
-    res = legal + hs[:2]
+    legal = corpus.search(query, k=min(k, 4), kind="legal")
+    res = legal if legal else corpus.search(query, k=2, kind="hs")  # HS labels only when no legal text matches
     return {"evidence_id": "REG-" + hashlib.md5(query.encode("utf-8")).hexdigest()[:8],
             "requete": query,
             "corpus_juridique_disponible": any(c["kind"] == "legal" for c in corpus.chunks),
             # legal chunks: only their quotable verbatim sentences (compact for small local models);
             # the validator checks quotes against the full chunk text in the corpus
             "resultats": [({"chunk_id": r["chunk_id"], "source": r["source"],
-                            "phrases_citables": sentences(r["text"])[:6]} if r["chunk_id"].startswith("LEG-")
+                            "phrases_citables": sentences(r["text"])[:4]} if r["chunk_id"].startswith("LEG-")
                            else {"chunk_id": r["chunk_id"], "source": r["source"], "text": r["text"]})
                           for r in res],
             "note": ("Aucun texte juridique n'a été chargé : base légale à confirmer par l'agent."

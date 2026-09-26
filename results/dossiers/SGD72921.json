@@ -1,0 +1,139 @@
+{
+  "case_id": "SGD72921",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 8487,
+  "probabilite_fraude": 0.9999,
+  "resume": "Déclaration à haut risque (voie Rouge) avec un montant en jeu de 8 487 TND simulés. L'importateur IMPNEW014 a un taux de fraude lissé de 74,0 %, et le couple importateur × SH4 8703 a un taux de fraude lissé de 67,8 %. Le déclarant DEC5252 a déclaré 176 fois.",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe.",
+      "evidence_ids": [
+        "RISK-SGD72921"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMPNEW014 : 74,0 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD72921-risk_importer"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 67,8 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD72921-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Valeur CIF déclarée : 170 827 TND simulés.",
+      "evidence_ids": [
+        "SHAP-SGD72921-l_cif"
+      ]
+    },
+    {
+      "texte": "Prix unitaire déclaré : 56 942,27 par unité.",
+      "evidence_ids": [
+        "SHAP-SGD72921-l_uv"
+      ]
+    },
+    {
+      "texte": "176 déclarations passées de ce déclarant.",
+      "evidence_ids": [
+        "SHAP-SGD72921-hist_count_declarant"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "sous-évaluation",
+      "justification": "Prix unitaire déclaré (56 942,27) est inférieur aux prix unitaires des comparables (prix unitaire p90 = 84 187,5 TND).",
+      "evidence_ids": [
+        "PEER-870324-CNTRY454"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "Le déclarant DEC5252 a déclaré 176 fois, et l'importateur IMPNEW014 a un taux de fraude lissé de 74,0 %.",
+      "evidence_ids": [
+        "SHAP-SGD72921-hist_count_declarant",
+        "SHAP-SGD72921-risk_importer"
+      ]
+    },
+    {
+      "type": "fausse origine",
+      "justification": "Le pays d'origine déclaré (CNTRY454) n'est pas aligné avec les comparables (CNTRY454, CNTRY759, CNTRY884, etc.).",
+      "evidence_ids": [
+        "DECL-SGD72921",
+        "PEER-870324-CNTRY454"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Contrôle documentaire standard"
+  ],
+  "incertitudes": [
+    "Données synthétiques (TND simulés), étiquettes sélectives (SH4, SH6), limites de l'historique des importateurs"
+  ],
+  "niveau_confiance": "élevé",
+  "_mode": "llm_local_valide",
+  "_modele": "mirsad-qwen3:8b",
+  "_fournisseur": "LLM local (mirsad-qwen3:8b)",
+  "_duree_s": 34.1,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 1,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 31
+        },
+        {
+          "type": "outils",
+          "s": 1.2,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.3,
+          "tokens_sortie": 35
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 25
+        },
+        {
+          "type": "dossier",
+          "s": 25.4,
+          "tokens_sortie": 844
+        }
+      ],
+      "duree_s": 34.1
+    }
+  ],
+  "_demo_injection": false
+}

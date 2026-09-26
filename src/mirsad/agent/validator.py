@@ -33,10 +33,10 @@ def _compatible(hyp: str, eid: str, prefixes: tuple) -> bool:
     return True
 
 HYP_EVIDENCE = {
-    "sous-évaluation": ("DECL-", "PEER-", "SIM-", "SHAP-"),
+    "sous-évaluation": ("DECL-", "PEER-", "SIM-", "SIMSET-", "SHAP-"),
     "fausse espèce": ("TARIF-",),
     "fausse origine": ("DECL-", "MIRROR-", "PEER-"),
-    "réseau": ("LINK-", "HIST-", "SIM-", "SHAP-"),
+    "réseau": ("LINK-", "HIST-", "SIM-", "SIMSET-", "SHAP-"),
 }
 
 

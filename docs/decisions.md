@@ -14,8 +14,8 @@
 - **LLM providers (01:40)**: local first, API as fallback. Machine: i5-13500H, 32 GB RAM, RTX 4060 Laptop 8 GB, 14 GB
   free disk, so no download. Already installed and chosen: `qwen3:8b` (Q4_K_M, 4.9 GB, native tool calling, good
   French, Apache 2.0). Rejected: `qwen3-coder:30b-a3b` (17 GB, does not fit 8 GB VRAM, coder-tuned) and `llama3.1:8b`
-  (weaker French). Variant `mirsad-qwen3:8b` = num_ctx 16384 (an investigation uses ~7–11k tokens; the default
-  context would truncate silently). Server started with `OLLAMA_FLASH_ATTENTION=1`, `OLLAMA_KV_CACHE_TYPE=q8_0` → 100 % GPU.
+  (weaker French). Variant `mirsad-qwen3:8b` first used num_ctx 16384 (an investigation used ~7–11k tokens; the default
+  context would truncate silently); see the 8k decision below. Server started with `OLLAMA_FLASH_ATTENTION=1`, `OLLAMA_KV_CACHE_TYPE=q8_0` → 100 % GPU.
   Qwen3 thinking disabled via `reasoning_effort: none` on the OpenAI-compatible endpoint (`think: false` was ignored there).
   API fallback `gpt-4.1` (supports temperature 0; the GPT-5 family does not). Local time budget 420 s per investigation.
 - **Observed local behaviour**: 4–6.5 min per dossier; once invented legal ids (`REG-2024-001`), caught by the validator →
@@ -27,3 +27,12 @@
   cnudst.rnrt.tn (Tunisian public server) was deliberately not fetched. Legal search results expose verbatim
   `phrases_citables`; the validator checks quotes against the full chunk text in the corpus.
 - **Keys**: `.env` (gitignored) with 4 keys rotated on auth/rate-limit errors; never printed (masked in logs).
+- **Local context 16k → 8k (02:10)**: measured with Ollama's own timings on the RTX 4060 Laptop, same 6.8k-token
+  prompt: num_ctx 8192 → prompt 1744 tok/s, generation 36 tok/s; num_ctx 12288 → prompt 209 tok/s (KV/compute buffers
+  spill to shared system memory under Windows). At 16k with ~12k tokens: prompt 127 tok/s, generation 5.5 tok/s. So:
+  num_ctx 8192, compact tool outputs (legal: ≤4 chunks × ≤4 quotable sentences, no HS labels when legal text matches;
+  links: top 3), compact JSON skeleton instead of the full schema, and a context guard (stop gathering at 70 %, hand
+  over to the API above 88 %). Result: local investigation 160–390 s → ~45 s. Local dossiers use plain JSON mode
+  (`json_object`); the validator enforces the schema (fields, enums, types).
+- **Chunking** now cuts on word boundaries, and quotable sentences drop fragments cut by the window (a quote once started
+  mid-word: « océder à la visite… »).

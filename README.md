@@ -58,8 +58,10 @@ streamlit run app/Accueil.py
 ollama pull qwen3:8b
 ollama create mirsad-qwen3:8b -f ollama/Modelfile
 ```
-Sur un GPU de 8 Go, lancer le serveur avec `OLLAMA_FLASH_ATTENTION=1` et `OLLAMA_KV_CACHE_TYPE=q8_0` : le modèle et son
-contexte de 16k tiennent alors entièrement en VRAM.
+Sur un GPU de 8 Go, lancer le serveur avec `OLLAMA_FLASH_ATTENTION=1` et `OLLAMA_KV_CACHE_TYPE=q8_0`. Mesuré sur une
+RTX 4060 Laptop : avec un contexte de 8k, tout tient en VRAM (lecture du prompt 1 744 jetons/s, génération 36 jetons/s) ;
+dès 12k, le cache déborde en mémoire partagée (209 jetons/s). Les enquêtes restent donc sous ~7,5k jetons (sorties
+d'outils compactes et garde-fou de contexte dans `agent/loop.py`).
 **Secours API (optionnel)** : copier `.env.example` en `.env` et y mettre `OPENAI_API_KEYS` (une ou plusieurs clés).
 `COMTRADE_KEY` (optionnel) donne le miroir au niveau SH4. Sans LLM ni clé, tout fonctionne en mode déterministe.
 Textes juridiques : déposer des `.txt`/`.md` dans `data/legal/`, chacun commençant par `SOURCE: <url ou titre>`.
@@ -170,7 +172,7 @@ Tentatives d'injection détectées : 3/3 (`results/espece_metrics_*.json`).
 
 **Modèles et API**
 - **LLM local (par défaut)** : Qwen3 8B (Alibaba Qwen, licence Apache 2.0, quantification Q4_K_M) servi par **Ollama**
-  (https://ollama.com), variante `mirsad-qwen3:8b` avec un contexte de 16k (`ollama/Modelfile`).
+  (https://ollama.com), variante `mirsad-qwen3:8b` avec un contexte de 8k (`ollama/Modelfile`).
 - **Secours** : OpenAI API (Chat Completions, function calling, structured outputs) : `gpt-4.1` pour l'agent,
   `gpt-4.1-mini` pour le reclassement SH. Clés lues depuis `.env` (non versionné).
 

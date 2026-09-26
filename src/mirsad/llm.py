@@ -50,6 +50,7 @@ class Provider:
     extra_body: dict = field(default_factory=dict)
     time_budget_s: float | None = None
     json_mode: str = "json_schema"  # "json_schema" (strict) or "json_object" (lighter, validated afterwards)
+    context_tokens: int | None = None  # local context window (None = large API context)
     key_idx: int = 0
 
     @property
@@ -107,7 +108,7 @@ def providers() -> tuple[Provider, ...]:
         if ok:
             out.append(Provider("local", loc["model"], loc.get("model_small", loc["model"]), loc["base_url"],
                                 dict(loc.get("extra_body") or {}), loc.get("time_budget_s"),
-                                loc.get("json_mode", "json_schema")))
+                                loc.get("json_mode", "json_schema"), loc.get("context_tokens")))
     api = cfg.get("api", {})
     if api.get("enabled", False) and keys():
         p = Provider("api", api["model"], api.get("model_small", api["model"]))

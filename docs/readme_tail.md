@@ -58,7 +58,7 @@
 
 **Modèles et API**
 - **LLM local (par défaut)** : Qwen3 8B (Alibaba Qwen, licence Apache 2.0, quantification Q4_K_M) servi par **Ollama**
-  (https://ollama.com), variante `mirsad-qwen3:8b` avec un contexte de 16k (`ollama/Modelfile`).
+  (https://ollama.com), variante `mirsad-qwen3:8b` avec un contexte de 8k (`ollama/Modelfile`).
 - **Secours** : OpenAI API (Chat Completions, function calling, structured outputs) : `gpt-4.1` pour l'agent,
   `gpt-4.1-mini` pour le reclassement SH. Clés lues depuis `.env` (non versionné).
 

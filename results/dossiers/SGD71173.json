@@ -1,0 +1,262 @@
+{
+  "case_id": "SGD71173",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 2520.0,
+  "probabilite_fraude": 0.9999,
+  "resume": "Déclaration à haut risque (voie Rouge) avec une probabilité de fraude de 99,99 %, montant en jeu de 2 520 TND simulés.",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe.",
+      "evidence_ids": [
+        "RISK-SGD71173"
+      ]
+    },
+    {
+      "texte": "Importateur IMPNEW002 avec 30 déclarations passées.",
+      "evidence_ids": [
+        "RISK-SGD71173",
+        "HIST-importer-IMPNEW002"
+      ]
+    },
+    {
+      "texte": "Déclarant DEC9031 avec un taux de fraude lissé de 44,6 %.",
+      "evidence_ids": [
+        "RISK-SGD71173"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 62,5 %.",
+      "evidence_ids": [
+        "RISK-SGD71173"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "réseau",
+      "justification": "L'importateur IMPNEW002 a des liens avec des déclarants à risque.",
+      "evidence_ids": [
+        "LINK-IMPNEW002"
+      ]
+    },
+    {
+      "type": "sous-évaluation",
+      "justification": "Prix unitaire déclaré de 20,67 TND simulés, sans comparables pertinents.",
+      "evidence_ids": [
+        "DECL-SGD71173",
+        "PEER-8703-CNTRY376"
+      ]
+    },
+    {
+      "type": "fausse origine",
+      "justification": "Origine déclarée CNTRY376, sans données de comparaison.",
+      "evidence_ids": [
+        "DECL-SGD71173"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+  ],
+  "incertitudes": [
+    "Données synthétiques sur les prix et les montants",
+    "Aucune description commerciale pour vérifier la classification tarifaire",
+    "Base légale : à confirmer par l'agent"
+  ],
+  "niveau_confiance": "élevé",
+  "_mode": "llm_local_valide_apres_correction",
+  "_modele": "mirsad-qwen3:8b",
+  "_fournisseur": "LLM local (mirsad-qwen3:8b)",
+  "_duree_s": 44.2,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 1,
+      "erreurs": [
+        "base_legale: chunk_id non récupéré 'LEG-123'"
+      ],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 1.3,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.2,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 31
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 35
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.3,
+          "tokens_sortie": 35
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 27
+        },
+        {
+          "type": "dossier",
+          "s": 18.9,
+          "tokens_sortie": 630
+        }
+      ],
+      "duree_s": 28.0,
+      "brouillon_rejete": {
+        "case_id": "SGD71173",
+        "voie": "Rouge",
+        "montant_en_jeu_TND": 2520.0,
+        "probabilite_fraude": 0.9999,
+        "resume": "Déclaration à haut risque (voie Rouge) avec une probabilité de fraude de 99,99 %, montant en jeu de 2 520 TND simulés.",
+        "faits": [
+          {
+            "texte": "Voie Rouge décidée par le scoreur déterministe.",
+            "evidence_ids": [
+              "RISK-SGD71173"
+            ]
+          },
+          {
+            "texte": "Importateur IMPNEW002 avec 30 déclarations passées.",
+            "evidence_ids": [
+              "RISK-SGD71173",
+              "HIST-importer-IMPNEW002"
+            ]
+          },
+          {
+            "texte": "Déclarant DEC9031 avec un taux de fraude lissé de 44,6 %.",
+            "evidence_ids": [
+              "RISK-SGD71173"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 62,5 %.",
+            "evidence_ids": [
+              "RISK-SGD71173"
+            ]
+          }
+        ],
+        "hypotheses": [
+          {
+            "type": "réseau",
+            "justification": "L'importateur IMPNEW002 a des liens avec des déclarants à risque.",
+            "evidence_ids": [
+              "LINK-IMPNEW002"
+            ]
+          },
+          {
+            "type": "sous-évaluation",
+            "justification": "Prix unitaire déclaré de 20,67 TND simulés, sans comparables pertinents.",
+            "evidence_ids": [
+              "DECL-SGD71173",
+              "PEER-8703-CNTRY376"
+            ]
+          },
+          {
+            "type": "fausse origine",
+            "justification": "Origine déclarée CNTRY376, sans données de comparaison.",
+            "evidence_ids": [
+              "DECL-SGD71173"
+            ]
+          }
+        ],
+        "base_legale": [
+          {
+            "chunk_id": "LEG-123",
+            "source": "Règlement sur la gestion des risques",
+            "extrait": "L'agent des douanes peut prendre des mesures de contrôle en cas de risque élevé."
+          }
+        ],
+        "controles_recommandes": [
+          "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+        ],
+        "incertitudes": [
+          "Données synthétiques sur les prix et les montants",
+          "Aucune description commerciale pour vérifier la classification tarifaire"
+        ],
+        "niveau_confiance": "élevé"
+      }
+    },
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 2,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 1.3,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.2,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 31
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 35
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.3,
+          "tokens_sortie": 35
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 27
+        },
+        {
+          "type": "dossier",
+          "s": 18.9,
+          "tokens_sortie": 630
+        },
+        {
+          "type": "dossier",
+          "s": 16.2,
+          "tokens_sortie": 565
+        }
+      ],
+      "duree_s": 44.2
+    }
+  ],
+  "_demo_injection": false
+}

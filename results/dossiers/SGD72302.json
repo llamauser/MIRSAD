@@ -1,0 +1,267 @@
+{
+  "case_id": "SGD72302",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 3186.0,
+  "probabilite_fraude": 0.2857,
+  "resume": "Déclaration SGD72302 classée voie Rouge avec un risque de fraude de 28,6 %, montant en jeu de 3 186 TND simulés.",
+  "faits": [
+    {
+      "texte": "Importateur connu depuis 250 jours.",
+      "evidence_ids": [
+        "SHAP-SGD72302-days_since_first"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 32,5 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD72302-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMP468728 : 32,5 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD72302-risk_importer"
+      ]
+    },
+    {
+      "texte": "Valeur déclarée par kg : 0,01.",
+      "evidence_ids": [
+        "SHAP-SGD72302-l_uv_kg"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de la sous-position SH 870390 : 40,2 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD72302-risk_hs6"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "sous-évaluation",
+      "justification": "Valeur déclarée par kg (0,01) basse par rapport aux comparables (PEER-8703-CNTRY680).",
+      "evidence_ids": [
+        "SHAP-SGD72302-l_uv_kg",
+        "PEER-8703-CNTRY680"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "Importateur lié à des déclarants à risque (DEC4100) avec un taux de fraude lissé de 0,4356.",
+      "evidence_ids": [
+        "LINK-IMP468728"
+      ]
+    },
+    {
+      "type": "autre",
+      "justification": "Origine déclarée (CNTRY680) correspond à des cas similaires avec revenus redressés.",
+      "evidence_ids": [
+        "SIMSET-SGD72302"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+  ],
+  "incertitudes": [
+    "Données synthétiques sur les prix unitaires",
+    "Aucune description commerciale pour vérifier la classification tarifaire",
+    "Aucune phrase citable pertinente dans la base légale"
+  ],
+  "niveau_confiance": "moyen",
+  "_mode": "llm_local_valide_apres_correction",
+  "_modele": "mirsad-qwen3:8b",
+  "_fournisseur": "LLM local (mirsad-qwen3:8b)",
+  "_duree_s": 48.9,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 1,
+      "erreurs": [
+        "hypotheses: « fausse origine » sans preuve compatible (attendu : DECL-, MIRROR-, PEER-)"
+      ],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 1.3,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 35
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.4,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 25
+        },
+        {
+          "type": "dossier",
+          "s": 21.0,
+          "tokens_sortie": 724
+        }
+      ],
+      "duree_s": 29.9,
+      "brouillon_rejete": {
+        "case_id": "SGD72302",
+        "voie": "Rouge",
+        "montant_en_jeu_TND": 3186.0,
+        "probabilite_fraude": 0.2857,
+        "resume": "Déclaration SGD72302 classée voie Rouge avec un risque de fraude de 28,6 %, montant en jeu de 3 186 TND simulés.",
+        "faits": [
+          {
+            "texte": "Importateur connu depuis 250 jours.",
+            "evidence_ids": [
+              "SHAP-SGD72302-days_since_first"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 32,5 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD72302-risk_imp_hs4"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé de l'importateur IMP468728 : 32,5 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD72302-risk_importer"
+            ]
+          },
+          {
+            "texte": "Valeur déclarée par kg : 0,01.",
+            "evidence_ids": [
+              "SHAP-SGD72302-l_uv_kg"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé de la sous-position SH 870390 : 40,2 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD72302-risk_hs6"
+            ]
+          }
+        ],
+        "hypotheses": [
+          {
+            "type": "sous-évaluation",
+            "justification": "Valeur déclarée par kg (0,01) basse par rapport aux comparables (PEER-8703-CNTRY680).",
+            "evidence_ids": [
+              "SHAP-SGD72302-l_uv_kg",
+              "PEER-8703-CNTRY680"
+            ]
+          },
+          {
+            "type": "réseau",
+            "justification": "Importateur lié à des déclarants à risque (DEC4100) avec un taux de fraude lissé de 0,4356.",
+            "evidence_ids": [
+              "LINK-IMP468728"
+            ]
+          },
+          {
+            "type": "fausse origine",
+            "justification": "Origine déclarée (CNTRY680) correspond à des cas similaires avec revenus redressés.",
+            "evidence_ids": [
+              "SIMSET-SGD72302"
+            ]
+          }
+        ],
+        "base_legale": [],
+        "controles_recommandes": [
+          "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+        ],
+        "incertitudes": [
+          "Données synthétiques sur les prix unitaires",
+          "Aucune description commerciale pour vérifier la classification tarifaire",
+          "Aucune phrase citable pertinente dans la base légale"
+        ],
+        "niveau_confiance": "moyen"
+      }
+    },
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 2,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 1.3,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 35
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.4,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 25
+        },
+        {
+          "type": "dossier",
+          "s": 21.0,
+          "tokens_sortie": 724
+        },
+        {
+          "type": "dossier",
+          "s": 19.0,
+          "tokens_sortie": 696
+        }
+      ],
+      "duree_s": 48.9
+    }
+  ],
+  "_demo_injection": false
+}

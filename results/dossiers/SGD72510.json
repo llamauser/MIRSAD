@@ -1,0 +1,143 @@
+{
+  "case_id": "SGD72510",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 1904.0,
+  "probabilite_fraude": 0.2857,
+  "resume": "Déclaration de SGD72510 avec voie Rouge, risque de fraude estimé à 28,6 %, montant en jeu de 1 904 TND simulés.",
+  "faits": [
+    {
+      "texte": "Importateur connu depuis 264 jours.",
+      "evidence_ids": [
+        "SHAP-SGD72510-days_since_first"
+      ]
+    },
+    {
+      "texte": "51 déclarations passées de cet importateur.",
+      "evidence_ids": [
+        "SHAP-SGD72510-hist_count_importer"
+      ]
+    },
+    {
+      "texte": "L'importateur a déjà déclaré en SH4 8703.",
+      "evidence_ids": [
+        "SHAP-SGD72510-is_new_combo"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 29,5 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD72510-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Poids par unité : 1,0 kg.",
+      "evidence_ids": [
+        "SHAP-SGD72510-l_kg_unit"
+      ]
+    },
+    {
+      "texte": "Valeur CIF déclarée : 2 572 TND simulés.",
+      "evidence_ids": [
+        "DECL-SGD72510"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "sous-évaluation",
+      "justification": "Prix unitaire déclaré (1,29 TND simulés) inférieur aux prix unitaires des déclarations comparables (mêmes SH6 et même pays d'origine).",
+      "evidence_ids": [
+        "PEER-870324-CNTRY884"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "L'importateur est lié à des déclarants à risque élevé (taux de fraude lissé > 25 %).",
+      "evidence_ids": [
+        "LINK-IMP112691"
+      ]
+    },
+    {
+      "type": "fausse origine",
+      "justification": "Origine déclarée (CNTRY884) n'est pas en corrélation avec les prix unitaires des déclarations comparables.",
+      "evidence_ids": [
+        "PEER-870324-CNTRY884"
+      ]
+    }
+  ],
+  "base_legale": [],
+  "controles_recommandes": [
+    "Demander le contrat de vente et la facture commerciale",
+    "Exiger la preuve de paiement (virement bancaire)",
+    "Comparer le prix avec les déclarations comparables (même SH6, même origine)",
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)",
+    "Pesage de la marchandise"
+  ],
+  "incertitudes": [
+    "Données synthétiques (TND simulés)",
+    "Étiquettes sélectives (SH6, origine)",
+    "Limites de l'historique des importateurs"
+  ],
+  "niveau_confiance": "moyen",
+  "_mode": "llm_local_valide",
+  "_modele": "mirsad-qwen3:8b",
+  "_fournisseur": "LLM local (mirsad-qwen3:8b)",
+  "_duree_s": 31.6,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 1,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 1.3,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.2,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.4,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 25
+        },
+        {
+          "type": "dossier",
+          "s": 22.5,
+          "tokens_sortie": 776
+        }
+      ],
+      "duree_s": 31.6
+    }
+  ],
+  "_demo_injection": false
+}

@@ -1,0 +1,343 @@
+[
+  {
+    "step": 1,
+    "tool": "get_risk_assessment",
+    "args": {
+      "case_id": "SGD72769"
+    },
+    "output": {
+      "evidence_id": "RISK-SGD72769",
+      "case_id": "SGD72769",
+      "voie": "Rouge",
+      "probabilite_fraude": 0.9999,
+      "revenu_attendu_si_fraude_TND": 4180.0,
+      "montant_en_jeu_TND": 4180.0,
+      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 99,99 %, montant en jeu (P × revenu attendu) = 4 180 TND simulés.",
+      "facteurs_shap": [
+        {
+          "evidence_id": "SHAP-SGD72769-risk_importer",
+          "variable": "risk_importer",
+          "valeur": 0.7064,
+          "contribution_shap": 2.6109,
+          "sens": "augmente le risque",
+          "texte": "Taux de fraude lissé de l'importateur IMPNEW019 : 70,6 % (sur les contrôles passés révélés)."
+        },
+        {
+          "evidence_id": "SHAP-SGD72769-risk_imp_hs4",
+          "variable": "risk_imp_hs4",
+          "valeur": 0.6445,
+          "contribution_shap": 2.154,
+          "sens": "augmente le risque",
+          "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 64,5 % (sur les contrôles passés révélés)."
+        },
+        {
+          "evidence_id": "SHAP-SGD72769-l_cif",
+          "variable": "l_cif",
+          "valeur": 7.0519,
+          "contribution_shap": 1.0047,
+          "sens": "augmente le risque",
+          "texte": "Valeur CIF déclarée : 1 154 TND simulés."
+        },
+        {
+          "evidence_id": "SHAP-SGD72769-risk_declarant",
+          "variable": "risk_declarant",
+          "valeur": 0.3747,
+          "contribution_shap": -0.2692,
+          "sens": "diminue le risque",
+          "texte": "Taux de fraude lissé du déclarant DEC9723 : 37,5 % (sur les contrôles passés révélés)."
+        },
+        {
+          "evidence_id": "SHAP-SGD72769-z_kg_unit",
+          "variable": "z_kg_unit",
+          "valeur": 1.2139,
+          "contribution_shap": -0.2047,
+          "sens": "diminue le risque",
+          "texte": "Poids par unité 1,2 écarts robustes au-dessus de la médiane des déclarations comparables (même SH6 et même pays, SH 870332) : 378 792,0 kg par unité contre une médiane de 1 055,0."
+        }
+      ],
+      "controles_recommandes_regles": [
+        "Demander le contrat de vente et la facture commerciale",
+        "Exiger la preuve de paiement (virement bancaire)",
+        "Comparer le prix avec les déclarations comparables (même SH6, même origine)",
+        "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+      ],
+      "note": "Scores issus du modèle LightGBM calibré ; l'agent ne peut pas modifier la voie."
+    },
+    "duree_ms": 69
+  },
+  {
+    "step": 2,
+    "tool": "get_declaration",
+    "args": {
+      "case_id": "SGD72769"
+    },
+    "output": {
+      "evidence_id": "DECL-SGD72769",
+      "case_id": "SGD72769",
+      "date": "2013-10-08",
+      "semaine": 40,
+      "importateur": "IMPNEW019",
+      "declarant": "DEC9723",
+      "pays_origine": "CNTRY277",
+      "bureau": "OFFICE60",
+      "code_sh10": "8703321922",
+      "sh6": "870332",
+      "sh4": "8703",
+      "quantite": 1.0,
+      "poids_brut_kg": 378792.0,
+      "valeur_fob": 1002.0,
+      "valeur_cif": 1154.0,
+      "taxes": 2918.0,
+      "prix_unitaire": 1154.0,
+      "unite_monetaire": "TND simulés (données synthétiques)"
+    },
+    "duree_ms": 3
+  },
+  {
+    "step": 3,
+    "tool": "get_entity_history",
+    "args": {
+      "entity_id": "IMPNEW019",
+      "kind": "importateur"
+    },
+    "output": {
+      "evidence_id": "HIST-importer-IMPNEW019",
+      "type": "importer",
+      "id": "IMPNEW019",
+      "declarations_passees": 37,
+      "premiere_declaration": "2013-07-02",
+      "valeur_cif_totale": 756056.0,
+      "principales_positions_sh4": {
+        "8703": 28,
+        "8702": 5,
+        "8704": 4
+      },
+      "controles_passes_reveles": 13,
+      "fraudes_confirmees": 13,
+      "taux_fraude_lisse": 0.7064,
+      "revenu_redresse_passe_TND": 46057.0,
+      "note": "Historique limité aux semaines passées ; fraudes connues uniquement pour les déclarations inspectées."
+    },
+    "duree_ms": 12
+  },
+  {
+    "step": 4,
+    "tool": "get_peer_prices",
+    "args": {
+      "hs6": "8703",
+      "country": "CNTRY277"
+    },
+    "output": {
+      "evidence_id": "PEER-8703-CNTRY277",
+      "sh6": "8703",
+      "pays": "CNTRY277",
+      "meme_sh6_meme_pays": {
+        "n": 0,
+        "prix_unitaire_median": null,
+        "prix_unitaire_p10": null,
+        "prix_unitaire_p90": null,
+        "taux_taxation_median_pct": null
+      },
+      "meme_sh6_tous_pays": {
+        "n": 0,
+        "prix_unitaire_median": null,
+        "prix_unitaire_p10": null,
+        "prix_unitaire_p90": null,
+        "taux_taxation_median_pct": null
+      }
+    },
+    "duree_ms": 10
+  },
+  {
+    "step": 5,
+    "tool": "find_similar_cases",
+    "args": {
+      "case_id": "SGD72769",
+      "k": 5
+    },
+    "output": {
+      "evidence_id": "SIMSET-SGD72769",
+      "base": "fraudes confirmées lors de contrôles passés",
+      "n_base": 1194,
+      "resultats_similaires": [
+        {
+          "evidence_id": "SIM-SGD68639",
+          "case_id": "SGD68639",
+          "semaine": 39,
+          "importateur": "IMPNEW004",
+          "sh6": "870323",
+          "pays": "CNTRY759",
+          "revenu_redresse_TND": 4327.0,
+          "distance": 1.11
+        },
+        {
+          "evidence_id": "SIM-SGD68217",
+          "case_id": "SGD68217",
+          "semaine": 38,
+          "importateur": "IMPNEW022",
+          "sh6": "870321",
+          "pays": "CNTRY376",
+          "revenu_redresse_TND": 5835.0,
+          "distance": 1.47
+        },
+        {
+          "evidence_id": "SIM-SGD68309",
+          "case_id": "SGD68309",
+          "semaine": 38,
+          "importateur": "IMPNEW005",
+          "sh6": "870323",
+          "pays": "CNTRY759",
+          "revenu_redresse_TND": 1950.0,
+          "distance": 1.85
+        },
+        {
+          "evidence_id": "SIM-SGD64974",
+          "case_id": "SGD64974",
+          "semaine": 37,
+          "importateur": "IMPNEW014",
+          "sh6": "870324",
+          "pays": "CNTRY680",
+          "revenu_redresse_TND": 1298.0,
+          "distance": 2.06
+        },
+        {
+          "evidence_id": "SIM-SGD68080",
+          "case_id": "SGD68080",
+          "semaine": 38,
+          "importateur": "IMPNEW019",
+          "sh6": "870332",
+          "pays": "CNTRY680",
+          "revenu_redresse_TND": 3057.0,
+          "distance": 2.44
+        }
+      ]
+    },
+    "duree_ms": 10
+  },
+  {
+    "step": 6,
+    "tool": "find_links",
+    "args": {
+      "importer_id": "IMPNEW019",
+      "declarant_id": "DEC9723"
+    },
+    "output": {
+      "importateur": "IMPNEW019",
+      "degre": 38,
+      "nouvel_importateur": false,
+      "declarants": [
+        {
+          "declarant": "DEC7291",
+          "taux_fraude_lisse": 0.5355,
+          "controles_reveles": 11,
+          "degre_importateurs": 224
+        },
+        {
+          "declarant": "DEC9697",
+          "taux_fraude_lisse": 0.4879,
+          "controles_reveles": 11,
+          "degre_importateurs": 274
+        },
+        {
+          "declarant": "DEC2291",
+          "taux_fraude_lisse": 0.4529,
+          "controles_reveles": 6,
+          "degre_importateurs": 113
+        }
+      ],
+      "importateurs_les_plus_risques_partageant_un_declarant": [
+        {
+          "importer": "IMPNEW005",
+          "taux_fraude_lisse": 0.7749,
+          "controles_reveles": 20
+        },
+        {
+          "importer": "IMPNEW004",
+          "taux_fraude_lisse": 0.7588,
+          "controles_reveles": 18
+        },
+        {
+          "importer": "IMPNEW022",
+          "taux_fraude_lisse": 0.7402,
+          "controles_reveles": 16
+        }
+      ],
+      "n_importateurs_partageant_un_declarant": 1622,
+      "taux_fraude_moyen_des_3_plus_risques": 0.758,
+      "note": "Un importateur partageant un déclarant n'est pas en soi « à risque » : voir son taux de fraude lissé.",
+      "declarant_risque_eleve": true,
+      "nouvel_importateur_lie_a_declarant_risque": false,
+      "seuil_risque_declarant": 0.25,
+      "evidence_id": "LINK-IMPNEW019"
+    },
+    "duree_ms": 54
+  },
+  {
+    "step": 7,
+    "tool": "check_tariff_classification",
+    "args": {
+      "case_id": "SGD72769"
+    },
+    "output": {
+      "evidence_id": "TARIF-SGD72769",
+      "disponible": false,
+      "raison": "aucune description commerciale dans ce jeu de données"
+    },
+    "duree_ms": 0
+  },
+  {
+    "step": 8,
+    "tool": "get_mirror_evidence",
+    "args": {
+      "hs_code": "8703"
+    },
+    "output": {
+      "evidence_id": "MIRROR-87",
+      "disponible": true,
+      "nature": "indicateur macro de priorisation (Tunisie réelle, UN Comtrade), pas une preuve pour cette déclaration",
+      "flux": [
+        {
+          "partner": "Germany",
+          "year": 2024,
+          "M_cif_usd": 189788024.058,
+          "X_fob_usd": 239080699.589,
+          "gap_log": 0.299,
+          "leak_usd": 61708714.488
+        },
+        {
+          "partner": "China",
+          "year": 2024,
+          "M_cif_usd": 246010765.461,
+          "X_fob_usd": 274878027.0,
+          "gap_log": 0.179,
+          "leak_usd": 44961423.765
+        },
+        {
+          "partner": "Italy",
+          "year": 2024,
+          "M_cif_usd": 117674738.793,
+          "X_fob_usd": 151482072.718,
+          "gap_log": 0.32,
+          "leak_usd": 41505681.323
+        },
+        {
+          "partner": "Spain",
+          "year": 2024,
+          "M_cif_usd": 102800794.042,
+          "X_fob_usd": 104597812.567,
+          "gap_log": 0.085,
+          "leak_usd": 8522304.117
+        },
+        {
+          "partner": "Türkiye",
+          "year": 2024,
+          "M_cif_usd": 110122414.766,
+          "X_fob_usd": 92791616.0,
+          "gap_log": -0.104,
+          "leak_usd": 0.0
+        }
+      ]
+    },
+    "duree_ms": 9
+  }
+]

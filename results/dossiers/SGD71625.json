@@ -1,75 +1,67 @@
 {
-  "case_id": "SGD70597",
+  "case_id": "SGD71625",
   "voie": "Rouge",
-  "montant_en_jeu_TND": 17047,
+  "montant_en_jeu_TND": 2665.0,
   "probabilite_fraude": 0.9999,
-  "resume": "Déclaration à haut risque (voie Rouge) avec un montant en jeu de 17 047 TND simulés. L'importateur IMPNEW003 a un taux de fraude lissé de 55,0 %.",
+  "resume": "Déclaration à haut risque (voie Rouge) avec un taux de fraude estimé à 99,99 %, montant en jeu de 2 665 TND simulés.",
   "faits": [
     {
-      "texte": "Déclaration du 2013-10-02, SH4 8703, importateur IMPNEW003, déclarant DEC9510.",
+      "texte": "Importateur IMPNEW013 avec un taux de fraude lissé de 70,6 % (sur les contrôles passés révélés).",
       "evidence_ids": [
-        "DECL-SGD70597"
+        "SHAP-SGD71625-risk_importer"
       ]
     },
     {
-      "texte": "L'importateur IMPNEW003 a déclaré 28 fois passées, avec 5 fraudes confirmées.",
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8704 : 38,6 % (sur les contrôles passés révélés).",
       "evidence_ids": [
-        "HIST-importer-IMPNEW003"
+        "SHAP-SGD71625-risk_imp_hs4"
       ]
     },
     {
-      "texte": "Le rapport FOB/CIF est de 0,99.",
+      "texte": "Poids par unité : 195,0 kg.",
       "evidence_ids": [
-        "SHAP-SGD70597-fob_cif"
+        "SHAP-SGD71625-l_kg_unit"
       ]
     },
     {
-      "texte": "Le bureau OFFICE51 a un taux de fraude lissé de 30,5 %.",
+      "texte": "L'importateur a déjà déclaré en SH4 8704.",
       "evidence_ids": [
-        "SHAP-SGD70597-risk_office"
+        "SHAP-SGD71625-is_new_combo"
       ]
     }
   ],
   "hypotheses": [
     {
       "type": "réseau",
-      "justification": "L'importateur IMPNEW003 a un historique de 28 déclarations passées et un taux de fraude lissé de 55,0 %.",
+      "justification": "L'importateur IMPNEW013 a un historique de fraude élevé et est lié à des déclarants à risque.",
       "evidence_ids": [
-        "HIST-importer-IMPNEW003",
-        "SHAP-SGD70597-risk_importer"
+        "HIST-importer-IMPNEW013",
+        "LINK-IMPNEW013"
       ]
     },
     {
       "type": "sous-évaluation",
-      "justification": "Le prix unitaire déclaré est inférieur aux prix unitaires des comparables.",
+      "justification": "Le prix unitaire déclaré est bas par rapport aux prix unitaires des déclarations passées de l'importateur.",
       "evidence_ids": [
-        "DECL-SGD70597",
-        "PEER-8703-CNTRY376"
-      ]
-    },
-    {
-      "type": "fausse origine",
-      "justification": "L'origine déclarée est CNTRY376, mais les comparables ne montrent pas de prix unitaires.",
-      "evidence_ids": [
-        "DECL-SGD70597",
-        "PEER-8703-CNTRY376"
+        "DECL-SGD71625",
+        "HIST-importer-IMPNEW013"
       ]
     }
   ],
   "base_legale": [],
   "controles_recommandes": [
-    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+    "Pesage de la marchandise"
   ],
   "incertitudes": [
     "Données synthétiques sur les prix unitaires",
-    "Aucune information sur la description commerciale",
-    "Aucune phrase citable pertinente dans la base légale"
+    "Absence de données sur la description commerciale",
+    "Limites de l'historique des déclarations"
   ],
   "niveau_confiance": "élevé",
   "_mode": "llm_local_valide",
   "_modele": "mirsad-qwen3:8b",
   "_fournisseur": "LLM local (mirsad-qwen3:8b)",
-  "_duree_s": 29.4,
+  "_duree_s": 26.2,
   "_raison_fallback": null,
   "_validation": [
     {
@@ -79,7 +71,7 @@
       "appels_llm": [
         {
           "type": "outils",
-          "s": 1.8,
+          "s": 1.4,
           "tokens_sortie": 30
         },
         {
@@ -104,7 +96,7 @@
         },
         {
           "type": "outils",
-          "s": 1.4,
+          "s": 1.3,
           "tokens_sortie": 35
         },
         {
@@ -119,11 +111,11 @@
         },
         {
           "type": "dossier",
-          "s": 19.0,
-          "tokens_sortie": 664
+          "s": 17.2,
+          "tokens_sortie": 559
         }
       ],
-      "duree_s": 29.4
+      "duree_s": 26.2
     }
   ],
   "_demo_injection": false

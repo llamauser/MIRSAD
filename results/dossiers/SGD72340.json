@@ -1,58 +1,56 @@
 {
-  "case_id": "SGD70597",
+  "case_id": "SGD72340",
   "voie": "Rouge",
-  "montant_en_jeu_TND": 17047,
+  "montant_en_jeu_TND": 12266,
   "probabilite_fraude": 0.9999,
-  "resume": "Déclaration à haut risque (voie Rouge) avec un montant en jeu de 17 047 TND simulés. L'importateur IMPNEW003 a un taux de fraude lissé de 55,0 %.",
+  "resume": "Déclaration à haut risque (voie Rouge) avec un taux de fraude estimé à 99,99 %, montant en jeu de 12 266 TND simulés.",
   "faits": [
     {
-      "texte": "Déclaration du 2013-10-02, SH4 8703, importateur IMPNEW003, déclarant DEC9510.",
+      "texte": "Voie Rouge décidée par le scoreur déterministe.",
       "evidence_ids": [
-        "DECL-SGD70597"
+        "RISK-SGD72340"
       ]
     },
     {
-      "texte": "L'importateur IMPNEW003 a déclaré 28 fois passées, avec 5 fraudes confirmées.",
+      "texte": "Importateur IMPNEW011 avec 35 déclarations passées.",
       "evidence_ids": [
-        "HIST-importer-IMPNEW003"
+        "RISK-SGD72340",
+        "HIST-importer-IMPNEW011"
       ]
     },
     {
-      "texte": "Le rapport FOB/CIF est de 0,99.",
+      "texte": "Déclarant DEC6463 avec un taux de fraude lissé de 35,4 %.",
       "evidence_ids": [
-        "SHAP-SGD70597-fob_cif"
+        "RISK-SGD72340"
       ]
     },
     {
-      "texte": "Le bureau OFFICE51 a un taux de fraude lissé de 30,5 %.",
+      "texte": "Prix unitaire de 4 116,4 TND simulés.",
       "evidence_ids": [
-        "SHAP-SGD70597-risk_office"
+        "DECL-SGD72340"
       ]
     }
   ],
   "hypotheses": [
     {
-      "type": "réseau",
-      "justification": "L'importateur IMPNEW003 a un historique de 28 déclarations passées et un taux de fraude lissé de 55,0 %.",
-      "evidence_ids": [
-        "HIST-importer-IMPNEW003",
-        "SHAP-SGD70597-risk_importer"
-      ]
-    },
-    {
       "type": "sous-évaluation",
-      "justification": "Le prix unitaire déclaré est inférieur aux prix unitaires des comparables.",
+      "justification": "Prix unitaire de 4 116,4 TND simulés inférieur aux prix unitaires des comparables (mêmes SH6 et même pays).",
       "evidence_ids": [
-        "DECL-SGD70597",
-        "PEER-8703-CNTRY376"
+        "PEER-870324-CNTRY615"
       ]
     },
     {
-      "type": "fausse origine",
-      "justification": "L'origine déclarée est CNTRY376, mais les comparables ne montrent pas de prix unitaires.",
+      "type": "réseau",
+      "justification": "L'importateur IMPNEW011 a un historique de 35 déclarations passées et un taux de fraude lissé de 73,0 %.",
       "evidence_ids": [
-        "DECL-SGD70597",
-        "PEER-8703-CNTRY376"
+        "HIST-importer-IMPNEW011"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "Le déclarant DEC6463 est lié à des importateurs à risque (IMPNEW005, IMPNEW004, IMPNEW022).",
+      "evidence_ids": [
+        "LINK-IMPNEW011"
       ]
     }
   ],
@@ -61,15 +59,13 @@
     "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
   ],
   "incertitudes": [
-    "Données synthétiques sur les prix unitaires",
-    "Aucune information sur la description commerciale",
-    "Aucune phrase citable pertinente dans la base légale"
+    "Données synthétiques (TND simulés), étiquettes sélectives (SH4, SH6), limites de l'historique des importateurs"
   ],
   "niveau_confiance": "élevé",
   "_mode": "llm_local_valide",
   "_modele": "mirsad-qwen3:8b",
   "_fournisseur": "LLM local (mirsad-qwen3:8b)",
-  "_duree_s": 29.4,
+  "_duree_s": 27.7,
   "_raison_fallback": null,
   "_validation": [
     {
@@ -79,7 +75,7 @@
       "appels_llm": [
         {
           "type": "outils",
-          "s": 1.8,
+          "s": 1.1,
           "tokens_sortie": 30
         },
         {
@@ -94,8 +90,8 @@
         },
         {
           "type": "outils",
-          "s": 1.1,
-          "tokens_sortie": 35
+          "s": 1.2,
+          "tokens_sortie": 37
         },
         {
           "type": "outils",
@@ -105,7 +101,7 @@
         {
           "type": "outils",
           "s": 1.4,
-          "tokens_sortie": 35
+          "tokens_sortie": 36
         },
         {
           "type": "outils",
@@ -119,11 +115,11 @@
         },
         {
           "type": "dossier",
-          "s": 19.0,
-          "tokens_sortie": 664
+          "s": 18.8,
+          "tokens_sortie": 612
         }
       ],
-      "duree_s": 29.4
+      "duree_s": 27.7
     }
   ],
   "_demo_injection": false

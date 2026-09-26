@@ -13,7 +13,7 @@ import time
 from .. import llm
 from ..config import load_config
 from . import fallback
-from .schema import DOSSIER_SCHEMA, RESPONSE_FORMAT
+from .schema import RESPONSE_FORMAT
 from .tools import TOOL_SCHEMAS, call_tool
 from .validator import dumps, validate
 
@@ -45,6 +45,19 @@ Règles impératives :
    Liste les incertitudes (données synthétiques, étiquettes sélectives, limites).
 8. resume ≤ 60 mots. Données et montants sont synthétiques (« TND simulés »)."""
 
+# compact skeleton given to local models in plain JSON mode (the validator enforces the full schema)
+SKELETON = ('{"case_id": "...", "voie": "Rouge|Orange|Vert (copiée)", "montant_en_jeu_TND": 0, "probabilite_fraude": 0, '
+            '"resume": "...", "faits": [{"texte": "...", "evidence_ids": ["..."]}], "hypotheses": [{"type": '
+            '"sous-évaluation|fausse espèce|fausse origine|réseau|autre", "justification": "...", "evidence_ids": ["..."]}], '
+            '"base_legale": [{"chunk_id": "LEG-...", "source": "...", "extrait": "phrase citable exacte"}], '
+            '"controles_recommandes": ["..."], "incertitudes": ["..."], "niveau_confiance": "faible|moyen|élevé"}')
+
+
+def est_tokens(messages) -> int:
+    """Rough token estimate (French/JSON ≈ 3 chars per token), incl. ~1200 tokens of tool schemas."""
+    return int(sum(len(json.dumps(m, ensure_ascii=False)) for m in messages) / 3.0) + 1200
+
+
 MODE = {("local", 0): "llm_local_valide", ("local", 1): "llm_local_valide_apres_correction",
         ("api", 0): "llm_api_valide", ("api", 1): "llm_api_valide_apres_correction"}
 
@@ -67,7 +80,10 @@ def _run_provider(prov: llm.Provider, case_id: str, cfg: dict, log: list) -> dic
     trace, messages = [], [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": f"Prépare le dossier d'enquête de la déclaration {case_id}."}]
+    ctx = prov.context_tokens
     for _ in range(cfg["max_steps"]):
+        if ctx and est_tokens(messages) > 0.70 * ctx:  # keep room for the dossier itself
+            break
         resp = chat("outils", messages=messages, tools=TOOL_SCHEMAS, temperature=cfg["temperature"])
         msg = resp.choices[0].message
         if not msg.tool_calls:
@@ -95,10 +111,11 @@ def _run_provider(prov: llm.Provider, case_id: str, cfg: dict, log: list) -> dic
         if prov.json_mode == "json_object":  # lighter decoding; the JSON schema is given in the prompt instead
             rf = {"type": "json_object"}
             if attempt == 0:
-                messages[-1]["content"] += ("\nRéponds uniquement par un objet JSON conforme à ce schéma :\n"
-                                            + json.dumps(DOSSIER_SCHEMA, ensure_ascii=False))
+                messages[-1]["content"] += "\nRéponds uniquement par un objet JSON de cette forme :\n" + SKELETON
         else:
             rf = RESPONSE_FORMAT
+        if ctx and est_tokens(messages) > 0.88 * ctx:
+            raise OverflowError(f"contexte local insuffisant (~{est_tokens(messages)} jetons pour {ctx})")
         resp = chat("dossier", messages=messages, temperature=cfg["temperature"], response_format=rf)
         try:
             dossier = json.loads(resp.choices[0].message.content)

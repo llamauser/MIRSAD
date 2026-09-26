@@ -41,16 +41,16 @@ def links(g: nx.Graph, revealed: pd.DataFrame, importer: str, declarant: str | N
     co_imps.discard(importer)
     co = [{"importer": i, "taux_fraude_lisse": round(float(imp_rate.get(i, p0)), 4),
            "controles_reveles": int(imp_n.get(i, 0))} for i in co_imps]
-    co = sorted(co, key=lambda x: -x["taux_fraude_lisse"])[:5]
+    co = sorted(co, key=lambda x: -x["taux_fraude_lisse"])[:3]
     risky = [d for d in dec_info if d["taux_fraude_lisse"] >= risky_threshold and d["controles_reveles"] >= 5]
     return {
         "importateur": importer,
         "degre": g.degree(node) if node in g else 0,
         "nouvel_importateur": node not in g,
-        "declarants": sorted(dec_info, key=lambda x: -x["taux_fraude_lisse"])[:5],
+        "declarants": sorted(dec_info, key=lambda x: -x["taux_fraude_lisse"])[:3],
         "importateurs_les_plus_risques_partageant_un_declarant": co,
         "n_importateurs_partageant_un_declarant": len(co_imps),
-        "taux_fraude_moyen_des_5_plus_risques": round(float(pd.Series([c["taux_fraude_lisse"] for c in co]).mean()), 4) if co else None,
+        "taux_fraude_moyen_des_3_plus_risques": round(float(pd.Series([c["taux_fraude_lisse"] for c in co]).mean()), 4) if co else None,
         "note": "Un importateur partageant un déclarant n'est pas en soi « à risque » : voir son taux de fraude lissé.",
         "declarant_risque_eleve": bool(risky),
         "nouvel_importateur_lie_a_declarant_risque": bool(node not in g and risky),

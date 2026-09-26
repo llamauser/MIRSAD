@@ -1,0 +1,511 @@
+{
+  "case_id": "SGD71396",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 2438.0,
+  "probabilite_fraude": 0.2857,
+  "resume": "Déclaration de véhicules (SH4 8703) en provenance de CNTRY150. Importateur connu, pas de fraude passée. Pas de comparables de prix. Risque pays d'origine élevé. Contrôle physique recommandé.",
+  "faits": [
+    {
+      "texte": "Déclaration SGD71396 : 5 véhicules (SH4 8703), valeur CIF 7124 TND simulés, importateur IMP638768, pays d'origine CNTRY150.",
+      "evidence_ids": [
+        "DECL-SGD71396"
+      ]
+    },
+    {
+      "texte": "Importateur connu depuis 273 jours, 21 déclarations passées, aucune fraude confirmée.",
+      "evidence_ids": [
+        "SHAP-SGD71396-days_since_first",
+        "HIST-importer-IMP638768"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMP638768 : 29,5 % sur les contrôles passés révélés.",
+      "evidence_ids": [
+        "SHAP-SGD71396-risk_importer",
+        "HIST-importer-IMP638768"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 29,5 %.",
+      "evidence_ids": [
+        "SHAP-SGD71396-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Rapport FOB/CIF : 0,97.",
+      "evidence_ids": [
+        "SHAP-SGD71396-fob_cif"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du pays d'origine CNTRY150 : 49,2 %.",
+      "evidence_ids": [
+        "SHAP-SGD71396-risk_country"
+      ]
+    },
+    {
+      "texte": "Aucun comparable de prix disponible pour SH6 8703 en provenance de CNTRY150.",
+      "evidence_ids": [
+        "PEER-8703-CNTRY150"
+      ]
+    },
+    {
+      "texte": "Contrôle physique de la marchandise recommandé par les règles.",
+      "evidence_ids": [
+        "RISK-SGD71396"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "réseau",
+      "justification": "L'importateur partage des déclarants avec des importateurs à taux de fraude très élevé (jusqu'à 77,5 %).",
+      "evidence_ids": [
+        "LINK-IMP638768"
+      ]
+    }
+  ],
+  "base_legale": [
+    {
+      "chunk_id": "LEG-omc_accord_evaluatio-014",
+      "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+      "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+    },
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+      "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+    },
+    {
+      "chunk_id": "LEG-tn_code_des_douanes_-008",
+      "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+      "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+    }
+  ],
+  "controles_recommandes": [
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+  ],
+  "incertitudes": [
+    "Aucun comparable de prix disponible pour cette position et ce pays.",
+    "Pas d'alerte de fausse espèce (absence de description commerciale).",
+    "Base légale : extraits OMC/OMD/Code des douanes, à compléter si besoin.",
+    "Indicateurs macro (MIRROR) non utilisables pour ce cas individuel."
+  ],
+  "niveau_confiance": "moyen",
+  "_mode": "llm_api_valide_apres_correction",
+  "_modele": "gpt-4.1",
+  "_fournisseur": "API OpenAI (gpt-4.1)",
+  "_duree_s": 64.9,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 1,
+      "erreurs": [
+        "hypotheses: « fausse origine » sans preuve compatible (attendu : DECL-, MIRROR-, PEER-)"
+      ],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 1.5,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.2,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.3,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.5,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 1.2,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 25
+        },
+        {
+          "type": "dossier",
+          "s": 19.3,
+          "tokens_sortie": 642
+        }
+      ],
+      "duree_s": 29.1,
+      "brouillon_rejete": {
+        "case_id": "SGD71396",
+        "voie": "Rouge",
+        "montant_en_jeu_TND": 2438.0,
+        "probabilite_fraude": 0.2857,
+        "resume": "Déclaration SGD71396 classée voie Rouge avec un risque de fraude de 28,6 %, montant en jeu de 2 438 TND simulés.",
+        "faits": [
+          {
+            "texte": "Importateur connu depuis 273 jours.",
+            "evidence_ids": [
+              "SHAP-SGD71396-days_since_first"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé de l'importateur IMP638768 : 29,5 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD71396-risk_importer"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 29,5 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD71396-risk_imp_hs4"
+            ]
+          },
+          {
+            "texte": "Rapport FOB/CIF : 0,97.",
+            "evidence_ids": [
+              "SHAP-SGD71396-fob_cif"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé du pays d'origine CNTRY150 : 49,2 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD71396-risk_country"
+            ]
+          }
+        ],
+        "hypotheses": [
+          {
+            "type": "fausse origine",
+            "justification": "Taux de fraude lissé du pays d'origine CNTRY150 : 49,2 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD71396-risk_country"
+            ]
+          },
+          {
+            "type": "réseau",
+            "justification": "Taux de fraude lissé du déclarant DEC9421 : 45,29 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "LINK-IMP638768"
+            ]
+          }
+        ],
+        "base_legale": [],
+        "controles_recommandes": [
+          "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+        ],
+        "incertitudes": [
+          "Données synthétiques sur les prix et les montants",
+          "Étiquettes sélectives sur les catégories de risque"
+        ],
+        "niveau_confiance": "moyen"
+      }
+    },
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 2,
+      "erreurs": [
+        "hypotheses: « fausse origine » sans preuve compatible (attendu : DECL-, MIRROR-, PEER-)"
+      ],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 1.5,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.2,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.3,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.5,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 1.2,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 25
+        },
+        {
+          "type": "dossier",
+          "s": 19.3,
+          "tokens_sortie": 642
+        },
+        {
+          "type": "dossier",
+          "s": 16.9,
+          "tokens_sortie": 618
+        }
+      ],
+      "duree_s": 46.1,
+      "brouillon_rejete": {
+        "case_id": "SGD71396",
+        "voie": "Rouge",
+        "montant_en_jeu_TND": 2438.0,
+        "probabilite_fraude": 0.2857,
+        "resume": "Déclaration SGD71396 classée voie Rouge avec un risque de fraude de 28,6 %, montant en jeu de 2 438 TND simulés.",
+        "faits": [
+          {
+            "texte": "Importateur connu depuis 273 jours.",
+            "evidence_ids": [
+              "SHAP-SGD71396-days_since_first"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé de l'importateur IMP638768 : 29,5 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD71396-risk_importer"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 29,5 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD71396-risk_imp_hs4"
+            ]
+          },
+          {
+            "texte": "Rapport FOB/CIF : 0,97.",
+            "evidence_ids": [
+              "SHAP-SGD71396-fob_cif"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé du pays d'origine CNTRY150 : 49,2 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD71396-risk_country"
+            ]
+          }
+        ],
+        "hypotheses": [
+          {
+            "type": "fausse origine",
+            "justification": "Taux de fraude lissé du pays d'origine CNTRY150 : 49,2 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "SHAP-SGD71396-risk_country"
+            ]
+          },
+          {
+            "type": "réseau",
+            "justification": "Taux de fraude lissé du déclarant DEC9421 : 45,29 % (sur les contrôles passés révélés).",
+            "evidence_ids": [
+              "LINK-IMP638768"
+            ]
+          }
+        ],
+        "base_legale": [],
+        "controles_recommandes": [
+          "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+        ],
+        "incertitudes": [
+          "Données synthétiques sur les prix et les montants",
+          "Étiquettes sélectives sur les catégories de risque"
+        ],
+        "niveau_confiance": "moyen"
+      }
+    },
+    {
+      "fournisseur": "API OpenAI (gpt-4.1)",
+      "tentative": 1,
+      "erreurs": [
+        "hypotheses: « fausse origine » sans preuve compatible (attendu : DECL-, MIRROR-, PEER-)"
+      ],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 2.0,
+          "tokens_sortie": 21
+        },
+        {
+          "type": "outils",
+          "s": 2.5,
+          "tokens_sortie": 238
+        },
+        {
+          "type": "outils",
+          "s": 4.3,
+          "tokens_sortie": 880
+        },
+        {
+          "type": "dossier",
+          "s": 5.3,
+          "tokens_sortie": 1221
+        }
+      ],
+      "duree_s": 14.7,
+      "brouillon_rejete": {
+        "case_id": "SGD71396",
+        "voie": "Rouge",
+        "montant_en_jeu_TND": 2438.0,
+        "probabilite_fraude": 0.2857,
+        "resume": "Déclaration de véhicules (SH4 8703) en provenance de CNTRY150. Importateur connu, pas de fraude passée. Pas de comparables de prix. Risque pays d'origine élevé. Contrôle physique recommandé.",
+        "faits": [
+          {
+            "texte": "Déclaration SGD71396 : 5 véhicules (SH4 8703), valeur CIF 7124 TND simulés, importateur IMP638768, pays d'origine CNTRY150.",
+            "evidence_ids": [
+              "DECL-SGD71396"
+            ]
+          },
+          {
+            "texte": "Importateur connu depuis 273 jours, 21 déclarations passées, aucune fraude confirmée.",
+            "evidence_ids": [
+              "SHAP-SGD71396-days_since_first",
+              "HIST-importer-IMP638768"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé de l'importateur IMP638768 : 29,5 % sur les contrôles passés révélés.",
+            "evidence_ids": [
+              "SHAP-SGD71396-risk_importer",
+              "HIST-importer-IMP638768"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 29,5 %.",
+            "evidence_ids": [
+              "SHAP-SGD71396-risk_imp_hs4"
+            ]
+          },
+          {
+            "texte": "Rapport FOB/CIF : 0,97.",
+            "evidence_ids": [
+              "SHAP-SGD71396-fob_cif"
+            ]
+          },
+          {
+            "texte": "Taux de fraude lissé du pays d'origine CNTRY150 : 49,2 %.",
+            "evidence_ids": [
+              "SHAP-SGD71396-risk_country"
+            ]
+          },
+          {
+            "texte": "Aucun comparable de prix disponible pour SH6 8703 en provenance de CNTRY150.",
+            "evidence_ids": [
+              "PEER-8703-CNTRY150"
+            ]
+          },
+          {
+            "texte": "Contrôle physique de la marchandise recommandé par les règles.",
+            "evidence_ids": [
+              "RISK-SGD71396"
+            ]
+          }
+        ],
+        "hypotheses": [
+          {
+            "type": "fausse origine",
+            "justification": "Le taux de fraude lissé du pays d'origine CNTRY150 est élevé (49,2 %).",
+            "evidence_ids": [
+              "SHAP-SGD71396-risk_country"
+            ]
+          },
+          {
+            "type": "réseau",
+            "justification": "L'importateur partage des déclarants avec des importateurs à taux de fraude très élevé (jusqu'à 77,5 %).",
+            "evidence_ids": [
+              "LINK-IMP638768"
+            ]
+          }
+        ],
+        "base_legale": [
+          {
+            "chunk_id": "LEG-omc_accord_evaluatio-014",
+            "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+            "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+          },
+          {
+            "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+            "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+            "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+          },
+          {
+            "chunk_id": "LEG-tn_code_des_douanes_-008",
+            "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+            "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+          }
+        ],
+        "controles_recommandes": [
+          "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+        ],
+        "incertitudes": [
+          "Aucun comparable de prix disponible pour cette position et ce pays.",
+          "Pas d'alerte de fausse espèce (absence de description commerciale).",
+          "Base légale : extraits OMC/OMD/Code des douanes, à compléter si besoin.",
+          "Indicateurs macro (MIRROR) non utilisables pour ce cas individuel."
+        ],
+        "niveau_confiance": "moyen"
+      }
+    },
+    {
+      "fournisseur": "API OpenAI (gpt-4.1)",
+      "tentative": 2,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 2.0,
+          "tokens_sortie": 21
+        },
+        {
+          "type": "outils",
+          "s": 2.5,
+          "tokens_sortie": 238
+        },
+        {
+          "type": "outils",
+          "s": 4.3,
+          "tokens_sortie": 880
+        },
+        {
+          "type": "dossier",
+          "s": 5.3,
+          "tokens_sortie": 1221
+        },
+        {
+          "type": "dossier",
+          "s": 4.1,
+          "tokens_sortie": 999
+        }
+      ],
+      "duree_s": 18.8
+    }
+  ],
+  "_demo_injection": false
+}

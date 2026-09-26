@@ -20,13 +20,20 @@ CHUNK, OVERLAP = 800, 150
 
 
 def chunk_text(text: str, size: int = CHUNK, overlap: int = OVERLAP) -> list[str]:
+    """~size-char windows with overlap, cut on word boundaries (never mid-word)."""
     text = " ".join(text.split())
     out, i = [], 0
     while i < len(text):
-        out.append(text[i:i + size])
-        if i + size >= len(text):
+        j = min(len(text), i + size)
+        if j < len(text):
+            sp = text.rfind(" ", i + size // 2, j)
+            j = sp if sp > i else j
+        out.append(text[i:j].strip())
+        if j >= len(text):
             break
-        i += size - overlap
+        nxt = j - overlap
+        sp = text.find(" ", nxt)
+        i = sp + 1 if 0 <= sp < j else nxt
     return out
 
 
@@ -82,8 +89,14 @@ class Corpus:
 def sentences(chunk_text: str, max_words: int = 40) -> list[str]:
     """Quotable sentences of a chunk: verbatim substrings (whitespace-normalised), each <= max_words words."""
     text = " ".join(chunk_text.split())
+    parts = re.split(r"(?<=[.;:])\s+", text)
+    # drop fragments cut by the chunk window: a first piece starting mid-sentence, a last piece not ending one
+    if parts and parts[0][:1].islower():
+        parts = parts[1:]
+    if parts and not parts[-1].rstrip().endswith((".", ";", ":")):
+        parts = parts[:-1]
     out = []
-    for s in re.split(r"(?<=[.;:])\s+", text):
+    for s in parts:
         w = s.split()
         if w and w[0] == "Norme":  # WCO numbering residue ("6.4. Norme La douane ...")
             w = w[1:]
