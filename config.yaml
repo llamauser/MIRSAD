@@ -89,9 +89,10 @@ simulation:
 llm:
   temperature: 0
   max_steps: 8
-  # Providers are tried in order; each dossier must pass the validator, otherwise the next provider is tried,
-  # and finally the deterministic template (no LLM) is used.
-  local:                       # 1) on-premises LLM via Ollama (declarations never leave the machine)
+  # Providers are tried in this order; each dossier must pass the validator, otherwise the next provider is
+  # tried, and finally the deterministic template (no LLM) is used. For production: [local] only (on-premises).
+  order: [api, local]
+  local:                       # on-premises LLM via Ollama (declarations never leave the machine) -- fallback here
     enabled: true
     base_url: http://localhost:11434/v1
     model: mirsad-qwen3:8b     # qwen3:8b + num_ctx 8192 (see ollama/Modelfile: 8k fits 8 GB VRAM, 12k+ spills)
@@ -100,7 +101,7 @@ llm:
     time_budget_s: 420         # per investigation; beyond it the next provider is used
     json_mode: json_object     # lighter than schema-constrained decoding; the validator checks the schema
     context_tokens: 8192       # must match num_ctx; the loop stops gathering evidence before overflowing it
-  api:                         # 2) OpenAI API fallback (keys from .env: OPENAI_API_KEYS / OPENAI_API_KEY)
+  api:                         # OpenAI API -- main provider for the demo (keys from .env: OPENAI_API_KEYS / OPENAI_API_KEY)
     enabled: true
     model: gpt-4.1             # temperature 0 supported (GPT-5 family is not)
     model_small: gpt-4.1-mini

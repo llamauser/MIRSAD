@@ -1,0 +1,452 @@
+[
+  {
+    "step": 1,
+    "tool": "get_risk_assessment",
+    "args": {
+      "case_id": "SGD72398"
+    },
+    "output": {
+      "evidence_id": "RISK-SGD72398",
+      "case_id": "SGD72398",
+      "voie": "Rouge",
+      "probabilite_fraude": 0.5095,
+      "revenu_attendu_si_fraude_TND": 1386.0,
+      "montant_en_jeu_TND": 706.0,
+      "segment": "Surveillé",
+      "motif_selection": "montant en jeu parmi les plus élevés de la semaine (exploitation)",
+      "alerte_tendance_active": false,
+      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 51,0 %, montant en jeu (P × revenu attendu) = 706 TND simulés.",
+      "facteurs_shap": [
+        {
+          "evidence_id": "SHAP-SGD72398-risk_importer",
+          "variable": "risk_importer",
+          "valeur": 0.3801,
+          "contribution_shap": 2.3748,
+          "sens": "augmente le risque",
+          "texte": "Taux de fraude lissé de l'importateur IMP108897 : 38,0 % (sur les contrôles passés révélés)."
+        },
+        {
+          "evidence_id": "SHAP-SGD72398-days_since_first",
+          "variable": "days_since_first",
+          "valeur": 216.0,
+          "contribution_shap": -0.5733,
+          "sens": "diminue le risque",
+          "texte": "Importateur connu depuis 216 jours."
+        },
+        {
+          "evidence_id": "SHAP-SGD72398-risk_imp_hs4",
+          "variable": "risk_imp_hs4",
+          "valeur": 0.3181,
+          "contribution_shap": 0.393,
+          "sens": "augmente le risque",
+          "texte": "Taux de fraude lissé du couple importateur × SH4 5903 : 31,8 % (sur les contrôles passés révélés)."
+        },
+        {
+          "evidence_id": "SHAP-SGD72398-ent_mean",
+          "variable": "ent_mean",
+          "valeur": 0.0739,
+          "contribution_shap": -0.3007,
+          "sens": "diminue le risque",
+          "texte": "Score de conformité dynamique de l'entreprise IMP108897 : 7,4 / 100 de risque (probabilité de fraude estimée, contrôles passés révélés)."
+        },
+        {
+          "evidence_id": "SHAP-SGD72398-risk_office",
+          "variable": "risk_office",
+          "valeur": 0.4291,
+          "contribution_shap": 0.2635,
+          "sens": "augmente le risque",
+          "texte": "Taux de fraude lissé du bureau OFFICE16 : 42,9 % (sur les contrôles passés révélés)."
+        }
+      ],
+      "controles_recommandes_regles": [
+        "Vérification de l'identité et de l'activité déclarée de l'importateur"
+      ],
+      "note": "Scores issus du modèle LightGBM calibré ; l'agent ne peut pas modifier la voie."
+    },
+    "duree_ms": 34
+  },
+  {
+    "step": 2,
+    "tool": "get_declaration",
+    "args": {
+      "case_id": "SGD72398"
+    },
+    "output": {
+      "evidence_id": "DECL-SGD72398",
+      "case_id": "SGD72398",
+      "date": "2013-10-07",
+      "semaine": 40,
+      "importateur": "IMP108897",
+      "declarant": "DEC4312",
+      "pays_origine": "CNTRY759",
+      "bureau": "OFFICE16",
+      "code_sh10": "5903900000",
+      "sh6": "590390",
+      "sh4": "5903",
+      "quantite": 400.0,
+      "poids_brut_kg": 695.0,
+      "valeur_fob": 4671.0,
+      "valeur_cif": 6134.0,
+      "taxes": 2458.0,
+      "prix_unitaire": 15.34,
+      "unite_monetaire": "TND simulés (données synthétiques)"
+    },
+    "duree_ms": 2
+  },
+  {
+    "step": 3,
+    "tool": "get_company_profile",
+    "args": {
+      "importer_id": "IMP108897"
+    },
+    "output": {
+      "evidence_id": "COMP-IMP108897",
+      "entreprise": "IMP108897",
+      "semaine": 40,
+      "score_risque_0_100": 7.4,
+      "intervalle_90_pct": [
+        0.0,
+        20.3
+      ],
+      "controles_effectifs": 0.2,
+      "tendance_4_semaines_points": -0.4,
+      "risque_reseau_declarants_pct": 12.3,
+      "segment": "Surveillé",
+      "controles_passes": [
+        {
+          "evidence_id": "CTRL-SGD14066",
+          "semaine": 10,
+          "sh6": "701328",
+          "motif": "exploitation",
+          "resultat": "fraude",
+          "redressement_TND": 1085.0
+        }
+      ],
+      "note": "Score = loi bêta a posteriori (a priori : taux de fraude des contrôles aléatoires), mise à jour par chaque contrôle, avec une demi-vie de 12 semaines. Segment : Surveillé = peu connue, Critique = connue et risquée, Confiance = connue et conforme."
+    },
+    "duree_ms": 20
+  },
+  {
+    "step": 4,
+    "tool": "get_entity_history",
+    "args": {
+      "kind": "importateur",
+      "entity_id": "IMP108897"
+    },
+    "output": {
+      "evidence_id": "HIST-importer-IMP108897",
+      "type": "importer",
+      "id": "IMP108897",
+      "declarations_passees": 8,
+      "premiere_declaration": "2013-03-05",
+      "valeur_cif_totale": 796787.0,
+      "principales_positions_sh4": {
+        "8703": 2,
+        "5509": 1,
+        "7013": 1,
+        "7309": 1,
+        "8431": 1
+      },
+      "controles_passes_reveles": 1,
+      "fraudes_confirmees": 1,
+      "taux_fraude_lisse": 0.3801,
+      "revenu_redresse_passe_TND": 1085.0,
+      "note": "Historique limité aux semaines passées ; fraudes connues uniquement pour les déclarations inspectées."
+    },
+    "duree_ms": 20
+  },
+  {
+    "step": 5,
+    "tool": "get_entity_history",
+    "args": {
+      "kind": "declarant",
+      "entity_id": "SGD72398"
+    },
+    "output": {
+      "evidence_id": "HIST-declarant-SGD72398",
+      "type": "declarant",
+      "id": "SGD72398",
+      "declarations_passees": 0,
+      "premiere_declaration": null,
+      "valeur_cif_totale": 0.0,
+      "principales_positions_sh4": {},
+      "controles_passes_reveles": 0,
+      "fraudes_confirmees": 0,
+      "taux_fraude_lisse": 0.3181,
+      "revenu_redresse_passe_TND": 0.0,
+      "note": "Historique limité aux semaines passées ; fraudes connues uniquement pour les déclarations inspectées."
+    },
+    "duree_ms": 15
+  },
+  {
+    "step": 6,
+    "tool": "get_entity_history",
+    "args": {
+      "kind": "bureau",
+      "entity_id": "OFFICE16"
+    },
+    "output": {
+      "evidence_id": "HIST-office-OFFICE16",
+      "type": "office",
+      "id": "OFFICE16",
+      "declarations_passees": 347,
+      "premiere_declaration": "2013-01-02",
+      "valeur_cif_totale": 33043943.0,
+      "principales_positions_sh4": {
+        "8703": 35,
+        "8704": 8,
+        "8708": 4,
+        "8518": 4,
+        "0303": 4
+      },
+      "controles_passes_reveles": 58,
+      "fraudes_confirmees": 26,
+      "taux_fraude_lisse": 0.4291,
+      "revenu_redresse_passe_TND": 29748.0,
+      "note": "Historique limité aux semaines passées ; fraudes connues uniquement pour les déclarations inspectées."
+    },
+    "duree_ms": 7
+  },
+  {
+    "step": 7,
+    "tool": "get_peer_prices",
+    "args": {
+      "hs6": "590390",
+      "country": ""
+    },
+    "output": {
+      "evidence_id": "PEER-590390-ALL",
+      "sh6": "590390",
+      "pays": "",
+      "meme_sh6_tous_pays": {
+        "n": 3,
+        "prix_unitaire_median": 1.82,
+        "prix_unitaire_p10": 1.64,
+        "prix_unitaire_p90": 37.45,
+        "taux_taxation_median_pct": 6.8
+      }
+    },
+    "duree_ms": 13
+  },
+  {
+    "step": 8,
+    "tool": "find_links",
+    "args": {
+      "importer_id": "IMP108897",
+      "declarant_id": "SGD72398"
+    },
+    "output": {
+      "importateur": "IMP108897",
+      "degre": 15,
+      "nouvel_importateur": false,
+      "declarants": [
+        {
+          "declarant": "DEC2280",
+          "taux_fraude_lisse": 0.4427,
+          "controles_reveles": 13,
+          "degre_importateurs": 251
+        },
+        {
+          "declarant": "DEC1512",
+          "taux_fraude_lisse": 0.4318,
+          "controles_reveles": 2,
+          "degre_importateurs": 8
+        },
+        {
+          "declarant": "DEC9027",
+          "taux_fraude_lisse": 0.3801,
+          "controles_reveles": 1,
+          "degre_importateurs": 63
+        }
+      ],
+      "importateurs_les_plus_risques_partageant_un_declarant": [
+        {
+          "importer": "IMPNEW005",
+          "taux_fraude_lisse": 0.8106,
+          "controles_reveles": 26
+        },
+        {
+          "importer": "IMPNEW009",
+          "taux_fraude_lisse": 0.8106,
+          "controles_reveles": 26
+        },
+        {
+          "importer": "IMPNEW022",
+          "taux_fraude_lisse": 0.7869,
+          "controles_reveles": 22
+        }
+      ],
+      "n_importateurs_partageant_un_declarant": 472,
+      "taux_fraude_moyen_des_3_plus_risques": 0.8027,
+      "note": "Un importateur partageant un déclarant n'est pas en soi « à risque » : voir son taux de fraude lissé.",
+      "declarant_risque_eleve": true,
+      "nouvel_importateur_lie_a_declarant_risque": false,
+      "seuil_risque_declarant": 0.25,
+      "evidence_id": "LINK-IMP108897"
+    },
+    "duree_ms": 27
+  },
+  {
+    "step": 9,
+    "tool": "find_similar_cases",
+    "args": {
+      "case_id": "SGD72398",
+      "k": 3
+    },
+    "output": {
+      "evidence_id": "SIMSET-SGD72398",
+      "base": "fraudes confirmées lors de contrôles passés",
+      "n_base": 1170,
+      "resultats_similaires": [
+        {
+          "evidence_id": "SIM-SGD52453",
+          "case_id": "SGD52453",
+          "semaine": 30,
+          "importateur": "IMP979830",
+          "sh6": "848280",
+          "pays": "CNTRY343",
+          "revenu_redresse_TND": 578.0,
+          "distance": 1.13
+        },
+        {
+          "evidence_id": "SIM-SGD67731",
+          "case_id": "SGD67731",
+          "semaine": 38,
+          "importateur": "IMP100143",
+          "sh6": "901590",
+          "pays": "CNTRY311",
+          "revenu_redresse_TND": 988.0,
+          "distance": 1.44
+        },
+        {
+          "evidence_id": "SIM-SGD40792",
+          "case_id": "SGD40792",
+          "semaine": 24,
+          "importateur": "IMP532390",
+          "sh6": "840420",
+          "pays": "CNTRY554",
+          "revenu_redresse_TND": 610.0,
+          "distance": 1.73
+        }
+      ]
+    },
+    "duree_ms": 16
+  },
+  {
+    "step": 10,
+    "tool": "check_tariff_classification",
+    "args": {
+      "case_id": "SGD72398"
+    },
+    "output": {
+      "evidence_id": "TARIF-SGD72398",
+      "disponible": false,
+      "raison": "aucune description commerciale dans ce jeu de données"
+    },
+    "duree_ms": 0
+  },
+  {
+    "step": 11,
+    "tool": "search_regulations",
+    "args": {
+      "query": "valeur transactionnelle",
+      "k": 2
+    },
+    "output": {
+      "evidence_id": "REG-6dcbf7ce",
+      "requete": "valeur transactionnelle",
+      "corpus_juridique_disponible": true,
+      "resultats": [
+        {
+          "chunk_id": "LEG-omc_accord_evaluatio-014",
+          "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+          "phrases_citables": [
+            "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+          ]
+        },
+        {
+          "chunk_id": "LEG-omc_accord_evaluatio-012",
+          "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+          "phrases_citables": [
+            "a) Si la valeur en douane des marchandises importées ne peut pas être déterminé e par application des dispositions de l'article premier, la valeur en douane sera la valeur transactionnelle de marchandises identiques, vendues pour l'exportation à destination du même",
+            "b) Lors de l'application du présent article, la valeur en douane sera déterminée en se référant à la valeur transactionnelle de marchandises identiques, vendues au même niveau commercial et sensiblement en même quantité que les marchandises à évaluer."
+          ]
+        }
+      ],
+      "note": "Extraits verbatim du corpus chargé (chunk_id LEG-…) ; les HS-… sont des libellés du Système harmonisé, pas des textes juridiques."
+    },
+    "duree_ms": 8
+  },
+  {
+    "step": 12,
+    "tool": "search_regulations",
+    "args": {
+      "query": "gestion des risques",
+      "k": 2
+    },
+    "output": {
+      "evidence_id": "REG-f04d4339",
+      "requete": "gestion des risques",
+      "corpus_juridique_disponible": true,
+      "resultats": [
+        {
+          "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+          "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+          "phrases_citables": [
+            "Toutes les marchandises, y compris les moyens de transport, qui sont introduites sur le territoire douanier ou quittent celui-ci sont soumises au contrôle de la douane, qu’elles soient passibles ou non de droits et taxes.",
+            "Les contrôles douaniers sont limités au minimum nécessaire pour assurer l’application de la législation douanière.",
+            "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques.",
+            "La douane a recours à l’analyse des risques pour désigner les personnes et les marchandises à examiner, y compris les moyens de transport, et l’étendue de cette vérification."
+          ]
+        },
+        {
+          "chunk_id": "LEG-omd_kyoto_revisee_ch-001",
+          "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+          "phrases_citables": [
+            "La douane adopte, à l’appui de la gestion des risques, une stratégie qui consiste à mesurer le degré d’application de la loi.",
+            "Les systèmes de contrôle de la douane incluent les contrôles par audit.",
+            "La douane cherche à coopérer avec les autres administrations douanières et à conclure des accords d’assistance mutuelle administrative pour améliorer les contrôles douaniers.",
+            "La douane cherche à coopérer avec le commerce et à conclure des Protocoles d’accord pour améliorer les contrôles douaniers."
+          ]
+        }
+      ],
+      "note": "Extraits verbatim du corpus chargé (chunk_id LEG-…) ; les HS-… sont des libellés du Système harmonisé, pas des textes juridiques."
+    },
+    "duree_ms": 8
+  },
+  {
+    "step": 13,
+    "tool": "search_regulations",
+    "args": {
+      "query": "pouvoirs de visite des agents",
+      "k": 2
+    },
+    "output": {
+      "evidence_id": "REG-83dec235",
+      "requete": "pouvoirs de visite des agents",
+      "corpus_juridique_disponible": true,
+      "resultats": [
+        {
+          "chunk_id": "LEG-tn_code_des_douanes_-008",
+          "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+          "phrases_citables": [
+            "55 – Tout agent des douanes qui est révoqué ou qui quitte son emploi, est tenu de remettre immédiatement à l'administration sa commission d'emploi, les regist res, sceaux, armes, tenues réglementaires et équipements spéciaux mis à sa disposition par l’administration,",
+            "Chapitre IV – Pouvoirs des agents des douanes Section 1 – Droit de visite des marchandises, des moyens de transport et des personnes Art.",
+            "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+          ]
+        },
+        {
+          "chunk_id": "LEG-tn_code_des_douanes_-009",
+          "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+          "phrases_citables": [
+            "La visite des personnes s'effectue à l'intérieur de locaux réservés à cet effet où il est procédé à la visite à corps des personnes lorsqu'il y a des doutes qui laissent présumer qu'ils dissimulent des marchandises à même leurs corps.",
+            "Lorsque d es indices sérieux laissent présumer qu'une personne, traversant la frontière, transporte des produits prohibés dissimulés dans son organisme, les agents des douanes peuvent la soumettre à des examens médicaux de dépistage après avoir préalablement obtenu, expressément, son consentement.",
+            "En cas de refus, les agents des douanes présentent au procureur de la république une demande d'autorisation pour procéder à ces examens."
+          ]
+        }
+      ],
+      "note": "Extraits verbatim du corpus chargé (chunk_id LEG-…) ; les HS-… sont des libellés du Système harmonisé, pas des textes juridiques."
+    },
+    "duree_ms": 12
+  }
+]

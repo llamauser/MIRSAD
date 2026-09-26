@@ -1,121 +1,126 @@
 {
   "case_id": "SGD71625",
   "voie": "Rouge",
-  "montant_en_jeu_TND": 2665.0,
-  "probabilite_fraude": 0.9999,
-  "resume": "Déclaration à haut risque (voie Rouge) avec un taux de fraude estimé à 99,99 %, montant en jeu de 2 665 TND simulés.",
+  "montant_en_jeu_TND": 5692.0,
+  "probabilite_fraude": 0.9628,
+  "resume": "Importateur IMPNEW013 à risque élevé, antécédents de fraudes confirmées, montant en jeu important. Contrôle recommandé sur la valeur déclarée et l'historique réseau.",
   "faits": [
     {
-      "texte": "Importateur IMPNEW013 avec un taux de fraude lissé de 70,6 % (sur les contrôles passés révélés).",
+      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 96,3 %, montant en jeu = 5 692 TND simulés.",
       "evidence_ids": [
-        "SHAP-SGD71625-risk_importer"
+        "RISK-SGD71625"
       ]
     },
     {
-      "texte": "Taux de fraude lissé du couple importateur × SH4 8704 : 38,6 % (sur les contrôles passés révélés).",
+      "texte": "Taux de fraude lissé de l'importateur IMPNEW013 : 73,8 % sur les contrôles passés révélés.",
+      "evidence_ids": [
+        "SHAP-SGD71625-risk_importer",
+        "HIST-importer-IMPNEW013"
+      ]
+    },
+    {
+      "texte": "Score de conformité dynamique de l'entreprise IMPNEW013 : 59,1 / 100 de risque.",
+      "evidence_ids": [
+        "SHAP-SGD71625-ent_mean",
+        "COMP-IMPNEW013"
+      ]
+    },
+    {
+      "texte": "Tendance du score de l'entreprise sur 4 semaines : hausse de 20,1 points.",
+      "evidence_ids": [
+        "SHAP-SGD71625-ent_trend",
+        "COMP-IMPNEW013"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8704 : 43,2 %.",
       "evidence_ids": [
         "SHAP-SGD71625-risk_imp_hs4"
       ]
     },
     {
-      "texte": "Poids par unité : 195,0 kg.",
+      "texte": "Importateur lié à des déclarants à taux de fraude lissé élevé (ex : DEC6300 à 51,0 %).",
       "evidence_ids": [
-        "SHAP-SGD71625-l_kg_unit"
+        "LINK-IMPNEW013"
       ]
     },
     {
-      "texte": "L'importateur a déjà déclaré en SH4 8704.",
+      "texte": "Historique : 16 fraudes confirmées sur 16 contrôles passés pour IMPNEW013.",
       "evidence_ids": [
-        "SHAP-SGD71625-is_new_combo"
+        "HIST-importer-IMPNEW013"
       ]
     }
   ],
   "hypotheses": [
     {
       "type": "réseau",
-      "justification": "L'importateur IMPNEW013 a un historique de fraude élevé et est lié à des déclarants à risque.",
+      "justification": "L'importateur IMPNEW013 présente un taux de fraude lissé élevé et partage des déclarants à risque avec d'autres importateurs très risqués.",
       "evidence_ids": [
+        "SHAP-SGD71625-risk_importer",
         "HIST-importer-IMPNEW013",
         "LINK-IMPNEW013"
       ]
-    },
-    {
-      "type": "sous-évaluation",
-      "justification": "Le prix unitaire déclaré est bas par rapport aux prix unitaires des déclarations passées de l'importateur.",
-      "evidence_ids": [
-        "DECL-SGD71625",
-        "HIST-importer-IMPNEW013"
-      ]
     }
   ],
-  "base_legale": [],
+  "base_legale": [
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier »",
+      "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+    },
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier »",
+      "extrait": "La douane a recours à l’analyse des risques pour désigner les personnes et les marchandises à examiner, y compris les moyens de transport, et l’étendue de cette vérification."
+    },
+    {
+      "chunk_id": "LEG-tn_code_des_douanes_-008",
+      "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie »",
+      "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+    }
+  ],
   "controles_recommandes": [
-    "Pesage de la marchandise"
+    "Contrôle documentaire standard"
   ],
   "incertitudes": [
-    "Données synthétiques sur les prix unitaires",
-    "Absence de données sur la description commerciale",
-    "Limites de l'historique des déclarations"
+    "Les taux de fraude sont calculés sur les contrôles passés révélés uniquement.",
+    "Données synthétiques : montants et quantités simulés.",
+    "Base légale : extraits OMC/OMD, vérifier l'applicabilité nationale exacte."
   ],
   "niveau_confiance": "élevé",
-  "_mode": "llm_local_valide",
-  "_modele": "mirsad-qwen3:8b",
-  "_fournisseur": "LLM local (mirsad-qwen3:8b)",
-  "_duree_s": 26.2,
+  "_mode": "llm_api_valide",
+  "_modele": "gpt-4.1",
+  "_fournisseur": "API OpenAI (gpt-4.1)",
+  "_duree_s": 11.3,
   "_raison_fallback": null,
   "_validation": [
     {
-      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "fournisseur": "API OpenAI (gpt-4.1)",
       "tentative": 1,
       "erreurs": [],
       "appels_llm": [
         {
           "type": "outils",
-          "s": 1.4,
-          "tokens_sortie": 30
-        },
-        {
-          "type": "outils",
-          "s": 1.1,
-          "tokens_sortie": 26
-        },
-        {
-          "type": "outils",
-          "s": 1.0,
-          "tokens_sortie": 31
-        },
-        {
-          "type": "outils",
-          "s": 1.1,
-          "tokens_sortie": 35
-        },
-        {
-          "type": "outils",
-          "s": 1.0,
-          "tokens_sortie": 33
+          "s": 0.7,
+          "tokens_sortie": 21
         },
         {
           "type": "outils",
           "s": 1.3,
-          "tokens_sortie": 35
+          "tokens_sortie": 194
         },
         {
           "type": "outils",
-          "s": 1.1,
-          "tokens_sortie": 28
-        },
-        {
-          "type": "outils",
-          "s": 0.8,
-          "tokens_sortie": 25
+          "s": 4.4,
+          "tokens_sortie": 912
         },
         {
           "type": "dossier",
-          "s": 17.2,
-          "tokens_sortie": 559
+          "s": 4.5,
+          "tokens_sortie": 988
         }
       ],
-      "duree_s": 26.2
+      "duree_s": 11.3
     }
   ],
   "_demo_injection": false

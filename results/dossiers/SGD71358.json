@@ -1,0 +1,133 @@
+{
+  "case_id": "SGD71358",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 1977.0,
+  "probabilite_fraude": 0.9792,
+  "resume": "Importateur à risque critique, historique de fraudes, montant élevé. Valeur déclarée dans la fourchette des comparables. Aucun indice de fausse espèce ou origine. Contrôles recommandés : documents, paiement, prix, examen physique.",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe avec une probabilité de fraude de 97,9 % et un montant en jeu de 1 977 TND simulés.",
+      "evidence_ids": [
+        "RISK-SGD71358"
+      ]
+    },
+    {
+      "texte": "Importateur IMPNEW000 classé segment Critique, score de risque 63,6/100, tendance en hausse de 21,7 points sur 4 semaines.",
+      "evidence_ids": [
+        "COMP-IMPNEW000",
+        "SHAP-SGD71358-ent_mean",
+        "SHAP-SGD71358-ent_trend"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMPNEW000 : 77,3 % sur 20 fraudes confirmées.",
+      "evidence_ids": [
+        "HIST-importer-IMPNEW000",
+        "SHAP-SGD71358-risk_importer"
+      ]
+    },
+    {
+      "texte": "Valeur CIF déclarée : 1 674 TND simulés pour 5 unités, prix unitaire 334,8 TND.",
+      "evidence_ids": [
+        "DECL-SGD71358",
+        "SHAP-SGD71358-l_cif"
+      ]
+    },
+    {
+      "texte": "Prix unitaire déclaré (334,8 TND) dans la fourchette des comparables SH6 870410 tous pays (médiane 271,73 TND, P10 0,7 TND, P90 60 874,2 TND).",
+      "evidence_ids": [
+        "DECL-SGD71358",
+        "PEER-870410-CN"
+      ]
+    },
+    {
+      "texte": "Aucun historique de déclaration pour le déclarant DECL000713.",
+      "evidence_ids": [
+        "HIST-declarant-DECL000713"
+      ]
+    },
+    {
+      "texte": "Aucune description commerciale disponible pour vérifier la classification tarifaire.",
+      "evidence_ids": [
+        "TARIF-SGD71358"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "réseau",
+      "justification": "Importateur IMPNEW000 avec taux de fraude lissé élevé (77,3 %) et antécédents de fraudes confirmées.",
+      "evidence_ids": [
+        "HIST-importer-IMPNEW000",
+        "COMP-IMPNEW000",
+        "SHAP-SGD71358-risk_importer",
+        "LINK-IMPNEW000"
+      ]
+    }
+  ],
+  "base_legale": [
+    {
+      "chunk_id": "LEG-omc_accord_evaluatio-014",
+      "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+      "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+    },
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+      "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+    },
+    {
+      "chunk_id": "LEG-tn_code_des_douanes_-008",
+      "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+      "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+    }
+  ],
+  "controles_recommandes": [
+    "Demander le contrat de vente et la facture commerciale",
+    "Exiger la preuve de paiement (virement bancaire)",
+    "Comparer le prix avec les déclarations comparables (même SH6, même origine)",
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+  ],
+  "incertitudes": [
+    "Aucune description commerciale disponible pour vérifier la classification tarifaire.",
+    "Pas de comparables directs pour le même SH6 et pays d'origine.",
+    "Base légale : à confirmer par l'agent pour d'autres aspects éventuels."
+  ],
+  "niveau_confiance": "élevé",
+  "_mode": "llm_api_valide",
+  "_modele": "gpt-4.1",
+  "_fournisseur": "API OpenAI (gpt-4.1)",
+  "_duree_s": 12.4,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "API OpenAI (gpt-4.1)",
+      "tentative": 1,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 21
+        },
+        {
+          "type": "outils",
+          "s": 1.6,
+          "tokens_sortie": 281
+        },
+        {
+          "type": "outils",
+          "s": 4.7,
+          "tokens_sortie": 973
+        },
+        {
+          "type": "dossier",
+          "s": 5.1,
+          "tokens_sortie": 1250
+        }
+      ],
+      "duree_s": 12.4
+    }
+  ],
+  "_demo_injection": false
+}

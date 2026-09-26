@@ -1,0 +1,425 @@
+{
+  "case_id": "SGD71965",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 1046.0,
+  "probabilite_fraude": 0.8273,
+  "resume": "Déclaration SGD71965 classée en voie Rouge avec une probabilité de fraude de 82,7 % et un montant en jeu de 1 046 TND simulés.",
+  "faits": [
+    {
+      "texte": "Déclaration du 2013-10-07, semaine 40, importateur IMP667645, déclarant DEC5524, origine CNTRY874, bureau OFFICE45.",
+      "evidence_ids": [
+        "DECL-SGD71965"
+      ]
+    },
+    {
+      "texte": "Valeur CIF déclarée : 1 739 TND simulés.",
+      "evidence_ids": [
+        "DECL-SGD71965"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMP667645 : 38,0 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD71965-risk_importer"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 7308 : 31,8 % (sur les contrôles passés révélés).",
+      "evidence_ids": [
+        "SHAP-SGD71965-risk_imp_hs4"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "sous-évaluation",
+      "justification": "Valeur CIF déclarée (1 739 TND) inférieure aux prix unitaires comparables (71 158 TND).",
+      "evidence_ids": [
+        "DECL-SGD71965",
+        "PEER-730890-CNTRY874"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "L'importateur IMP667645 partage un déclarant avec d'autres importateurs à risque.",
+      "evidence_ids": [
+        "LINK-IMP667645"
+      ]
+    },
+    {
+      "type": "fausse origine",
+      "justification": "Origine déclarée CNTRY874, mais les prix unitaires comparables sont très élevés.",
+      "evidence_ids": [
+        "DECL-SGD71965",
+        "PEER-730890-CNTRY874"
+      ]
+    }
+  ],
+  "base_legale": [
+    {
+      "chunk_id": "LEG-tn_code_des_douanes_-008",
+      "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+      "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+    },
+    {
+      "chunk_id": "LEG-omc_accord_evaluatio-014",
+      "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+      "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+    },
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+      "extrait": "La douane a recours à l’analyse des risques pour désigner les personnes et les marchandises à examiner, y compris les moyens de transport, et l’étendue de cette vérification."
+    }
+  ],
+  "controles_recommandes": [
+    "Demander le contrat de vente et la facture commerciale",
+    "Exiger la preuve de paiement (virement bancaire)",
+    "Comparer le prix avec les déclarations comparables (même SH6, même origine)",
+    "Vérification de l'identité et de l'activité déclarée de l'importateur"
+  ],
+  "incertitudes": [
+    "Données synthétiques sur les prix unitaires et la valeur CIF",
+    "Limites de l'historique de l'importateur",
+    "Absence de description commerciale pour la vérification de la classification tarifaire"
+  ],
+  "niveau_confiance": "moyen",
+  "_mode": "llm_local_valide",
+  "_modele": "mirsad-qwen3:8b",
+  "_fournisseur": "LLM local (mirsad-qwen3:8b)",
+  "_duree_s": 70.2,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "API OpenAI (gpt-4.1)",
+      "tentative": 1,
+      "erreurs": [
+        "faits: nombre '10' introuvable dans les sorties d'outils"
+      ],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 0.7,
+          "tokens_sortie": 21
+        },
+        {
+          "type": "outils",
+          "s": 1.6,
+          "tokens_sortie": 271
+        },
+        {
+          "type": "outils",
+          "s": 4.4,
+          "tokens_sortie": 917
+        },
+        {
+          "type": "dossier",
+          "s": 5.6,
+          "tokens_sortie": 1289
+        }
+      ],
+      "duree_s": 12.4,
+      "brouillon_rejete": {
+        "case_id": "SGD71965",
+        "voie": "Rouge",
+        "montant_en_jeu_TND": 1046.0,
+        "probabilite_fraude": 0.8273,
+        "resume": "Importateur surveillé, antécédent de fraude, prix unitaire très bas sans comparable local, historique réseau à surveiller. Voie Rouge, montant en jeu 1 046 TND simulés.",
+        "faits": [
+          {
+            "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 82,7 %, montant en jeu = 1 046 TND simulés.",
+            "evidence_ids": [
+              "RISK-SGD71965"
+            ]
+          },
+          {
+            "texte": "Importateur IMP667645, segment Surveillé, taux de fraude lissé : 38,0 % sur les contrôles passés révélés.",
+            "evidence_ids": [
+              "SHAP-SGD71965-risk_importer",
+              "COMP-IMP667645"
+            ]
+          },
+          {
+            "texte": "Déclaration du 07/10/2013, SH6 : 730890, valeur CIF déclarée : 1 739 TND simulés, prix unitaire : 0,49 TND.",
+            "evidence_ids": [
+              "DECL-SGD71965"
+            ]
+          },
+          {
+            "texte": "Aucun comparable local disponible pour le SH6 730890 (Tunisie).",
+            "evidence_ids": [
+              "PEER-730890-TUN"
+            ]
+          },
+          {
+            "texte": "Historique limité : 1 déclaration passée, 1 fraude confirmée, revenu redressé 716 TND.",
+            "evidence_ids": [
+              "HIST-importer-IMP667645"
+            ]
+          },
+          {
+            "texte": "Le bureau OFFICE45 présente un taux de fraude lissé de 37,4 %.",
+            "evidence_ids": [
+              "SHAP-SGD71965-risk_office"
+            ]
+          },
+          {
+            "texte": "Le déclarant n'a aucune déclaration passée connue.",
+            "evidence_ids": [
+              "HIST-declarant-DECLARANT-SGD71965"
+            ]
+          },
+          {
+            "texte": "L'importateur partage son déclarant avec 6 autres importateurs, taux de fraude moyen des 3 plus risqués : 31,8 %. ",
+            "evidence_ids": [
+              "LINK-IMP667645"
+            ]
+          }
+        ],
+        "hypotheses": [
+          {
+            "type": "sous-évaluation",
+            "justification": "Prix unitaire déclaré (0,49 TND) très inférieur au prix unitaire médian international (1 362,11 TND) pour le même SH6, aucun comparable local disponible.",
+            "evidence_ids": [
+              "DECL-SGD71965",
+              "PEER-730890-TUN"
+            ]
+          },
+          {
+            "type": "réseau",
+            "justification": "Importateur surveillé, antécédent de fraude, liens avec plusieurs importateurs via le même déclarant.",
+            "evidence_ids": [
+              "COMP-IMP667645",
+              "HIST-importer-IMP667645",
+              "LINK-IMP667645"
+            ]
+          }
+        ],
+        "base_legale": [
+          {
+            "chunk_id": "LEG-omc_accord_evaluatio-014",
+            "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+            "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+          },
+          {
+            "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+            "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+            "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+          },
+          {
+            "chunk_id": "LEG-tn_code_des_douanes_-008",
+            "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+            "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+          }
+        ],
+        "controles_recommandes": [
+          "Demander le contrat de vente et la facture commerciale",
+          "Exiger la preuve de paiement (virement bancaire)",
+          "Comparer le prix avec les déclarations comparables (même SH6, même origine)",
+          "Vérification de l'identité et de l'activité déclarée de l'importateur"
+        ],
+        "incertitudes": [
+          "Aucun comparable local disponible pour le SH6 730890.",
+          "Historique limité de l'importateur et du déclarant.",
+          "Base légale : à confirmer par l'agent pour l'absence de comparables locaux."
+        ],
+        "niveau_confiance": "moyen"
+      }
+    },
+    {
+      "fournisseur": "API OpenAI (gpt-4.1)",
+      "tentative": 2,
+      "erreurs": [
+        "faits: nombre '10' introuvable dans les sorties d'outils"
+      ],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 0.7,
+          "tokens_sortie": 21
+        },
+        {
+          "type": "outils",
+          "s": 1.6,
+          "tokens_sortie": 271
+        },
+        {
+          "type": "outils",
+          "s": 4.4,
+          "tokens_sortie": 917
+        },
+        {
+          "type": "dossier",
+          "s": 5.6,
+          "tokens_sortie": 1289
+        },
+        {
+          "type": "dossier",
+          "s": 4.5,
+          "tokens_sortie": 1107
+        }
+      ],
+      "duree_s": 16.9,
+      "brouillon_rejete": {
+        "case_id": "SGD71965",
+        "voie": "Rouge",
+        "montant_en_jeu_TND": 1046.0,
+        "probabilite_fraude": 0.8273,
+        "resume": "Importateur surveillé, antécédent de fraude, prix unitaire très bas sans comparable local, historique réseau à surveiller. Voie Rouge, montant en jeu 1 046 TND simulés.",
+        "faits": [
+          {
+            "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 82,7 %, montant en jeu = 1 046 TND simulés.",
+            "evidence_ids": [
+              "RISK-SGD71965"
+            ]
+          },
+          {
+            "texte": "Importateur IMP667645, segment Surveillé, taux de fraude lissé : 38,0 % sur les contrôles passés révélés.",
+            "evidence_ids": [
+              "SHAP-SGD71965-risk_importer",
+              "COMP-IMP667645"
+            ]
+          },
+          {
+            "texte": "Déclaration du 07/10/2013, SH6 : 730890, valeur CIF déclarée : 1 739 TND simulés, prix unitaire : 0,49 TND.",
+            "evidence_ids": [
+              "DECL-SGD71965"
+            ]
+          },
+          {
+            "texte": "Aucun comparable local disponible pour le SH6 730890 (Tunisie).",
+            "evidence_ids": [
+              "PEER-730890-TUN"
+            ]
+          },
+          {
+            "texte": "Historique limité : 1 déclaration passée, 1 fraude confirmée, revenu redressé 716 TND.",
+            "evidence_ids": [
+              "HIST-importer-IMP667645"
+            ]
+          },
+          {
+            "texte": "Le bureau OFFICE45 présente un taux de fraude lissé de 37,4 %.",
+            "evidence_ids": [
+              "SHAP-SGD71965-risk_office"
+            ]
+          },
+          {
+            "texte": "Le déclarant n'a aucune déclaration passée connue.",
+            "evidence_ids": [
+              "HIST-declarant-DECLARANT-SGD71965"
+            ]
+          },
+          {
+            "texte": "L'importateur partage son déclarant avec 6 autres importateurs, taux de fraude moyen des 3 plus risqués : 31,8 %.",
+            "evidence_ids": [
+              "LINK-IMP667645"
+            ]
+          }
+        ],
+        "hypotheses": [
+          {
+            "type": "sous-évaluation",
+            "justification": "Prix unitaire déclaré (0,49 TND) très inférieur au prix unitaire médian international (1 362,11 TND) pour le même SH6, aucun comparable local disponible.",
+            "evidence_ids": [
+              "DECL-SGD71965",
+              "PEER-730890-TUN"
+            ]
+          },
+          {
+            "type": "réseau",
+            "justification": "Importateur surveillé, antécédent de fraude, liens avec plusieurs importateurs via le même déclarant.",
+            "evidence_ids": [
+              "COMP-IMP667645",
+              "HIST-importer-IMP667645",
+              "LINK-IMP667645"
+            ]
+          }
+        ],
+        "base_legale": [
+          {
+            "chunk_id": "LEG-omc_accord_evaluatio-014",
+            "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+            "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+          },
+          {
+            "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+            "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+            "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+          },
+          {
+            "chunk_id": "LEG-tn_code_des_douanes_-008",
+            "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+            "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+          }
+        ],
+        "controles_recommandes": [
+          "Demander le contrat de vente et la facture commerciale",
+          "Exiger la preuve de paiement (virement bancaire)",
+          "Comparer le prix avec les déclarations comparables (même SH6, même origine)",
+          "Vérification de l'identité et de l'activité déclarée de l'importateur"
+        ],
+        "incertitudes": [
+          "Aucun comparable local disponible pour le SH6 730890.",
+          "Historique limité de l'importateur et du déclarant.",
+          "Base légale : à confirmer par l'agent pour l'absence de comparables locaux."
+        ],
+        "niveau_confiance": "moyen"
+      }
+    },
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 1,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 6.6,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 34
+        },
+        {
+          "type": "outils",
+          "s": 0.9,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 1.1,
+          "tokens_sortie": 38
+        },
+        {
+          "type": "outils",
+          "s": 1.0,
+          "tokens_sortie": 25
+        },
+        {
+          "type": "outils",
+          "s": 1.6,
+          "tokens_sortie": 43
+        },
+        {
+          "type": "dossier",
+          "s": 38.9,
+          "tokens_sortie": 1260
+        }
+      ],
+      "duree_s": 53.4
+    }
+  ],
+  "_demo_injection": false
+}

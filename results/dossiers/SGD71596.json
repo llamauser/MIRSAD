@@ -1,0 +1,135 @@
+{
+  "case_id": "SGD71596",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 969.0,
+  "probabilite_fraude": 0.4918,
+  "resume": "Importateur surveillé, antécédent de fraude, prix unitaire très inférieur à la médiane, liens avec des déclarants à risque. Voie Rouge et contrôle recommandés.",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 49,2 %, montant en jeu = 969 TND simulés.",
+      "evidence_ids": [
+        "RISK-SGD71596"
+      ]
+    },
+    {
+      "texte": "Importateur IMP497208, segment Surveillé, score de conformité dynamique : 7,6 / 100 de risque.",
+      "evidence_ids": [
+        "COMP-IMP497208"
+      ]
+    },
+    {
+      "texte": "Antécédent de fraude confirmée pour IMP497208 (redressement : 1517 TND simulés).",
+      "evidence_ids": [
+        "COMP-IMP497208",
+        "HIST-importer-IMP497208"
+      ]
+    },
+    {
+      "texte": "Prix unitaire déclaré : 22,4 TND simulés, très inférieur à la médiane des comparables (611,33 TND).",
+      "evidence_ids": [
+        "DECL-SGD71596",
+        "PEER-730900-ALL"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur : 38,0 % ; taux de fraude du couple importateur × SH4 7309 : 31,8 %. ",
+      "evidence_ids": [
+        "SHAP-SGD71596-risk_importer",
+        "SHAP-SGD71596-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Liens avec plusieurs déclarants à taux de fraude lissé élevé (jusqu'à 36,4 %).",
+      "evidence_ids": [
+        "LINK-IMP497208"
+      ]
+    },
+    {
+      "texte": "Valeur CIF déclarée : 14 605 TND simulés pour 652 unités (poids brut : 85 182 kg).",
+      "evidence_ids": [
+        "DECL-SGD71596"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "sous-évaluation",
+      "justification": "Le prix unitaire déclaré (22,4 TND) est très inférieur à la médiane des comparables (611,33 TND).",
+      "evidence_ids": [
+        "DECL-SGD71596",
+        "PEER-730900-ALL"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "L'importateur présente un taux de fraude lissé élevé et partage des déclarants à risque.",
+      "evidence_ids": [
+        "SHAP-SGD71596-risk_importer",
+        "LINK-IMP497208"
+      ]
+    }
+  ],
+  "base_legale": [
+    {
+      "chunk_id": "LEG-omc_accord_evaluatio-014",
+      "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+      "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+    },
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+      "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+    },
+    {
+      "chunk_id": "LEG-tn_code_des_douanes_-008",
+      "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+      "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+    }
+  ],
+  "controles_recommandes": [
+    "Vérification de l'identité et de l'activité déclarée de l'importateur"
+  ],
+  "incertitudes": [
+    "Description commerciale absente : impossibilité de vérifier la classification tarifaire.",
+    "Prix comparables : effectif limité (6 observations).",
+    "Base légale : à confirmer par l'agent pour l'application nationale.",
+    "Indicateurs macro (MIRROR) non exploitables pour ce cas individuel."
+  ],
+  "niveau_confiance": "moyen",
+  "_mode": "llm_api_valide",
+  "_modele": "gpt-4.1",
+  "_fournisseur": "API OpenAI (gpt-4.1)",
+  "_duree_s": 11.9,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "API OpenAI (gpt-4.1)",
+      "tentative": 1,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 21
+        },
+        {
+          "type": "outils",
+          "s": 1.6,
+          "tokens_sortie": 255
+        },
+        {
+          "type": "outils",
+          "s": 3.9,
+          "tokens_sortie": 809
+        },
+        {
+          "type": "dossier",
+          "s": 5.5,
+          "tokens_sortie": 1217
+        }
+      ],
+      "duree_s": 11.9
+    }
+  ],
+  "_demo_injection": false
+}

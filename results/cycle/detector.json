@@ -1,0 +1,39 @@
+[
+  {
+    "scenario": "front",
+    "n_alerts": 1,
+    "n_alerts_before_scheme": 0,
+    "first_matching_alert_week": 26,
+    "lead_time_weeks": 0,
+    "signals_matching": [
+      "nouveaux_operateurs"
+    ],
+    "alerts_after_w0_not_matching": 0
+  },
+  {
+    "scenario": "turncoat",
+    "n_alerts": 0,
+    "n_alerts_before_scheme": 0,
+    "first_matching_alert_week": null,
+    "lead_time_weeks": null,
+    "signals_matching": [],
+    "alerts_after_w0_not_matching": 0
+  },
+  {
+    "scenario": "network",
+    "n_alerts": 2,
+    "n_alerts_before_scheme": 0,
+    "first_matching_alert_week": 26,
+    "lead_time_weeks": 0,
+    "signals_matching": [
+      "declarant_eventail",
+      "nouveaux_operateurs"
+    ],
+    "alerts_after_w0_not_matching": 0
+  },
+  {
+    "scenario": "aucun schéma (données de base)",
+    "n_alerts": 0,
+    "false_alarms_per_year": 0
+  }
+]

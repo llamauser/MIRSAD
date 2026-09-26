@@ -19,7 +19,7 @@ d'enquête solide pour l'agent.
    importateur–déclarant, prix comparables, cas similaires, espèce SH, statistiques miroir, réglementation) et rédige
    un **dossier en français**. Un **validateur** rejette tout identifiant de preuve, nombre ou citation absent des
    sorties d'outils, toute voie différente de celle du scoreur et toute hypothèse sans preuve compatible. Chaîne de
-   fournisseurs : **LLM local sur site** (Qwen3 8B via Ollama) → **API OpenAI** en secours → **gabarit déterministe**,
+   fournisseurs (démo) : **API OpenAI** → **LLM local sur site** (Qwen3 8B via Ollama) en secours → **gabarit déterministe**,
    avec une correction autorisée par fournisseur. **Le LLM ne décide jamais de la voie.**
 5. **Carte des fuites** : statistiques miroir UN Comtrade (Tunisie réelle, 2024), un indicateur de priorisation macro.
 6. **Espèce (T18)** : recherche BM25 sur le Système harmonisé 2022 → top 3 SH6 (reclassement LLM optionnel) →
@@ -32,7 +32,7 @@ d'enquête solide pour l'agent.
    → politique (budget r, exploration ε) → Rouge / Orange / Vert → simulateur (étiquettes sélectives + schéma injecté)
    → cas rouges → agent (function calling, ≤ 8 étapes, température 0) → dossier JSON strict
    → validateur (preuves, nombres, citations verbatim, voie, cohérence hypothèse/preuve)
-      [LLM local Qwen3 8B (Ollama) → échec : API OpenAI → échec : gabarit déterministe]
+      [API OpenAI → échec : LLM local Qwen3 8B (Ollama) → échec : gabarit déterministe] (ordre : config.yaml)
    → application Streamlit (français, entièrement précalculée)
  Module miroir UN Comtrade → « Carte des fuites »
 ```
@@ -43,17 +43,20 @@ pip install -r requirements.txt
 cd scripts
 python 00_download.py          # télécharge et vérifie le jeu BACUDA
 python 01_build_features.py    # variables (passé uniquement) + scénario injecté + contrôle de cohérence
-python 02_simulate.py          # grille de simulation (≈ 7 min sur 16 cœurs) + graphiques A/B + semaine de démo
+python 02_simulate.py          # grille de référence (≈ 15 min sur 16 cœurs) + graphiques A/B
+python 06_export_results.py    # tableau de résultats + tests de Welch / Levene sur l'exploration
+python 07_cycle_experiments.py # cycle : 3 schémas × 6 configurations × 10 graines + registre de risque de la démo
+python 08_posthoc_variant.py   # variante post-hoc A3b (signalée comme telle)
 python 03_mirror.py            # UN Comtrade (réseau requis ; sinon « données miroir indisponibles »)
 python make_espece_demo.py     # jeu de démonstration espèce
 python 04_espece_eval.py       # évaluation T18
-python 05_build_dossiers.py    # dossiers d'enquête : LLM local → API → gabarit déterministe
-python 06_export_results.py    # tableau de résultats
+python 05_build_dossiers.py    # dossiers d'enquête (lit le registre) : API → LLM local → gabarit déterministe
 python smoke_test.py           # vérifie le chemin de démonstration (< 2 min)
 cd .. && python -m pytest -q tests
 streamlit run app/Accueil.py
 ```
-**LLM local (recommandé, par défaut)** : installer [Ollama](https://ollama.com), puis :
+**Clés API (fournisseur principal de la démo)** : copier `.env.example` en `.env` et y mettre `OPENAI_API_KEYS`.
+**LLM local (secours, et recommandation pour la production)** : installer [Ollama](https://ollama.com), puis :
 ```bash
 ollama pull qwen3:8b
 ollama create mirsad-qwen3:8b -f ollama/Modelfile
@@ -62,69 +65,82 @@ Sur un GPU de 8 Go, lancer le serveur avec `OLLAMA_FLASH_ATTENTION=1` et `OLLAMA
 RTX 4060 Laptop : avec un contexte de 8k, tout tient en VRAM (lecture du prompt 1 744 jetons/s, génération 36 jetons/s) ;
 dès 12k, le cache déborde en mémoire partagée (209 jetons/s). Les enquêtes restent donc sous ~7,5k jetons (sorties
 d'outils compactes et garde-fou de contexte dans `agent/loop.py`).
-**Secours API (optionnel)** : copier `.env.example` en `.env` et y mettre `OPENAI_API_KEYS` (une ou plusieurs clés).
 `COMTRADE_KEY` (optionnel) donne le miroir au niveau SH4. Sans LLM ni clé, tout fonctionne en mode déterministe.
 Textes juridiques : déposer des `.txt`/`.md` dans `data/legal/`, chacun commençant par `SOURCE: <url ou titre>`.
 Données des organisateurs : les placer dans `data/organisers/`, adapter `columns:` dans `config.yaml` ;
 `schema_report` indique alors quels modules peuvent tourner.
 
 ## Résultats (données synthétiques, à budget égal, 10 graines)
-Source : `results/results_table.md` (généré par `scripts/06_export_results.py` à partir de `results/summary_by_seed.csv`).
-« MIRSAD (ε = 0) » est le réglage par défaut, un classement par montant en jeu. Le vocabulaire est défini dans
-`docs/facts_for_pitch.md`, § 0.
+Détail, sources et formulations autorisées : `docs/facts_for_pitch.md`.
 
-**À retenir (budget 5 %)** : MIRSAD capture 39,9 % ± 11,1 du revenu récupérable, contre 5,4 % ± 0,8 au hasard (≈ 7×).
-Sur les fraudes historiques, 14,3 % contre 10,6 % pour les règles. Les règles restent très robustes sur le schéma
-injecté, et le modèle y est bimodal (voir limites).
+**Le cycle, brique par brique** (budget 5 %, 3 schémas simulés, `results/cycle/`) : Revenu@5 % (total).
+
+| Configuration | Sociétés écrans | Réseau | Établies qui dérivent |
+|---|---|---|---|
+| Aléatoire | 5,4 % | 4,8 % | 4,9 % |
+| Règles (profil importateur) | 39,0 % ± 0,6 | 47,6 % ± 0,6 | 10,1 % ± 0,1 |
+| ④ seul (montant en jeu) | 36,0 % ± 12,7 | 36,0 % ± 19,2 | 24,7 % ± 5,9 |
+| Cycle complet A3 (pré-enregistré) | 40,0 % ± 11,7 | 48,8 % ± 13,9 | 18,0 % ± 7,0 |
+| Variante A3b (post-hoc, à confirmer) | 44,0 % ± 3,2 | 53,2 % ± 1,3 | 19,3 % ± 4,8 |
+
+- Le cycle complet dépasse toujours le hasard (7 à 10×) et fait jeu égal avec les règles ou mieux. Face à ④ seul, il
+  **perd** significativement sur les entreprises établies qui dérivent (p = 0,03) : c'est le coût de la facilitation.
+- Probabilités mieux calibrées avec le cycle : Brier 0,076 contre 0,100 (p ≤ 0,002 sur les trois schémas).
+- Segments ordonnés par taux de fraude réel : Confiance 2,0 % < Standard 2,3 % < Surveillé 8,7 % < Critique 84 %.
+  Mais « Surveillé » représente 93 % du volume avec 5 % de contrôles.
+- Détecteur ⑦ : alerte dès la semaine du début du schéma (sociétés écrans, réseau), aveugle aux entreprises établies,
+  0 fausse alerte sur les données sans schéma.
+
+**Grille de référence** (schéma « sociétés écrans », `results/results_table.md`) :
 
 | Politique | r | Revenu@k (total) | Revenu@k (fraudes historiques) | Schéma injecté capturé (revenu) | Faux-vert (revenu) |
 |---|---|---|---|---|---|
 | Aléatoire | 2% | 2.1 % ± 0.6 | 2.0 % ± 0.2 | 2.2 % ± 1.4 | 95.6 % ± 0.9 |
 | Règles (profil importateur) | 2% | 16.4 % ± 0.6 | 4.7 % ± 0.1 | 28.4 % ± 1.2 | 81.1 % ± 0.6 |
-| Variante : probabilité seule | 2% | 11.3 % ± 6.3 | 6.7 % ± 1.7 | 16.0 % ± 14.4 | 79.7 % ± 10.7 |
-| MIRSAD (montant en jeu, ε = 0) | 2% | 28.3 % ± 9.9 | 4.8 % ± 1.4 | 52.2 % ± 21.3 | 65.8 % ± 10.9 |
-| MIRSAD + exploration (ε = 0,1) | 2% | 18.0 % ± 12.5 | 5.9 % ± 1.4 | 30.3 % ± 26.6 | 76.7 % ± 13.8 |
-| MIRSAD + exploration (ε = 0,2) | 2% | 24.1 % ± 9.8 | 5.1 % ± 0.9 | 43.4 % ± 20.6 | 69.5 % ± 11.0 |
+| Variante : probabilité seule | 2% | 14.1 % ± 6.0 | 4.2 % ± 0.7 | 24.2 % ± 12.7 | 77.5 % ± 9.4 |
+| MIRSAD (montant en jeu, ε = 0) | 2% | 24.1 % ± 14.4 | 4.7 % ± 1.8 | 43.8 % ± 30.9 | 71.1 % ± 15.5 |
+| MIRSAD + exploration (ε = 0,1) | 2% | 22.8 % ± 12.2 | 4.9 % ± 1.1 | 40.9 % ± 25.6 | 71.9 % ± 13.2 |
+| MIRSAD + exploration (ε = 0,2) | 2% | 27.8 % ± 6.7 | 4.5 % ± 0.6 | 51.6 % ± 14.1 | 64.9 % ± 7.3 |
 | Aléatoire | 5% | 5.4 % ± 0.8 | 5.1 % ± 0.3 | 5.7 % ± 1.6 | 90.0 % ± 1.2 |
 | Règles (profil importateur) | 5% | 39.0 % ± 0.6 | 10.6 % ± 0.2 | 67.8 % ± 1.3 | 53.9 % ± 0.6 |
-| Variante : probabilité seule | 5% | 30.7 % ± 13.1 | 16.7 % ± 2.7 | 45.0 % ± 29.3 | 59.0 % ± 13.1 |
-| MIRSAD (montant en jeu, ε = 0) | 5% | 39.9 % ± 11.1 | 14.3 % ± 2.3 | 66.0 % ± 24.6 | 51.2 % ± 11.1 |
-| MIRSAD + exploration (ε = 0,1) | 5% | 34.1 % ± 13.8 | 14.8 % ± 2.5 | 53.8 % ± 30.4 | 56.5 % ± 13.8 |
-| MIRSAD + exploration (ε = 0,2) | 5% | 38.3 % ± 8.6 | 13.2 % ± 1.5 | 63.8 % ± 18.7 | 52.4 % ± 8.5 |
+| Variante : probabilité seule | 5% | 29.4 % ± 9.6 | 12.3 % ± 1.4 | 46.8 % ± 20.5 | 61.6 % ± 9.1 |
+| MIRSAD (montant en jeu, ε = 0) | 5% | 36.0 % ± 12.7 | 14.0 % ± 1.8 | 58.3 % ± 27.2 | 55.0 % ± 13.0 |
+| MIRSAD + exploration (ε = 0,1) | 5% | 37.1 % ± 9.9 | 13.7 % ± 1.5 | 61.1 % ± 21.3 | 53.4 % ± 9.7 |
+| MIRSAD + exploration (ε = 0,2) | 5% | 44.9 % ± 2.5 | 12.3 % ± 0.6 | 78.0 % ± 5.0 | 45.3 % ± 2.7 |
 | Aléatoire | 10% | 10.0 % ± 1.2 | 10.0 % ± 0.5 | 10.0 % ± 2.1 | 79.8 % ± 1.0 |
 | Règles (profil importateur) | 10% | 59.1 % ± 0.0 | 23.4 % ± 0.1 | 95.5 % ± 0.0 | 26.6 % ± 0.1 |
-| Variante : probabilité seule | 10% | 49.3 % ± 6.4 | 33.9 % ± 1.1 | 64.9 % ± 13.8 | 33.3 % ± 6.5 |
-| MIRSAD (montant en jeu, ε = 0) | 10% | 50.1 % ± 9.2 | 32.7 % ± 2.4 | 67.8 % ± 20.9 | 34.3 % ± 8.3 |
-| MIRSAD + exploration (ε = 0,1) | 10% | 53.1 % ± 6.6 | 30.7 % ± 1.7 | 75.9 % ± 14.9 | 31.3 % ± 6.2 |
-| MIRSAD + exploration (ε = 0,2) | 10% | 55.2 % ± 4.0 | 28.7 % ± 1.4 | 82.2 % ± 9.0 | 28.3 % ± 2.9 |
+| Variante : probabilité seule | 10% | 43.1 % ± 8.6 | 28.7 % ± 2.6 | 57.8 % ± 18.0 | 41.8 % ± 8.4 |
+| MIRSAD (montant en jeu, ε = 0) | 10% | 50.9 % ± 9.0 | 31.2 % ± 0.8 | 71.0 % ± 18.2 | 34.2 % ± 9.1 |
+| MIRSAD + exploration (ε = 0,1) | 10% | 54.1 % ± 3.7 | 30.5 % ± 1.0 | 78.2 % ± 8.1 | 29.0 % ± 2.5 |
+| MIRSAD + exploration (ε = 0,2) | 10% | 53.5 % ± 3.7 | 29.3 % ± 1.0 | 78.1 % ± 8.2 | 29.5 % ± 3.3 |
 | Aléatoire | 20% | 20.2 % ± 1.0 | 19.9 % ± 0.6 | 20.6 % ± 1.6 | 60.3 % ± 1.4 |
 | Règles (profil importateur) | 20% | 74.8 % ± 0.1 | 50.1 % ± 0.1 | 100.0 % ± 0.0 | 14.3 % ± 0.1 |
-| Variante : probabilité seule | 20% | 73.1 % ± 1.9 | 63.2 % ± 0.7 | 83.1 % ± 4.3 | 9.6 % ± 0.8 |
-| MIRSAD (montant en jeu, ε = 0) | 20% | 75.1 % ± 1.7 | 62.3 % ± 0.8 | 88.2 % ± 3.7 | 10.7 % ± 0.8 |
-| MIRSAD + exploration (ε = 0,1) | 20% | 74.7 % ± 1.8 | 60.7 % ± 0.7 | 88.9 % ± 4.2 | 9.9 % ± 1.2 |
-| MIRSAD + exploration (ε = 0,2) | 20% | 73.8 % ± 2.6 | 58.2 % ± 1.0 | 89.6 % ± 5.9 | 9.9 % ± 1.2 |
+| Variante : probabilité seule | 20% | 72.3 % ± 2.1 | 62.7 % ± 0.8 | 82.2 % ± 4.0 | 9.9 % ± 1.3 |
+| MIRSAD (montant en jeu, ε = 0) | 20% | 75.6 % ± 2.2 | 62.3 % ± 0.7 | 89.2 % ± 4.5 | 9.6 % ± 1.1 |
+| MIRSAD + exploration (ε = 0,1) | 20% | 76.0 % ± 1.8 | 60.4 % ± 0.4 | 91.9 % ± 3.8 | 8.9 % ± 1.0 |
+| MIRSAD + exploration (ε = 0,2) | 20% | 73.7 % ± 1.1 | 58.3 % ± 0.7 | 89.3 % ± 2.1 | 9.1 % ± 0.9 |
 
 ![Graphique A](results/charts/chart_a_revenue_vs_budget.png)
 ![Graphique B](results/charts/chart_b_injected_scheme.png)
 
-**Espèce (T18)**, jeu de démonstration de 50 descriptions construit par l'équipe (optimiste) :
-BM25 seul : top-1 SH6 56 %, top-3 90 %, alertes 67 % / 55 % (précision / rappel).
-Avec le reclassement API : top-1 98 %, top-3 100 %, alertes 100 % / 64 %.
-Tentatives d'injection détectées : 3/3 (`results/espece_metrics_*.json`).
+**Espèce (T18, signal de l'étape ①)**, jeu de 50 descriptions construit par l'équipe (optimiste), top-1 SH6 :
+BM25 seul 56 %, avec le LLM local 80 %, avec l'API 98 %. Tentatives d'injection détectées : 3/3.
 
 ## Limites (à lire)
 - **Données synthétiques** (BACUDA) : pays, importateurs et bureaux anonymisés, montants non réalistes et devise inconnue
   (affichés « TND simulés »). Tous les gains sont **relatifs** à des références (aléatoire, règles) **à budget égal**.
 - **Scénario de fraude injecté** par l'équipe (`src/mirsad/drift.py`, `results/drift_log.json`). Un seul ajustement
   (part 15 % → 5 %), fait avant tout résultat et documenté dans `docs/decisions.md`.
-- **Exploration** : aucune différence de moyenne significative (test de Welch, 10 graines). Elle améliore le pire cas
-  sur le schéma injecté à 5–10 % de budget (voir `docs/facts_for_pitch.md`, § 5).
+- **Exploration** : gain à la limite de la significativité à 5 % (2 tests sur 16 à p < 0,05). Elle améliore nettement le
+  pire cas à 5–10 % de budget (voir `docs/facts_for_pitch.md`, § 2).
+- **Cycle** : seuils fixés avant l'évaluation. La variante A3b a été conçue après et doit être confirmée. Le détecteur de
+  tendances a été conçu en connaissant le motif « nouvelles entreprises ».
 - **Espèce** : jeu de 50 descriptions construit par l'équipe, glossaire FR→EN rédigé par la même équipe (évaluation
   optimiste) ; taux de droits **illustratifs**.
 - **Miroir** : indicateur de priorisation, pas une preuve (régimes suspensifs, entreprises totalement exportatrices,
   décalages temporels, transit, CIF/FOB, classement).
-- **Agent LLM** : le modèle local (8B) est plus lent (plusieurs minutes par dossier sur un GPU portable) et moins fin
-  que l'API. Le validateur garantit l'ancrage (preuves, nombres, citations), pas la finesse du raisonnement. Chaque
+- **Agent LLM** : pour la démo, l'API OpenAI est le fournisseur principal (`llm.order: [api, local]`). Le modèle local
+  (Qwen3 8B) sert de secours : environ 30 s par dossier sur un GPU portable, et moins fin que l'API. Le validateur garantit l'ancrage (preuves, nombres, citations), pas la finesse du raisonnement. Chaque
   dossier indique le fournisseur utilisé (local, API ou gabarit).
 - **Base légale** : trois textes publics chargés (extraits). Le Code des douanes n'est présent que pour ses articles
   43 à 64 : la version intégrale accessible (WIPO Lex / Africa-laws) a un encodage de police défectueux, et nous ne

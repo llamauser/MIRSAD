@@ -1,0 +1,130 @@
+{
+  "case_id": "SGD72398",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 706.0,
+  "probabilite_fraude": 0.5095,
+  "resume": "Importateur surveillé, taux de fraude élevé, prix unitaire nettement supérieur aux comparables. Historique de fraude confirmée et liens avec des déclarants à risque. Voie Rouge, contrôle recommandé.",
+  "faits": [
+    {
+      "texte": "Importateur IMP108897 avec un taux de fraude lissé de 38,0 % sur les contrôles passés révélés.",
+      "evidence_ids": [
+        "SHAP-SGD72398-risk_importer",
+        "HIST-importer-IMP108897"
+      ]
+    },
+    {
+      "texte": "Le couple importateur × SH4 5903 présente un taux de fraude lissé de 31,8 %.",
+      "evidence_ids": [
+        "SHAP-SGD72398-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Le bureau OFFICE16 affiche un taux de fraude lissé de 42,9 % sur les contrôles passés révélés.",
+      "evidence_ids": [
+        "SHAP-SGD72398-risk_office",
+        "HIST-office-OFFICE16"
+      ]
+    },
+    {
+      "texte": "Prix unitaire déclaré de 15,34 TND simulés, très supérieur au prix unitaire médian de 1,82 TND simulés pour le SH6 590390.",
+      "evidence_ids": [
+        "DECL-SGD72398",
+        "PEER-590390-ALL"
+      ]
+    },
+    {
+      "texte": "Importateur IMP108897 déjà impliqué dans une fraude confirmée (redressement de 1085 TND simulés).",
+      "evidence_ids": [
+        "COMP-IMP108897",
+        "HIST-importer-IMP108897"
+      ]
+    },
+    {
+      "texte": "Liens avec plusieurs déclarants à taux de fraude lissé élevé (ex : DEC2280 à 44,3 %).",
+      "evidence_ids": [
+        "LINK-IMP108897"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "sous-évaluation",
+      "justification": "Le prix unitaire déclaré (15,34 TND simulés) est très supérieur au prix médian observé (1,82 TND simulés), ce qui peut indiquer une incohérence de valeur.",
+      "evidence_ids": [
+        "DECL-SGD72398",
+        "PEER-590390-ALL"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "L'importateur présente un historique de fraude et des liens avec plusieurs déclarants à taux de fraude élevé.",
+      "evidence_ids": [
+        "HIST-importer-IMP108897",
+        "LINK-IMP108897"
+      ]
+    }
+  ],
+  "base_legale": [
+    {
+      "chunk_id": "LEG-omc_accord_evaluatio-014",
+      "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+      "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+    },
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+      "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+    },
+    {
+      "chunk_id": "LEG-tn_code_des_douanes_-008",
+      "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+      "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+    }
+  ],
+  "controles_recommandes": [
+    "Vérification de l'identité et de l'activité déclarée de l'importateur"
+  ],
+  "incertitudes": [
+    "Prix comparables : faible nombre de références (n=3) pour le SH6 590390.",
+    "Pas de description commerciale disponible pour vérifier la classification tarifaire.",
+    "Historique limité aux contrôles passés révélés.",
+    "Base légale : à confirmer par l'agent pour toute action non couverte par les extraits fournis."
+  ],
+  "niveau_confiance": "moyen",
+  "_mode": "llm_api_valide",
+  "_modele": "gpt-4.1",
+  "_fournisseur": "API OpenAI (gpt-4.1)",
+  "_duree_s": 11.0,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "API OpenAI (gpt-4.1)",
+      "tentative": 1,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 0.7,
+          "tokens_sortie": 21
+        },
+        {
+          "type": "outils",
+          "s": 1.6,
+          "tokens_sortie": 286
+        },
+        {
+          "type": "outils",
+          "s": 3.7,
+          "tokens_sortie": 755
+        },
+        {
+          "type": "dossier",
+          "s": 4.9,
+          "tokens_sortie": 1200
+        }
+      ],
+      "duree_s": 11.0
+    }
+  ],
+  "_demo_injection": false
+}

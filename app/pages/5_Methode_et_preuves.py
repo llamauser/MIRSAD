@@ -8,10 +8,15 @@ page("Méthode et preuves")
 st.title("Méthode et preuves : le cycle évalué brique par brique")
 
 CYC = load_csv("results/cycle/cycle_summary_by_seed.csv")
+POST = load_csv("results/cycle/posthoc_A3b_by_seed.csv")
+if CYC is not None and POST is not None:
+    import pandas as pd
+    CYC = pd.concat([CYC, POST], ignore_index=True)
 TESTS = load_json("results/cycle/ablation_tests.json") or []
 NAMES = {"random": "Aléatoire", "rules": "Règles (profil importateur)", "mirsad": "④ seul (montant en jeu)",
          "cycle_A1": "④ + ② score entreprise", "cycle_A2": "+ ③ segments, Thompson, audits",
-         "cycle_A3": "+ ⑦ alertes de tendance (cycle complet)"}
+         "cycle_A3": "+ ⑦ alertes de tendance (cycle complet, pré-enregistré)",
+         "cycle_A3b": "Variante post-hoc : « Confiance » reste ciblable si montant élevé"}
 SCEN = {"front": "Sociétés écrans nouvelles (sous-évaluation)", "turncoat": "Entreprises établies qui dérivent",
         "network": "Réseau autour d'un déclarant"}
 if CYC is not None:
@@ -19,8 +24,8 @@ if CYC is not None:
                 "en semaine 26. Chaque ligne ajoute une brique à la précédente. Les moyennes sont affichées ± écart-type, "
                 "avec la p-valeur de Welch contre la ligne précédente.")
     scen = st.radio("Schéma simulé", list(SCEN), format_func=SCEN.get, horizontal=True)
-    order = ["random", "rules", "mirsad", "cycle_A1", "cycle_A2", "cycle_A3"]
-    prev = {"cycle_A1": "mirsad", "cycle_A2": "cycle_A1", "cycle_A3": "cycle_A2"}
+    order = ["random", "rules", "mirsad", "cycle_A1", "cycle_A2", "cycle_A3", "cycle_A3b"]
+    prev = {"cycle_A1": "mirsad", "cycle_A2": "cycle_A1", "cycle_A3": "cycle_A2", "cycle_A3b": "cycle_A3"}
     rows = []
     for pol in order:
         g_ = CYC[(CYC.scenario == scen) & (CYC.policy == pol)]
@@ -29,7 +34,8 @@ if CYC is not None:
 
         def ms(c):
             return f"{pct(g_[c].mean())} ± {fr(100 * g_[c].std(), 1)}"
-        t = next((x for x in TESTS if x["scenario"] == scen and x["a"] == pol and x.get("b") == prev.get(pol)
+        t = next((x for x in TESTS + (load_json("results/cycle/posthoc_A3b_tests.json") or [])
+                  if x["scenario"] == scen and x["a"] == pol and x.get("b") == prev.get(pol)
                   and x["metric"] == "injected_recall_rev"), None)
         rows.append({"Configuration": NAMES[pol], "Revenu@5 % (total)": ms("revenue_at_k"),
                      "Fraudes historiques": ms("revenue_hist_at_k"), "Schéma capturé": ms("injected_recall_rev"),
@@ -46,7 +52,16 @@ if CYC is not None:
             st.dataframe([{"Segment": s_, "Taux de fraude": pct(r0[f"fraud_rate_{s_}"]),
                            "Part des déclarations": pct(r0[f"volume_share_{s_}"])}
                           for s_ in ["Confiance", "Standard", "Surveillé", "Critique"]], hide_index=True, width="stretch")
-    st.caption("Sources : `results/cycle/cycle_summary_by_seed.csv`, `ablation_tests.json`, `segments.csv`. "
+    st.markdown("""<div class="caveat"><b>Lecture honnête.</b> Face aux références : le cycle complet dépasse toujours le
+hasard (7 à 10×) et fait jeu égal avec les règles ou mieux, selon le schéma. Face à ④ seul : gain sur le réseau, égalité sur
+les sociétés écrans, <b>perte significative</b> sur les entreprises établies qui dérivent. Le budget d'exploration et la
+facilitation des entreprises « Confiance » ont un coût quand ce sont justement elles qui fraudent. La variante post-hoc
+(« Confiance » reste ciblable) bat les règles sur les trois schémas, avec une variabilité très faible, mais elle a été conçue
+<b>après</b> avoir vu les résultats et doit être confirmée. Le score entreprise (②) n'améliore pas la précision en
+lui-même (il reprend l'information des profils lissés) : sa valeur est l'explication, l'incertitude et la segmentation.
+</div>""", unsafe_allow_html=True)
+    st.caption("Sources : `results/cycle/cycle_summary_by_seed.csv`, `ablation_tests.json`, `segments.csv`, "
+               "`posthoc_A3b_*`. "
                "Données synthétiques ; les écarts non significatifs (p ≥ 0,05) ne sont pas présentés comme des gains.")
     st.divider()
 

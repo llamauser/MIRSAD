@@ -15,6 +15,9 @@ REQUIRED = [
     "results/charts/chart_a_revenue_vs_budget.png", "results/charts/chart_b_injected_scheme.png",
     "results/dossiers/index.json", "results/espece_metrics.json", "results/espece_results.csv",
     "data/espece/demo_set.csv", "data/hs/harmonized-system.csv", "results/drift_log.json",
+    "data/processed/risk_register.parquet", "data/processed/company_scores.parquet",
+    "data/processed/trend_alerts.parquet", "results/cycle/cycle_summary_by_seed.csv", "results/cycle/detector.json",
+    "results/cycle/ablation_tests.json",
 ]
 OPTIONAL = ["data/processed/mirror.parquet"]  # app shows « données miroir indisponibles » if absent
 missing = [f for f in REQUIRED if not (ROOT / f).exists()]

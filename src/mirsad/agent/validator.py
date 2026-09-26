@@ -15,8 +15,11 @@ import re
 
 from .schema import DOSSIER_SCHEMA
 
-NUM_RX = re.compile(r"(?<![A-Za-z0-9_\-])\d{1,3}(?:[   ]\d{3})+(?:[.,]\d+)?(?![A-Za-z0-9])"
-                    r"|(?<![A-Za-z0-9_\-])\d+(?:[.,]\d+)?(?![A-Za-z0-9])")
+# a number never starts right after a decimal separator ("1,9" must not yield "9") nor inside an id ("SGD-123");
+# a leading minus sign is allowed ("-1,9"), values are compared by magnitude
+_LB = r"(?<![A-Za-z0-9_.,])(?<![A-Za-z0-9]-)"
+NUM_RX = re.compile(_LB + r"\d{1,3}(?:[   ]\d{3})+(?:[.,]\d+)?(?![A-Za-z0-9])"
+                    r"|" + _LB + r"\d+(?:[.,]\d+)?(?![A-Za-z0-9])")
 TRIVIAL = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0}
 # semantic guard: each hypothesis type must cite at least one evidence of a compatible kind
 _VALUE_FEATS = ("z_uv", "z_uv_kg", "l_uv", "l_uv_kg", "l_cif", "tax_rt", "z_tax_rt", "fob_cif", "iso_score")
@@ -85,7 +88,7 @@ class TraceIndex:
         _walk(self.outputs, nums)
         self.keys: set[tuple[int, float]] = set()
         for v in nums:
-            for c in (v, v * 100, v / 1000, v / 1e6):
+            for c in (abs(v), abs(v) * 100, abs(v) / 1000, abs(v) / 1e6):
                 for d in range(0, 4):
                     self.keys.add((d, round(c, d)))
         # retrieved chunks: full text from the output if present, else from the corpus (outputs may only carry

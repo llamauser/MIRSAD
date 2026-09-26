@@ -121,6 +121,7 @@ def get_company_profile(importer_id: str) -> dict:
         "entreprise": importer_id, "semaine": int(cur.week),
         "score_risque_0_100": _num(100 * cur.ent_mean, 1),
         "intervalle_90_pct": [_num(100 * lo, 1), _num(100 * hi, 1)],
+        "niveau_intervalle_pct": 90,
         "controles_effectifs": _num(cur.ent_neff, 1),
         "tendance_4_semaines_points": _num(100 * cur.ent_trend, 1),
         "risque_reseau_declarants_pct": _num(100 * cur.link_risk, 1),

@@ -36,3 +36,15 @@
   (`json_object`); the validator enforces the schema (fields, enums, types).
 - **Chunking** now cuts on word boundaries, and quotable sentences drop fragments cut by the window (a quote once started
   mid-word: « océder à la visite… »).
+- **API as main LLM (05:00, team request)**: `llm.order: [api, local]`. The local model was too heavy for the demo
+  machine; it stays as a fallback and as the production recommendation (on-premises). Local measurements are kept.
+- **Calibration isotonic → Platt (04:30)**: isotonic calibration on the most recent inspected week produced 0.9999
+  plateaus; Platt scaling is smooth and bounded (clip 0.001–0.98). Probabilities remain selection-biased (fitted on
+  inspected rows only). This changed the main grid: at 5 %, MIRSAD ε=0 now 36.0 % (was 39.9 %), ε=0.2 44.9 % ± 2.5.
+- **Risk cycle (04:25–05:05)**: stages ②③⑦ added. Thresholds (entity, cycle, trends) committed in git BEFORE the
+  evaluation (commit "Cycle scaffolding…"). Pre-registered full loop = `cycle_A3`.
+- **Post-hoc variant `cycle_A3b` (05:05)**: after seeing that `cycle_A3` loses to ④ alone on the turncoat scheme
+  (p = 0.03), we tested keeping « Confiance » companies eligible for exploitation. It is reported separately and flagged
+  as post-hoc in the app and docs; the demo register still uses the pre-registered `cycle_A3`.
+- **Detector honesty**: signals were designed knowing the "new front companies" pattern, so detection on front/network is
+  partly circular; it is blind to the turncoat scheme (0 alerts); 0 false alarms on the scheme-free data.

@@ -1,0 +1,141 @@
+{
+  "case_id": "SGD70472",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 705.0,
+  "probabilite_fraude": 0.5378,
+  "resume": "Déclaration d’un véhicule d’occasion, voie Rouge. Risque élevé lié à l’importateur (fraude passée), alerte fausse espèce, tentative d’injection détectée. Montant en jeu : 705 TND simulés.",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe, P(fraude) = 53,8 %, montant en jeu = 705 TND simulés.",
+      "evidence_ids": [
+        "RISK-SGD70472"
+      ]
+    },
+    {
+      "texte": "Importateur IMP233723 avec taux de fraude lissé de 38,0 % sur les contrôles passés révélés.",
+      "evidence_ids": [
+        "SHAP-SGD70472-risk_importer",
+        "HIST-importer-IMP233723"
+      ]
+    },
+    {
+      "texte": "Couple importateur × SH4 8703 : taux de fraude lissé de 31,8 %.",
+      "evidence_ids": [
+        "SHAP-SGD70472-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Alerte fausse espèce : espèce déclarée 870390 absente du top 3, sous-position la plus probable 870322.",
+      "evidence_ids": [
+        "TARIF-SGD70472"
+      ]
+    },
+    {
+      "texte": "Tentative d'injection d'instructions détectée dans la description commerciale.",
+      "evidence_ids": [
+        "GUARD-SGD70472"
+      ]
+    },
+    {
+      "texte": "Historique : 1 fraude confirmée sur 7 déclarations passées pour l’importateur.",
+      "evidence_ids": [
+        "HIST-importer-IMP233723"
+      ]
+    },
+    {
+      "texte": "Risque réseau : les déclarants utilisés par l'entreprise ont un taux de fraude estimé moyen de 16,1 %. Plusieurs déclarants à risque élevé liés.",
+      "evidence_ids": [
+        "SHAP-SGD70472-link_risk",
+        "LINK-IMP233723"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "fausse espèce",
+      "justification": "Espèce déclarée 870390 absente du top 3, sous-position la plus probable 870322 (écart de droits illustratifs).",
+      "evidence_ids": [
+        "TARIF-SGD70472"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "Importateur avec antécédent de fraude, taux de fraude élevé, liens avec plusieurs déclarants à risque.",
+      "evidence_ids": [
+        "SHAP-SGD70472-risk_importer",
+        "HIST-importer-IMP233723",
+        "LINK-IMP233723"
+      ]
+    },
+    {
+      "type": "autre",
+      "justification": "Tentative d'injection d'instructions détectée dans la description commerciale.",
+      "evidence_ids": [
+        "GUARD-SGD70472"
+      ]
+    }
+  ],
+  "base_legale": [
+    {
+      "chunk_id": "LEG-omc_accord_evaluatio-014",
+      "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+      "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+    },
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+      "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+    },
+    {
+      "chunk_id": "LEG-tn_code_des_douanes_-008",
+      "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+      "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+    }
+  ],
+  "controles_recommandes": [
+    "Contrôle documentaire standard"
+  ],
+  "incertitudes": [
+    "Description commerciale contenant une tentative d'injection : données non fiables.",
+    "Prix comparables synthétiques, large dispersion sur la position SH6.",
+    "Base légale : extraits OMC/OMD, à compléter selon contexte tunisien.",
+    "Données historiques limitées aux contrôles passés révélés."
+  ],
+  "niveau_confiance": "moyen",
+  "_mode": "llm_api_valide",
+  "_modele": "gpt-4.1",
+  "_fournisseur": "API OpenAI (gpt-4.1)",
+  "_duree_s": 16.1,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "API OpenAI (gpt-4.1)",
+      "tentative": 1,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 21
+        },
+        {
+          "type": "outils",
+          "s": 1.5,
+          "tokens_sortie": 283
+        },
+        {
+          "type": "outils",
+          "s": 4.5,
+          "tokens_sortie": 964
+        },
+        {
+          "type": "dossier",
+          "s": 5.5,
+          "tokens_sortie": 1247
+        }
+      ],
+      "duree_s": 16.1
+    }
+  ],
+  "_demo_injection": true
+}

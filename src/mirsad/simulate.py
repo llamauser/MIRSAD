@@ -22,14 +22,17 @@ from .policy import LANE_ORANGE, LANE_ROUGE, LANE_VERT, NEEDS_MODEL, assign_lane
 from .trends import active_mask
 
 CYCLE = {"cycle_A1": dict(entity=True), "cycle_A2": dict(entity=True, segments=True),
-         "cycle_A3": dict(entity=True, segments=True, trends=True)}
+         "cycle_A3": dict(entity=True, segments=True, trends=True),
+         # POST-HOC variant (designed after seeing the turncoat result): trusted companies stay eligible for
+         # exploitation, so a « Confiance » company whose declaration has a high expected amount is still inspected
+         "cycle_A3b": dict(entity=True, segments=True, trends=True, trust_exploit=True)}
 REGISTER_COLS = ["id", "week", "importer", "declarant", "country", "office", "hs6", "cif", "taxes",
                  "z_uv", "z_uv_kg", "z_tax_rt", "z_kg_unit", "iso_score", "is_new_importer",
                  "ent_mean", "ent_sd", "ent_neff", "ent_trend", "link_risk", "segment",
                  "p", "r_hat", "er", "lane", "selected_by", "alert", "label_fraud", "label_revenue", "scheme"]
 
 
-def _cycle_select(b, k, rng, cc, alert_rows):
+def _cycle_select(b, k, rng, cc, alert_rows, trust_exploit=False):
     """③+④ budget split by segment. Returns positions, ranking score, source label per selected position."""
     seg, er = b.segment.values, b.er.values
     n = len(b)
@@ -40,7 +43,7 @@ def _cycle_select(b, k, rng, cc, alert_rows):
     taken = np.zeros(n, bool)
     src = {}
     # exploitation: ER ranking outside « Confiance » (facilitation of compliant operators)
-    pool = np.where(seg != "Confiance")[0]
+    pool = np.arange(n) if trust_exploit else np.where(seg != "Confiance")[0]
     ex = pool[np.argsort(-er[pool], kind="stable")[:k_exploit]]
     taken[ex] = True
     src.update({i: "exploitation" for i in ex})
@@ -115,7 +118,7 @@ def run(static: pd.DataFrame, cfg: dict, policy: str, r: float, eps: float, seed
         alert_rows = active_mask(b, alerts, w, cfg.get("trends", {}).get("persist_weeks", 2)) \
             if opts.get("trends") else np.zeros(len(b), bool)
         if opts.get("segments"):
-            sel, score, src = _cycle_select(b, k, rng, cfg["cycle"], alert_rows)
+            sel, score, src = _cycle_select(b, k, rng, cfg["cycle"], alert_rows, opts.get("trust_exploit", False))
         else:
             sel, score = select("mirsad" if opts else policy, b, k, eps, rng)
             src = {i: ("audit" if policy == "random" else "exploitation") for i in sel}

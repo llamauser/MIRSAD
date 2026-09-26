@@ -1,4 +1,5 @@
-"""LLM providers, tried in order: local Ollama first (on-premises), then the OpenAI API as fallback.
+"""LLM providers, tried in the order set by config `llm.order` (demo: OpenAI API first, local Ollama as fallback;
+production: local only, on-premises).
 
 - Local: OpenAI-compatible endpoint of Ollama (default http://localhost:11434/v1), model from config.
 - API: keys from the environment / .env (OPENAI_API_KEYS comma-separated and/or OPENAI_API_KEY), never
@@ -102,6 +103,7 @@ def providers() -> tuple[Provider, ...]:
     cfg = load_config()["llm"]
     out = []
     loc = cfg.get("local", {})
+    order = cfg.get("order", ["local", "api"])
     if loc.get("enabled", False):
         ok, why = _ollama_has(loc["base_url"], loc["model"])
         print(f"[llm] local {loc['model']}: {why}")
@@ -127,7 +129,7 @@ def providers() -> tuple[Provider, ...]:
             print(f"[llm] api {api['model']}: ok ({len(keys())} clé(s))")
         except Exception as e:
             print(f"[llm] api {api['model']}: indisponible ({type(e).__name__})")
-    return tuple(out)
+    return tuple(sorted(out, key=lambda pr: order.index(pr.name) if pr.name in order else len(order)))
 
 
 def available() -> bool:

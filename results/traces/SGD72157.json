@@ -9,50 +9,53 @@
       "evidence_id": "RISK-SGD72157",
       "case_id": "SGD72157",
       "voie": "Rouge",
-      "probabilite_fraude": 0.9999,
-      "revenu_attendu_si_fraude_TND": 2429.0,
-      "montant_en_jeu_TND": 2429.0,
-      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 99,99 %, montant en jeu (P × revenu attendu) = 2 429 TND simulés.",
+      "probabilite_fraude": 0.98,
+      "revenu_attendu_si_fraude_TND": 2196.0,
+      "montant_en_jeu_TND": 2152.0,
+      "segment": "Critique",
+      "motif_selection": "montant en jeu parmi les plus élevés de la semaine (exploitation)",
+      "alerte_tendance_active": false,
+      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 98,0 %, montant en jeu (P × revenu attendu) = 2 152 TND simulés.",
       "facteurs_shap": [
         {
           "evidence_id": "SHAP-SGD72157-risk_importer",
           "variable": "risk_importer",
-          "valeur": 0.7299,
-          "contribution_shap": 2.6475,
+          "valeur": 0.7377,
+          "contribution_shap": 2.6696,
           "sens": "augmente le risque",
-          "texte": "Taux de fraude lissé de l'importateur IMPNEW021 : 73,0 % (sur les contrôles passés révélés)."
+          "texte": "Taux de fraude lissé de l'importateur IMPNEW021 : 73,8 % (sur les contrôles passés révélés)."
         },
         {
-          "evidence_id": "SHAP-SGD72157-risk_imp_hs4",
-          "variable": "risk_imp_hs4",
-          "valeur": 0.7186,
-          "contribution_shap": 2.1242,
+          "evidence_id": "SHAP-SGD72157-ent_mean",
+          "variable": "ent_mean",
+          "valeur": 0.5839,
+          "contribution_shap": 2.0803,
           "sens": "augmente le risque",
-          "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 71,9 % (sur les contrôles passés révélés)."
+          "texte": "Score de conformité dynamique de l'entreprise IMPNEW021 : 58,4 / 100 de risque (probabilité de fraude estimée, contrôles passés révélés)."
         },
         {
           "evidence_id": "SHAP-SGD72157-l_cif",
           "variable": "l_cif",
           "valeur": 7.0198,
-          "contribution_shap": 1.2509,
+          "contribution_shap": 1.4256,
           "sens": "augmente le risque",
           "texte": "Valeur CIF déclarée : 1 118 TND simulés."
         },
         {
-          "evidence_id": "SHAP-SGD72157-risk_declarant",
-          "variable": "risk_declarant",
-          "valeur": 0.4263,
-          "contribution_shap": -0.3919,
-          "sens": "diminue le risque",
-          "texte": "Taux de fraude lissé du déclarant DEC2280 : 42,6 % (sur les contrôles passés révélés)."
+          "evidence_id": "SHAP-SGD72157-risk_imp_hs4",
+          "variable": "risk_imp_hs4",
+          "valeur": 0.7159,
+          "contribution_shap": 0.7782,
+          "sens": "augmente le risque",
+          "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 71,6 % (sur les contrôles passés révélés)."
         },
         {
-          "evidence_id": "SHAP-SGD72157-risk_hs6",
-          "variable": "risk_hs6",
-          "valeur": 0.3634,
-          "contribution_shap": 0.2181,
+          "evidence_id": "SHAP-SGD72157-ent_trend",
+          "variable": "ent_trend",
+          "valeur": 0.356,
+          "contribution_shap": 0.4113,
           "sens": "augmente le risque",
-          "texte": "Taux de fraude lissé de la sous-position SH 870322 : 36,3 % (sur les contrôles passés révélés)."
+          "texte": "Tendance du score de l'entreprise sur 4 semaines : hausse de 35,6 points."
         }
       ],
       "controles_recommandes_regles": [
@@ -63,7 +66,7 @@
       ],
       "note": "Scores issus du modèle LightGBM calibré ; l'agent ne peut pas modifier la voie."
     },
-    "duree_ms": 73
+    "duree_ms": 33
   },
   {
     "step": 2,
@@ -91,10 +94,75 @@
       "prix_unitaire": 1117.6,
       "unite_monetaire": "TND simulés (données synthétiques)"
     },
-    "duree_ms": 0
+    "duree_ms": 2
   },
   {
     "step": 3,
+    "tool": "get_company_profile",
+    "args": {
+      "importer_id": "IMPNEW021"
+    },
+    "output": {
+      "evidence_id": "COMP-IMPNEW021",
+      "entreprise": "IMPNEW021",
+      "semaine": 40,
+      "score_risque_0_100": 58.4,
+      "intervalle_90_pct": [
+        41.7,
+        75.1
+      ],
+      "controles_effectifs": 12.6,
+      "tendance_4_semaines_points": 35.6,
+      "risque_reseau_declarants_pct": 16.2,
+      "segment": "Critique",
+      "controles_passes": [
+        {
+          "evidence_id": "CTRL-SGD66168",
+          "semaine": 37,
+          "sh6": "870332",
+          "motif": "exploitation",
+          "resultat": "fraude",
+          "redressement_TND": 441.0
+        },
+        {
+          "evidence_id": "CTRL-SGD66968",
+          "semaine": 38,
+          "sh6": "870324",
+          "motif": "exploitation",
+          "resultat": "fraude",
+          "redressement_TND": 337.0
+        },
+        {
+          "evidence_id": "CTRL-SGD67584",
+          "semaine": 38,
+          "sh6": "870324",
+          "motif": "exploitation",
+          "resultat": "fraude",
+          "redressement_TND": 398.0
+        },
+        {
+          "evidence_id": "CTRL-SGD67626",
+          "semaine": 38,
+          "sh6": "870390",
+          "motif": "exploitation",
+          "resultat": "fraude",
+          "redressement_TND": 1748.0
+        },
+        {
+          "evidence_id": "CTRL-SGD67806",
+          "semaine": 38,
+          "sh6": "870322",
+          "motif": "exploitation",
+          "resultat": "fraude",
+          "redressement_TND": 445.0
+        }
+      ],
+      "note": "Score = loi bêta a posteriori (a priori : taux de fraude des contrôles aléatoires), mise à jour par chaque contrôle, avec une demi-vie de 12 semaines. Segment : Surveillé = peu connue, Critique = connue et risquée, Confiance = connue et conforme."
+    },
+    "duree_ms": 8
+  },
+  {
+    "step": 4,
     "tool": "get_entity_history",
     "args": {
       "kind": "importateur",
@@ -112,77 +180,43 @@
         "8702": 4,
         "8704": 3
       },
-      "controles_passes_reveles": 15,
-      "fraudes_confirmees": 15,
-      "taux_fraude_lisse": 0.7299,
-      "revenu_redresse_passe_TND": 15939.0,
-      "note": "Historique limité aux semaines passées ; fraudes connues uniquement pour les déclarations inspectées."
-    },
-    "duree_ms": 20
-  },
-  {
-    "step": 4,
-    "tool": "get_entity_history",
-    "args": {
-      "kind": "declarant",
-      "entity_id": "DEC2280"
-    },
-    "output": {
-      "evidence_id": "HIST-declarant-DEC2280",
-      "type": "declarant",
-      "id": "DEC2280",
-      "declarations_passees": 365,
-      "premiere_declaration": "2013-01-02",
-      "valeur_cif_totale": 39462623.0,
-      "principales_positions_sh4": {
-        "8703": 234,
-        "8702": 31,
-        "8517": 21,
-        "8704": 18,
-        "3004": 3
-      },
-      "controles_passes_reveles": 7,
-      "fraudes_confirmees": 4,
-      "taux_fraude_lisse": 0.4263,
-      "revenu_redresse_passe_TND": 10153.0,
+      "controles_passes_reveles": 16,
+      "fraudes_confirmees": 16,
+      "taux_fraude_lisse": 0.7377,
+      "revenu_redresse_passe_TND": 21868.0,
       "note": "Historique limité aux semaines passées ; fraudes connues uniquement pour les déclarations inspectées."
     },
     "duree_ms": 10
   },
   {
     "step": 5,
-    "tool": "get_peer_prices",
+    "tool": "get_entity_history",
     "args": {
-      "hs6": "870322",
-      "country": "TN"
+      "kind": "declarant",
+      "entity_id": "DECNEW021"
     },
     "output": {
-      "evidence_id": "PEER-870322-TN",
-      "sh6": "870322",
-      "pays": "TN",
-      "meme_sh6_meme_pays": {
-        "n": 0,
-        "prix_unitaire_median": null,
-        "prix_unitaire_p10": null,
-        "prix_unitaire_p90": null,
-        "taux_taxation_median_pct": null
-      },
-      "meme_sh6_tous_pays": {
-        "n": 4471,
-        "prix_unitaire_median": 2073.0,
-        "prix_unitaire_p10": 1.98,
-        "prix_unitaire_p90": 108454.0,
-        "taux_taxation_median_pct": 17.7
-      }
+      "evidence_id": "HIST-declarant-DECNEW021",
+      "type": "declarant",
+      "id": "DECNEW021",
+      "declarations_passees": 0,
+      "premiere_declaration": null,
+      "valeur_cif_totale": 0.0,
+      "principales_positions_sh4": {},
+      "controles_passes_reveles": 0,
+      "fraudes_confirmees": 0,
+      "taux_fraude_lisse": 0.3181,
+      "revenu_redresse_passe_TND": 0.0,
+      "note": "Historique limité aux semaines passées ; fraudes connues uniquement pour les déclarations inspectées."
     },
-    "duree_ms": 25
+    "duree_ms": 7
   },
   {
     "step": 6,
     "tool": "find_links",
     "args": {
       "importer_id": "IMPNEW021",
-      "declarant_id": "DEC2280"
+      "declarant_id": "DECNEW021"
     },
     "output": {
       "importateur": "IMPNEW021",
@@ -190,50 +224,50 @@
       "nouvel_importateur": false,
       "declarants": [
         {
-          "declarant": "DEC2291",
-          "taux_fraude_lisse": 0.4529,
-          "controles_reveles": 6,
-          "degre_importateurs": 113
+          "declarant": "DEC2280",
+          "taux_fraude_lisse": 0.4427,
+          "controles_reveles": 13,
+          "degre_importateurs": 251
+        },
+        {
+          "declarant": "DEC3929",
+          "taux_fraude_lisse": 0.4415,
+          "controles_reveles": 4,
+          "degre_importateurs": 70
         },
         {
           "declarant": "DEC3109",
-          "taux_fraude_lisse": 0.4372,
+          "taux_fraude_lisse": 0.4318,
           "controles_reveles": 2,
           "degre_importateurs": 62
-        },
-        {
-          "declarant": "DEC6582",
-          "taux_fraude_lisse": 0.4356,
-          "controles_reveles": 25,
-          "degre_importateurs": 378
         }
       ],
       "importateurs_les_plus_risques_partageant_un_declarant": [
         {
-          "importer": "IMPNEW005",
-          "taux_fraude_lisse": 0.7749,
-          "controles_reveles": 20
+          "importer": "IMPNEW008",
+          "taux_fraude_lisse": 0.8157,
+          "controles_reveles": 27
         },
         {
-          "importer": "IMPNEW004",
-          "taux_fraude_lisse": 0.7588,
-          "controles_reveles": 18
+          "importer": "IMPNEW001",
+          "taux_fraude_lisse": 0.8157,
+          "controles_reveles": 27
         },
         {
-          "importer": "IMPNEW022",
-          "taux_fraude_lisse": 0.7402,
-          "controles_reveles": 16
+          "importer": "IMPNEW009",
+          "taux_fraude_lisse": 0.8106,
+          "controles_reveles": 26
         }
       ],
       "n_importateurs_partageant_un_declarant": 1708,
-      "taux_fraude_moyen_des_3_plus_risques": 0.758,
+      "taux_fraude_moyen_des_3_plus_risques": 0.814,
       "note": "Un importateur partageant un déclarant n'est pas en soi « à risque » : voir son taux de fraude lissé.",
       "declarant_risque_eleve": true,
       "nouvel_importateur_lie_a_declarant_risque": false,
       "seuil_risque_declarant": 0.25,
       "evidence_id": "LINK-IMPNEW021"
     },
-    "duree_ms": 58
+    "duree_ms": 38
   },
   {
     "step": 7,
@@ -245,28 +279,8 @@
     "output": {
       "evidence_id": "SIMSET-SGD72157",
       "base": "fraudes confirmées lors de contrôles passés",
-      "n_base": 1194,
+      "n_base": 1170,
       "resultats_similaires": [
-        {
-          "evidence_id": "SIM-SGD68639",
-          "case_id": "SGD68639",
-          "semaine": 39,
-          "importateur": "IMPNEW004",
-          "sh6": "870323",
-          "pays": "CNTRY759",
-          "revenu_redresse_TND": 4327.0,
-          "distance": 1.27
-        },
-        {
-          "evidence_id": "SIM-SGD68309",
-          "case_id": "SGD68309",
-          "semaine": 38,
-          "importateur": "IMPNEW005",
-          "sh6": "870323",
-          "pays": "CNTRY759",
-          "revenu_redresse_TND": 1950.0,
-          "distance": 1.64
-        },
         {
           "evidence_id": "SIM-SGD68217",
           "case_id": "SGD68217",
@@ -275,11 +289,31 @@
           "sh6": "870321",
           "pays": "CNTRY376",
           "revenu_redresse_TND": 5835.0,
-          "distance": 2.08
+          "distance": 0.81
+        },
+        {
+          "evidence_id": "SIM-SGD68639",
+          "case_id": "SGD68639",
+          "semaine": 39,
+          "importateur": "IMPNEW004",
+          "sh6": "870323",
+          "pays": "CNTRY759",
+          "revenu_redresse_TND": 4327.0,
+          "distance": 1.25
+        },
+        {
+          "evidence_id": "SIM-SGD67021",
+          "case_id": "SGD67021",
+          "semaine": 38,
+          "importateur": "IMPNEW000",
+          "sh6": "870322",
+          "pays": "CNTRY680",
+          "revenu_redresse_TND": 2294.0,
+          "distance": 1.59
         }
       ]
     },
-    "duree_ms": 10
+    "duree_ms": 5
   },
   {
     "step": 8,
@@ -296,9 +330,37 @@
   },
   {
     "step": 9,
+    "tool": "get_peer_prices",
+    "args": {
+      "hs6": "870323",
+      "country": "JP"
+    },
+    "output": {
+      "evidence_id": "PEER-870323-JP",
+      "sh6": "870323",
+      "pays": "JP",
+      "meme_sh6_meme_pays": {
+        "n": 0,
+        "prix_unitaire_median": null,
+        "prix_unitaire_p10": null,
+        "prix_unitaire_p90": null,
+        "taux_taxation_median_pct": null
+      },
+      "meme_sh6_tous_pays": {
+        "n": 9973,
+        "prix_unitaire_median": 2205.0,
+        "prix_unitaire_p10": 2.34,
+        "prix_unitaire_p90": 110557.4,
+        "taux_taxation_median_pct": 17.8
+      }
+    },
+    "duree_ms": 26
+  },
+  {
+    "step": 10,
     "tool": "get_mirror_evidence",
     "args": {
-      "hs_code": "870322"
+      "hs_code": "8703"
     },
     "output": {
       "evidence_id": "MIRROR-87",
@@ -347,10 +409,10 @@
         }
       ]
     },
-    "duree_ms": 10
+    "duree_ms": 17
   },
   {
-    "step": 10,
+    "step": 11,
     "tool": "search_regulations",
     "args": {
       "query": "valeur transactionnelle",
@@ -379,10 +441,10 @@
       ],
       "note": "Extraits verbatim du corpus chargé (chunk_id LEG-…) ; les HS-… sont des libellés du Système harmonisé, pas des textes juridiques."
     },
-    "duree_ms": 7
+    "duree_ms": 2
   },
   {
-    "step": 11,
+    "step": 12,
     "tool": "search_regulations",
     "args": {
       "query": "gestion des risques",
@@ -416,10 +478,10 @@
       ],
       "note": "Extraits verbatim du corpus chargé (chunk_id LEG-…) ; les HS-… sont des libellés du Système harmonisé, pas des textes juridiques."
     },
-    "duree_ms": 4
+    "duree_ms": 8
   },
   {
-    "step": 12,
+    "step": 13,
     "tool": "search_regulations",
     "args": {
       "query": "pouvoirs de visite des agents",
@@ -451,6 +513,6 @@
       ],
       "note": "Extraits verbatim du corpus chargé (chunk_id LEG-…) ; les HS-… sont des libellés du Système harmonisé, pas des textes juridiques."
     },
-    "duree_ms": 7
+    "duree_ms": 6
   }
 ]

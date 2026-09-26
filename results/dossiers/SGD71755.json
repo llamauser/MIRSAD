@@ -1,0 +1,145 @@
+{
+  "case_id": "SGD71755",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 2002.0,
+  "probabilite_fraude": 0.98,
+  "resume": "Importateur à risque critique, historique de fraudes, liens avec des déclarants risqués. Valeur déclarée faible, absence de comparables. Contrôles recommandés : vérification documentaire et physique.",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe avec une probabilité de fraude de 98,0 % et un montant en jeu de 2 002 TND simulés.",
+      "evidence_ids": [
+        "RISK-SGD71755"
+      ]
+    },
+    {
+      "texte": "Importateur IMPNEW022 classé segment Critique, score de risque 64,2 / 100, tendance à la hausse (+8 points sur 4 semaines).",
+      "evidence_ids": [
+        "COMP-IMPNEW022"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMPNEW022 : 78,7 % sur les contrôles passés révélés.",
+      "evidence_ids": [
+        "SHAP-SGD71755-risk_importer",
+        "HIST-importer-IMPNEW022"
+      ]
+    },
+    {
+      "texte": "Historique de 22 fraudes confirmées sur 22 contrôles passés pour IMPNEW022.",
+      "evidence_ids": [
+        "HIST-importer-IMPNEW022"
+      ]
+    },
+    {
+      "texte": "Liens avec plusieurs déclarants à taux de fraude lissé élevé (ex : DEC9556 à 48,1 %).",
+      "evidence_ids": [
+        "LINK-IMPNEW022"
+      ]
+    },
+    {
+      "texte": "Valeur CIF déclarée : 944 TND simulés pour 55 unités (prix unitaire 17,17 TND).",
+      "evidence_ids": [
+        "DECL-SGD71755"
+      ]
+    },
+    {
+      "texte": "Aucun prix comparable disponible pour la position SH6 8703.",
+      "evidence_ids": [
+        "PEER-8703-ALL"
+      ]
+    },
+    {
+      "texte": "Plusieurs cas similaires de fraudes confirmées sur des positions SH6 proches (ex : SGD66047, redressement 2 082 TND).",
+      "evidence_ids": [
+        "SIMSET-SGD71755"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "sous-évaluation",
+      "justification": "Valeur CIF déclarée faible (944 TND pour 55 unités), absence de comparables, cas similaires de fraudes sur SH6 proches.",
+      "evidence_ids": [
+        "DECL-SGD71755",
+        "PEER-8703-ALL",
+        "SIMSET-SGD71755"
+      ]
+    },
+    {
+      "type": "réseau",
+      "justification": "Importateur à taux de fraude élevé, liens avec plusieurs déclarants à risque, historique de fraudes confirmées.",
+      "evidence_ids": [
+        "SHAP-SGD71755-risk_importer",
+        "HIST-importer-IMPNEW022",
+        "LINK-IMPNEW022"
+      ]
+    }
+  ],
+  "base_legale": [
+    {
+      "chunk_id": "LEG-omc_accord_evaluatio-014",
+      "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+      "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+    },
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+      "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+    },
+    {
+      "chunk_id": "LEG-tn_code_des_douanes_-008",
+      "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+      "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+    }
+  ],
+  "controles_recommandes": [
+    "Demander le contrat de vente et la facture commerciale",
+    "Exiger la preuve de paiement (virement bancaire)",
+    "Comparer le prix avec les déclarations comparables (même SH6, même origine)",
+    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+  ],
+  "incertitudes": [
+    "Aucun prix comparable disponible pour la position SH6 8703.",
+    "Base légale : les extraits OMC ne sont pas des textes nationaux.",
+    "Données synthétiques, montants simulés.",
+    "Pas de description commerciale pour vérifier la classification tarifaire.",
+    "Indicateurs macro (MIRROR) non utilisables comme preuve individuelle."
+  ],
+  "niveau_confiance": "élevé",
+  "_mode": "llm_api_valide",
+  "_modele": "gpt-4.1",
+  "_fournisseur": "API OpenAI (gpt-4.1)",
+  "_duree_s": 12.3,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "API OpenAI (gpt-4.1)",
+      "tentative": 1,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 0.7,
+          "tokens_sortie": 21
+        },
+        {
+          "type": "outils",
+          "s": 1.4,
+          "tokens_sortie": 255
+        },
+        {
+          "type": "outils",
+          "s": 3.8,
+          "tokens_sortie": 776
+        },
+        {
+          "type": "dossier",
+          "s": 6.3,
+          "tokens_sortie": 1328
+        }
+      ],
+      "duree_s": 12.3
+    }
+  ],
+  "_demo_injection": false
+}

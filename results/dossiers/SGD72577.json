@@ -1,24 +1,39 @@
 {
   "case_id": "SGD72577",
   "voie": "Rouge",
-  "montant_en_jeu_TND": 8884,
-  "probabilite_fraude": 0.9999,
-  "resume": "Déclaration à haut risque (voie Rouge) avec une probabilité de fraude de 99,99 %, montant en jeu de 8 884 TND simulés.",
+  "montant_en_jeu_TND": 10461.0,
+  "probabilite_fraude": 0.98,
+  "resume": "Importateur à risque critique, historique de fraudes, montant élevé. Valeur déclarée à comparer. Contrôles recommandés : documents, preuve de paiement, examen physique.",
   "faits": [
     {
-      "texte": "Voie Rouge décidée par le scoreur déterministe.",
+      "texte": "Voie Rouge décidée par le scoreur déterministe avec une probabilité de fraude de 98,0 % et un montant en jeu de 10 461 TND simulés.",
       "evidence_ids": [
         "RISK-SGD72577"
       ]
     },
     {
-      "texte": "Taux de fraude lissé de l'importateur IMPNEW021 : 73,0 %.",
+      "texte": "Importateur IMPNEW021 classé segment Critique, score de risque 58,4/100, tendance à la hausse de 35,6 points sur 4 semaines.",
       "evidence_ids": [
-        "SHAP-SGD72577-risk_importer"
+        "COMP-IMPNEW021",
+        "SHAP-SGD72577-ent_mean",
+        "SHAP-SGD72577-ent_trend"
       ]
     },
     {
-      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 71,9 %.",
+      "texte": "Taux de fraude lissé de l'importateur IMPNEW021 : 73,8 % sur les contrôles passés révélés.",
+      "evidence_ids": [
+        "SHAP-SGD72577-risk_importer",
+        "HIST-importer-IMPNEW021"
+      ]
+    },
+    {
+      "texte": "Historique de 16 fraudes confirmées pour IMPNEW021, revenu redressé total de 21 868 TND.",
+      "evidence_ids": [
+        "HIST-importer-IMPNEW021"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 71,6 %.",
       "evidence_ids": [
         "SHAP-SGD72577-risk_imp_hs4"
       ]
@@ -26,37 +41,64 @@
     {
       "texte": "Valeur CIF déclarée : 1 123 TND simulés.",
       "evidence_ids": [
+        "DECL-SGD72577",
         "SHAP-SGD72577-l_cif"
+      ]
+    },
+    {
+      "texte": "Des cas similaires sur la même famille de produits ont conduit à des redressements de 6 400 à 11 480 TND.",
+      "evidence_ids": [
+        "SIMSET-SGD72577",
+        "SIM-SGD69972",
+        "SIM-SGD69340",
+        "SIM-SGD63157"
+      ]
+    },
+    {
+      "texte": "Importateur partageant des déclarants avec d'autres importateurs à taux de fraude élevé.",
+      "evidence_ids": [
+        "LINK-IMPNEW021"
       ]
     }
   ],
   "hypotheses": [
     {
       "type": "sous-évaluation",
-      "justification": "Valeur CIF déclarée basse par rapport aux comparables (aucun prix comparable trouvé).",
+      "justification": "La valeur CIF déclarée (1 123 TND simulés) est à comparer avec les redressements élevés constatés sur des cas similaires et l'historique de fraudes de l'importateur.",
       "evidence_ids": [
-        "SHAP-SGD72577-l_cif",
-        "PEER-8703-CNTRY759"
+        "DECL-SGD72577",
+        "SIMSET-SGD72577",
+        "SIM-SGD69972",
+        "SIM-SGD69340",
+        "SIM-SGD63157",
+        "HIST-importer-IMPNEW021"
       ]
     },
     {
       "type": "réseau",
-      "justification": "L'importateur IMPNEW021 a un historique de fraude élevé (73,0 %) et est lié à des déclarants à risque.",
+      "justification": "L'importateur IMPNEW021 partage des déclarants avec d'autres importateurs à taux de fraude élevé, et le déclarant principal présente un risque élevé.",
       "evidence_ids": [
-        "HIST-importer-IMPNEW021",
         "LINK-IMPNEW021"
-      ]
-    },
-    {
-      "type": "fausse origine",
-      "justification": "Origine déclarée CNTRY759, mais aucun prix comparable trouvé pour ce SH6 et ce pays.",
-      "evidence_ids": [
-        "DECL-SGD72577",
-        "PEER-8703-CNTRY759"
       ]
     }
   ],
-  "base_legale": [],
+  "base_legale": [
+    {
+      "chunk_id": "LEG-omc_accord_evaluatio-014",
+      "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+      "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+    },
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+      "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+    },
+    {
+      "chunk_id": "LEG-tn_code_des_douanes_-008",
+      "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+      "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+    }
+  ],
   "controles_recommandes": [
     "Demander le contrat de vente et la facture commerciale",
     "Exiger la preuve de paiement (virement bancaire)",
@@ -64,68 +106,46 @@
     "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
   ],
   "incertitudes": [
-    "Aucun prix comparable trouvé pour SH6 8703 et pays CNTRY759.",
-    "Données synthétiques pour les montants et les prix."
+    "Valeur transactionnelle à confirmer par comparaison avec des cas comparables.",
+    "Pas de description commerciale disponible pour vérification de l'espèce.",
+    "Base légale : les extraits cités sont issus de textes internationaux et nationaux, à confirmer pour application locale.",
+    "Données synthétiques, montants simulés.",
+    "Historique limité aux contrôles passés révélés."
   ],
   "niveau_confiance": "élevé",
-  "_mode": "llm_local_valide",
-  "_modele": "mirsad-qwen3:8b",
-  "_fournisseur": "LLM local (mirsad-qwen3:8b)",
-  "_duree_s": 29.7,
+  "_mode": "llm_api_valide",
+  "_modele": "gpt-4.1",
+  "_fournisseur": "API OpenAI (gpt-4.1)",
+  "_duree_s": 17.7,
   "_raison_fallback": null,
   "_validation": [
     {
-      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "fournisseur": "API OpenAI (gpt-4.1)",
       "tentative": 1,
       "erreurs": [],
       "appels_llm": [
         {
           "type": "outils",
-          "s": 1.2,
-          "tokens_sortie": 30
+          "s": 2.0,
+          "tokens_sortie": 21
         },
         {
           "type": "outils",
-          "s": 1.1,
-          "tokens_sortie": 26
+          "s": 1.8,
+          "tokens_sortie": 241
         },
         {
           "type": "outils",
-          "s": 1.0,
-          "tokens_sortie": 31
-        },
-        {
-          "type": "outils",
-          "s": 1.1,
-          "tokens_sortie": 35
-        },
-        {
-          "type": "outils",
-          "s": 1.0,
-          "tokens_sortie": 33
-        },
-        {
-          "type": "outils",
-          "s": 1.3,
-          "tokens_sortie": 36
-        },
-        {
-          "type": "outils",
-          "s": 1.1,
-          "tokens_sortie": 28
-        },
-        {
-          "type": "outils",
-          "s": 0.8,
-          "tokens_sortie": 25
+          "s": 4.5,
+          "tokens_sortie": 859
         },
         {
           "type": "dossier",
-          "s": 20.8,
-          "tokens_sortie": 686
+          "s": 6.3,
+          "tokens_sortie": 1394
         }
       ],
-      "duree_s": 29.7
+      "duree_s": 17.7
     }
   ],
   "_demo_injection": false

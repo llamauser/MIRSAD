@@ -1,0 +1,7 @@
+scenario,policy,fraud_rate_Confiance,volume_share_Confiance,fraud_rate_Standard,volume_share_Standard,fraud_rate_Surveillé,volume_share_Surveillé,fraud_rate_Critique,volume_share_Critique,false_green_Confiance
+front,cycle_A2,0.0202,0.018,0.0227,0.0364,0.0872,0.9311,0.9239,0.0145,0.0155
+front,cycle_A3,0.0202,0.0169,0.0231,0.0347,0.0868,0.9335,0.8419,0.0148,0.0152
+network,cycle_A2,0.0207,0.0167,0.0229,0.0325,0.0874,0.937,0.7387,0.0138,0.0156
+network,cycle_A3,0.0209,0.0161,0.0221,0.0347,0.0847,0.9322,0.8342,0.017,0.0142
+turncoat,cycle_A2,0.0189,0.019,0.0232,0.0438,0.0911,0.9305,0.2773,0.0067,0.0142
+turncoat,cycle_A3,0.0189,0.019,0.0232,0.0438,0.0911,0.9305,0.2773,0.0067,0.0142

@@ -1,0 +1,129 @@
+{
+  "case_id": "SGD72933",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 2602.0,
+  "probabilite_fraude": 0.956,
+  "resume": "Importateur à risque critique, antécédents de fraudes confirmées, montant en jeu élevé. Contrôle documentaire recommandé. Historique et réseau à surveiller.",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe avec une probabilité de fraude de 95,6 % et un montant en jeu de 2 602 TND simulés.",
+      "evidence_ids": [
+        "RISK-SGD72933"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMPNEW014 : 70,4 % sur les contrôles passés révélés.",
+      "evidence_ids": [
+        "SHAP-SGD72933-risk_importer",
+        "HIST-importer-IMPNEW014"
+      ]
+    },
+    {
+      "texte": "Score de conformité dynamique de l'entreprise IMPNEW014 : 53,3 / 100 de risque.",
+      "evidence_ids": [
+        "SHAP-SGD72933-ent_mean",
+        "COMP-IMPNEW014"
+      ]
+    },
+    {
+      "texte": "Tendance du score de l'entreprise sur 4 semaines : hausse de 19,1 points.",
+      "evidence_ids": [
+        "SHAP-SGD72933-ent_trend",
+        "COMP-IMPNEW014"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 64,1 %.",
+      "evidence_ids": [
+        "SHAP-SGD72933-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Historique de 13 fraudes confirmées sur 13 contrôles passés pour IMPNEW014.",
+      "evidence_ids": [
+        "HIST-importer-IMPNEW014"
+      ]
+    },
+    {
+      "texte": "Risque propagé par le réseau : les déclarants utilisés par l'entreprise ont un taux de fraude estimé moyen de 16,8 %. Plusieurs déclarants à risque élevé partagés.",
+      "evidence_ids": [
+        "SHAP-SGD72933-link_risk",
+        "LINK-IMPNEW014"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "réseau",
+      "justification": "L'importateur IMPNEW014 présente un taux de fraude lissé élevé et partage plusieurs déclarants à risque élevé avec d'autres importateurs très risqués.",
+      "evidence_ids": [
+        "SHAP-SGD72933-risk_importer",
+        "HIST-importer-IMPNEW014",
+        "LINK-IMPNEW014"
+      ]
+    }
+  ],
+  "base_legale": [
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier »",
+      "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+    },
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier »",
+      "extrait": "La douane a recours à l’analyse des risques pour désigner les personnes et les marchandises à examiner, y compris les moyens de transport, et l’étendue de cette vérification."
+    },
+    {
+      "chunk_id": "LEG-tn_code_des_douanes_-008",
+      "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie »",
+      "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+    }
+  ],
+  "controles_recommandes": [
+    "Contrôle documentaire standard"
+  ],
+  "incertitudes": [
+    "Pas de description commerciale disponible pour vérifier la classification tarifaire (TARIF-SGD72933).",
+    "Base légale : les extraits cités sont issus de textes internationaux et nationaux, à confirmer pour application locale.",
+    "Les taux de fraude sont calculés sur les contrôles passés révélés uniquement.",
+    "Les comparables de valeur ne sont pas explicitement listés dans ce dossier."
+  ],
+  "niveau_confiance": "élevé",
+  "_mode": "llm_api_valide",
+  "_modele": "gpt-4.1",
+  "_fournisseur": "API OpenAI (gpt-4.1)",
+  "_duree_s": 11.2,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "API OpenAI (gpt-4.1)",
+      "tentative": 1,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 0.8,
+          "tokens_sortie": 21
+        },
+        {
+          "type": "outils",
+          "s": 1.4,
+          "tokens_sortie": 215
+        },
+        {
+          "type": "outils",
+          "s": 4.3,
+          "tokens_sortie": 822
+        },
+        {
+          "type": "dossier",
+          "s": 4.5,
+          "tokens_sortie": 1036
+        }
+      ],
+      "duree_s": 11.2
+    }
+  ],
+  "_demo_injection": false
+}

@@ -118,3 +118,9 @@ def test_legal_quote_checked_against_corpus_when_output_is_compact():
     assert validate(d, trace, SCORER) == []
     d["base_legale"][0]["extrait"] = phrase + " et l'article 999 s'applique"
     assert any("non verbatim" in e or "> 40 mots" in e for e in validate(d, trace, SCORER))
+
+
+def test_number_parsing_signed_decimals_and_ids():
+    from mirsad.agent.validator import numbers_in_text
+    assert [v for _, v, _ in numbers_in_text("tendance -1,9 points")] == [1.9]
+    assert [v for _, v, _ in numbers_in_text("SGD-123 et 4 521 TND")] == [4521.0]

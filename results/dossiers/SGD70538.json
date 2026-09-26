@@ -1,124 +1,134 @@
 {
   "case_id": "SGD70538",
   "voie": "Rouge",
-  "montant_en_jeu_TND": 6490,
-  "probabilite_fraude": 0.9999,
-  "resume": "Déclaration à haut risque (voie Rouge) avec un montant en jeu de 6 490 TND simulés. L'importateur IMPNEW015 a un taux de fraude lissé de 67,8 %.",
+  "montant_en_jeu_TND": 10002.0,
+  "probabilite_fraude": 0.9547,
+  "resume": "Importateur à risque critique, historique de fraudes, montant élevé. Prix déclaré très supérieur au prix médian observé. Contrôle documentaire recommandé. Risque réseau et sous-évaluation à examiner.",
   "faits": [
     {
-      "texte": "Voie Rouge décidée par le scoreur déterministe.",
+      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 95,5 %, montant en jeu = 10 002 TND simulés.",
       "evidence_ids": [
         "RISK-SGD70538"
       ]
     },
     {
-      "texte": "Taux de fraude lissé de l'importateur IMPNEW015 : 67,8 %.",
+      "texte": "Taux de fraude lissé de l'importateur IMPNEW015 : 65,9 % (10 fraudes sur 10 contrôles passés révélés).",
       "evidence_ids": [
-        "SHAP-SGD70538-risk_importer"
+        "SHAP-SGD70538-risk_importer",
+        "HIST-importer-IMPNEW015"
       ]
     },
     {
-      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 66,2 %.",
+      "texte": "Score de conformité dynamique de l'entreprise IMPNEW015 : 48,6 / 100 de risque.",
+      "evidence_ids": [
+        "SHAP-SGD70538-ent_mean",
+        "COMP-IMPNEW015"
+      ]
+    },
+    {
+      "texte": "Tendance du score de l'entreprise sur 4 semaines : hausse de 30,0 points.",
+      "evidence_ids": [
+        "SHAP-SGD70538-ent_trend",
+        "COMP-IMPNEW015"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 62,1 %.",
       "evidence_ids": [
         "SHAP-SGD70538-risk_imp_hs4"
       ]
     },
     {
-      "texte": "Prix unitaire déclaré : 81 486,40 par unité.",
+      "texte": "Prix unitaire déclaré : 81 486,4 TND simulés ; prix unitaire médian observé (SH6 870323, tous pays) : 2 205 TND simulés.",
       "evidence_ids": [
-        "SHAP-SGD70538-l_uv"
+        "DECL-SGD70538",
+        "PEER-870323-JP"
+      ]
+    },
+    {
+      "texte": "Importateur partageant des déclarants avec d'autres importateurs à taux de fraude très élevé (jusqu'à 81,6 %).",
+      "evidence_ids": [
+        "LINK-IMPNEW015"
       ]
     }
   ],
   "hypotheses": [
     {
       "type": "sous-évaluation",
-      "justification": "Prix unitaire déclaré (81 486,40) est proche des prix comparables (81 486,40).",
+      "justification": "Prix unitaire déclaré (81 486,4 TND simulés) très supérieur au prix médian observé (2 205 TND simulés) pour la même position SH6, ce qui peut indiquer une incohérence de valeur.",
       "evidence_ids": [
-        "SHAP-SGD70538-l_uv"
+        "DECL-SGD70538",
+        "PEER-870323-JP"
       ]
     },
     {
       "type": "réseau",
-      "justification": "L'importateur IMPNEW015 a un historique de fraude lissé de 67,8 %.",
-      "evidence_ids": [
-        "HIST-importer-IMPNEW015"
-      ]
-    },
-    {
-      "type": "réseau",
-      "justification": "Le déclarant DEC8156 est lié à des importateurs à risque (taux de fraude lissé de 75,8 %).",
+      "justification": "Importateur partageant des déclarants avec plusieurs importateurs à taux de fraude très élevé (jusqu'à 81,6 %).",
       "evidence_ids": [
         "LINK-IMPNEW015"
       ]
     }
   ],
-  "base_legale": [],
+  "base_legale": [
+    {
+      "chunk_id": "LEG-omc_accord_evaluatio-014",
+      "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)",
+      "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+    },
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+      "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+    },
+    {
+      "chunk_id": "LEG-tn_code_des_douanes_-008",
+      "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+      "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+    }
+  ],
   "controles_recommandes": [
-    "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+    "Contrôle documentaire standard"
   ],
   "incertitudes": [
-    "Données synthétiques (TND simulés), étiquettes sélectives (pays d'origine, SH4, SH6)"
+    "Pas de comparables exacts pour SH6 870323 en provenance du pays d'origine déclaré.",
+    "Pas de description commerciale disponible pour vérification de l'espèce tarifaire.",
+    "Historique du déclarant DECNEW022 inexistant.",
+    "Base légale : à confirmer par l'agent pour toute action non couverte par les extraits fournis."
   ],
   "niveau_confiance": "élevé",
-  "_mode": "llm_local_valide",
-  "_modele": "mirsad-qwen3:8b",
-  "_fournisseur": "LLM local (mirsad-qwen3:8b)",
-  "_duree_s": 27.5,
+  "_mode": "llm_api_valide",
+  "_modele": "gpt-4.1",
+  "_fournisseur": "API OpenAI (gpt-4.1)",
+  "_duree_s": 17.7,
   "_raison_fallback": null,
   "_validation": [
     {
-      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "fournisseur": "API OpenAI (gpt-4.1)",
       "tentative": 1,
       "erreurs": [],
       "appels_llm": [
         {
           "type": "outils",
-          "s": 1.0,
-          "tokens_sortie": 30
-        },
-        {
-          "type": "outils",
-          "s": 1.1,
-          "tokens_sortie": 26
-        },
-        {
-          "type": "outils",
-          "s": 1.0,
-          "tokens_sortie": 31
-        },
-        {
-          "type": "outils",
-          "s": 1.1,
-          "tokens_sortie": 35
-        },
-        {
-          "type": "outils",
-          "s": 1.0,
-          "tokens_sortie": 33
-        },
-        {
-          "type": "outils",
-          "s": 1.3,
-          "tokens_sortie": 35
-        },
-        {
-          "type": "outils",
-          "s": 1.1,
-          "tokens_sortie": 28
-        },
-        {
-          "type": "outils",
           "s": 0.8,
-          "tokens_sortie": 25
+          "tokens_sortie": 21
+        },
+        {
+          "type": "outils",
+          "s": 2.1,
+          "tokens_sortie": 262
+        },
+        {
+          "type": "outils",
+          "s": 5.9,
+          "tokens_sortie": 879
         },
         {
           "type": "dossier",
-          "s": 18.9,
-          "tokens_sortie": 615
+          "s": 8.7,
+          "tokens_sortie": 1249
         }
       ],
-      "duree_s": 27.5
+      "duree_s": 17.7
     }
   ],
   "_demo_injection": false

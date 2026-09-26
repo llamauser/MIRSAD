@@ -1,0 +1,120 @@
+{
+  "case_id": "SGD72414",
+  "voie": "Rouge",
+  "montant_en_jeu_TND": 3500.0,
+  "probabilite_fraude": 0.969,
+  "resume": "Importateur à risque critique, antécédents de fraudes confirmées, liens avec des déclarants à risque, montant en jeu élevé. Contrôle recommandé. Données et montants simulés.",
+  "faits": [
+    {
+      "texte": "Voie Rouge décidée par le scoreur déterministe avec une probabilité de fraude de 96,9 % et un montant en jeu de 3 500 TND simulés.",
+      "evidence_ids": [
+        "RISK-SGD72414"
+      ]
+    },
+    {
+      "texte": "Importateur IMPNEW017 classé segment Critique, score de risque 60,8/100, tendance à la hausse sur 4 semaines (+26 points).",
+      "evidence_ids": [
+        "COMP-IMPNEW017"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé de l'importateur IMPNEW017 : 75,6 % sur les contrôles passés révélés.",
+      "evidence_ids": [
+        "SHAP-SGD72414-risk_importer",
+        "HIST-importer-IMPNEW017"
+      ]
+    },
+    {
+      "texte": "Historique de 18 fraudes confirmées sur 18 contrôles passés pour IMPNEW017, revenu redressé total de 60 071 TND simulés.",
+      "evidence_ids": [
+        "HIST-importer-IMPNEW017"
+      ]
+    },
+    {
+      "texte": "Liens avec des déclarants à taux de fraude lissé élevé (ex : DEC2342 à 46,3 %).",
+      "evidence_ids": [
+        "LINK-IMPNEW017"
+      ]
+    },
+    {
+      "texte": "Taux de fraude lissé du couple importateur × SH4 8702 : 54,5 % sur les contrôles passés révélés.",
+      "evidence_ids": [
+        "SHAP-SGD72414-risk_imp_hs4"
+      ]
+    },
+    {
+      "texte": "Contrôle documentaire standard recommandé par les règles.",
+      "evidence_ids": [
+        "RISK-SGD72414"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "type": "réseau",
+      "justification": "L'importateur IMPNEW017 présente un taux de fraude lissé élevé, des antécédents de fraudes confirmées et des liens avec plusieurs déclarants à risque.",
+      "evidence_ids": [
+        "SHAP-SGD72414-risk_importer",
+        "HIST-importer-IMPNEW017",
+        "LINK-IMPNEW017",
+        "COMP-IMPNEW017"
+      ]
+    }
+  ],
+  "base_legale": [
+    {
+      "chunk_id": "LEG-omd_kyoto_revisee_ch-000",
+      "source": "OMD — Convention de Kyoto révisée, Annexe générale, Chapitre 6 « Contrôle douanier », https://www.wcoomd.org/fr/topics/facilitation/instrument-and-tools/conventions/pf_revised_kyoto_conv/kyoto_new/gach6.aspx",
+      "extrait": "Pour l’application des contrôles douaniers, la douane fait appel à la gestion des risques."
+    },
+    {
+      "chunk_id": "LEG-tn_code_des_douanes_-008",
+      "source": "Code des douanes tunisien (loi n° 2008-34 du 2 juin 2008), articles 43 à 64 — extrait publié par la base de données DCAF « La législation du secteur de la sécurité en Tunisie », https://legislation-securite.tn/latest-laws/loi-n-2008-34-du-2-juin-2008-portant-promulgation-du-code-des-douanes-code-des-douanes/",
+      "extrait": "Pour l'application des dispositions du présent code et en vue de la recherche des contraventions et délits douaniers, les agents des douanes peuvent procéder à la visite des marchandises, des moyens de transport et des personnes."
+    }
+  ],
+  "controles_recommandes": [
+    "Contrôle documentaire standard"
+  ],
+  "incertitudes": [
+    "Historique limité aux contrôles passés révélés (fraudes connues uniquement pour les déclarations inspectées).",
+    "Base légale : à confirmer par l'agent pour d'autres aspects spécifiques."
+  ],
+  "niveau_confiance": "élevé",
+  "_mode": "llm_api_valide",
+  "_modele": "gpt-4.1",
+  "_fournisseur": "API OpenAI (gpt-4.1)",
+  "_duree_s": 10.9,
+  "_raison_fallback": null,
+  "_validation": [
+    {
+      "fournisseur": "API OpenAI (gpt-4.1)",
+      "tentative": 1,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 0.7,
+          "tokens_sortie": 21
+        },
+        {
+          "type": "outils",
+          "s": 1.4,
+          "tokens_sortie": 194
+        },
+        {
+          "type": "outils",
+          "s": 4.0,
+          "tokens_sortie": 827
+        },
+        {
+          "type": "dossier",
+          "s": 4.7,
+          "tokens_sortie": 977
+        }
+      ],
+      "duree_s": 10.9
+    }
+  ],
+  "_demo_injection": false
+}
