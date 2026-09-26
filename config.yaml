@@ -45,6 +45,32 @@ drift:
   n_new_importers: 25
   share: 0.05         # adjusted from 0.15, see docs/decisions.md
   undervaluation_factor: 0.4
+  target_rows: 1900          # turncoat / network schemes sized like the front scheme (~1 900 rows)
+  network_hs2: "85"
+
+# ② company score / ③ segments (cycle)
+entity:
+  alpha: 10                  # prior strength (pseudo-inspections)
+  half_life: 12              # weeks: an inspection's weight halves every 12 weeks
+  n_min: 2.0                 # effective inspections below which a company is « Surveillé » (little known)
+  high: 2.0                  # « Critique » if posterior mean >= high x base rate
+  low: 0.75                  # « Confiance » if posterior mean <= low x base rate
+
+# ④ budget split by segment (cycle policies)
+cycle:
+  audit_share: 0.05          # random audits on « Confiance » (measures false-green, unbiased base rate)
+  explore_share: 0.20        # Thompson sampling on « Surveillé »
+  explore_share_alert: 0.30  # while a trend alert is active
+  kappa: 2.0                 # pseudo-count of the model probability in the Thompson posterior
+
+# ⑦ trend detector -- thresholds fixed BEFORE evaluation (see docs/decisions.md)
+trends:
+  baseline_weeks: 8
+  z_min: 3.0
+  min_count_a: 10
+  min_count_b: 8
+  min_count_c: 5
+  persist_weeks: 2
 
 simulation:
   warm_weeks: 2
