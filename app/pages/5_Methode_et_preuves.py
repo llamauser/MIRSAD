@@ -4,8 +4,53 @@ import streamlit as st
 from common import fr, load_csv, load_json, load_parquet, page, pct
 from mirsad.charts import EPS_COLORS, POLICY_COLORS, SERIES_COLORS, series_label
 
-page("Simulation")
-st.title("Simulation : ciblage sous budget, avec étiquettes sélectives")
+page("Méthode et preuves")
+st.title("Méthode et preuves : le cycle évalué brique par brique")
+
+CYC = load_csv("results/cycle/cycle_summary_by_seed.csv")
+TESTS = load_json("results/cycle/ablation_tests.json") or []
+NAMES = {"random": "Aléatoire", "rules": "Règles (profil importateur)", "mirsad": "④ seul (montant en jeu)",
+         "cycle_A1": "④ + ② score entreprise", "cycle_A2": "+ ③ segments, Thompson, audits",
+         "cycle_A3": "+ ⑦ alertes de tendance (cycle complet)"}
+SCEN = {"front": "Sociétés écrans nouvelles (sous-évaluation)", "turncoat": "Entreprises établies qui dérivent",
+        "network": "Réseau autour d'un déclarant"}
+if CYC is not None:
+    st.markdown("**Ablations le long du cycle** : budget 5 %, 10 graines, 3 schémas de fraude **simulés** qui démarrent "
+                "en semaine 26. Chaque ligne ajoute une brique à la précédente. Les moyennes sont affichées ± écart-type, "
+                "avec la p-valeur de Welch contre la ligne précédente.")
+    scen = st.radio("Schéma simulé", list(SCEN), format_func=SCEN.get, horizontal=True)
+    order = ["random", "rules", "mirsad", "cycle_A1", "cycle_A2", "cycle_A3"]
+    prev = {"cycle_A1": "mirsad", "cycle_A2": "cycle_A1", "cycle_A3": "cycle_A2"}
+    rows = []
+    for pol in order:
+        g_ = CYC[(CYC.scenario == scen) & (CYC.policy == pol)]
+        if not len(g_):
+            continue
+
+        def ms(c):
+            return f"{pct(g_[c].mean())} ± {fr(100 * g_[c].std(), 1)}"
+        t = next((x for x in TESTS if x["scenario"] == scen and x["a"] == pol and x.get("b") == prev.get(pol)
+                  and x["metric"] == "injected_recall_rev"), None)
+        rows.append({"Configuration": NAMES[pol], "Revenu@5 % (total)": ms("revenue_at_k"),
+                     "Fraudes historiques": ms("revenue_hist_at_k"), "Schéma capturé": ms("injected_recall_rev"),
+                     "Pire graine (schéma)": pct(g_["injected_recall_rev"].min()),
+                     "p (schéma, vs ligne préc.)": fr(t["p_value"], 3) if t else "—",
+                     "Brier": fr(g_["brier"].mean(), 3) if g_["brier"].notna().any() else "—"})
+    st.dataframe(rows, hide_index=True, width="stretch")
+    seg = load_csv("results/cycle/segments.csv")
+    if seg is not None:
+        sg = seg[(seg.scenario == scen) & (seg.policy == "cycle_A3")]
+        if len(sg):
+            r0 = sg.iloc[0]
+            st.markdown("**③ Segments (cycle complet)**, taux de fraude réel par palier (évaluation) et part du volume :")
+            st.dataframe([{"Segment": s_, "Taux de fraude": pct(r0[f"fraud_rate_{s_}"]),
+                           "Part des déclarations": pct(r0[f"volume_share_{s_}"])}
+                          for s_ in ["Confiance", "Standard", "Surveillé", "Critique"]], hide_index=True, width="stretch")
+    st.caption("Sources : `results/cycle/cycle_summary_by_seed.csv`, `ablation_tests.json`, `segments.csv`. "
+               "Données synthétiques ; les écarts non significatifs (p ≥ 0,05) ne sont pas présentés comme des gains.")
+    st.divider()
+
+st.subheader("Historique : budget et exploration (grille de référence, schéma « sociétés écrans »)")
 st.markdown("Rejeu hebdomadaire de 50 semaines. Chaque semaine, le modèle n'apprend **que** des déclarations contrôlées "
             "par le passé, sélectionne k = r × N déclarations, puis seules celles-ci révèlent leur résultat. Dès la "
             "semaine 26, un **schéma de fraude simulé** apparaît : 25 nouveaux importateurs sous-évaluent 5 % des "

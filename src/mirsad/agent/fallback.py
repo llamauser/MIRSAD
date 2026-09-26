@@ -26,6 +26,8 @@ def run_tools(case_id: str) -> list[dict]:
     decl = step("get_declaration", case_id=case_id)
     if "erreur" in decl or "erreur" in risk:
         return trace
+    step("get_company_profile", importer_id=decl["importateur"])
+    step("get_trend_alerts", hs_code=decl["sh6"])
     step("get_entity_history", kind="importateur", entity_id=decl["importateur"])
     step("find_links", importer_id=decl["importateur"], declarant_id=decl["declarant"])
     step("get_peer_prices", hs6=decl["sh6"], country=decl["pays_origine"])
@@ -67,7 +69,21 @@ def build(case_id: str, trace: list[dict]) -> dict:
     tarif = _out(trace, "check_tariff_classification")
     rid, did = risk["evidence_id"], decl["evidence_id"]
 
+    comp, trend = _out(trace, "get_company_profile"), _out(trace, "get_trend_alerts")
     faits = [{"texte": risk["texte"], "evidence_ids": [rid]}]
+    if risk.get("motif_selection"):
+        faits.append({"texte": f"Pourquoi ce contrôle : {risk['motif_selection']} (segment {risk.get('segment')}).",
+                      "evidence_ids": [rid]})
+    if comp.get("score_risque_0_100") is not None:
+        lo, hi = comp["intervalle_90_pct"]
+        faits.append({"texte": f"Score dynamique de l'entreprise {comp['entreprise']} : {fmt(comp['score_risque_0_100'], 1)} "
+                               f"/ 100 (intervalle à 90 % : {fmt(lo, 1)} – {fmt(hi, 1)}), segment « {comp['segment']} », "
+                               f"tendance sur 4 semaines {fmt(comp['tendance_4_semaines_points'], 1)} points.",
+                      "evidence_ids": [comp["evidence_id"]]})
+    for a in trend.get("alertes", [])[-1:]:
+        faits.append({"texte": f"Alerte de tendance « {a['signal']} » sur {a['cle']} en semaine {a['semaine']} "
+                               f"(valeur {fmt(a['valeur'], 2)} contre {fmt(a['reference'], 2)} habituellement).",
+                      "evidence_ids": [a["evidence_id"]]})
     for f in risk.get("facteurs_shap", []):
         if f["contribution_shap"] > 0:
             faits.append({"texte": f["texte"], "evidence_ids": [f["evidence_id"]]})

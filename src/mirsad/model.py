@@ -6,10 +6,15 @@ from dataclasses import dataclass, field
 import lightgbm as lgb
 import numpy as np
 import pandas as pd
-from sklearn.isotonic import IsotonicRegression
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import average_precision_score, roc_auc_score
 
 from .features import MODEL_FEATURES
+
+
+def _logit(p):
+    p = np.clip(np.asarray(p, float), 1e-6, 1 - 1e-6)
+    return np.log(p / (1 - p))
 
 
 @dataclass
@@ -51,9 +56,10 @@ class RiskModel:
             self.clf.fit(self._X(train[fit_mask]), yf)
         self.iso = None
         if use_cal and self.clf is not None:
+            # Platt scaling on the held-out most recent week (smooth, monotone, never a 0.9999 plateau like the
+            # isotonic step function). Still fitted on inspected rows only: probabilities remain selection-biased.
             raw = self.clf.predict_proba(self._X(train[~fit_mask]))[:, 1]
-            self.iso = IsotonicRegression(out_of_bounds="clip", y_min=1e-4, y_max=1 - 1e-4)
-            self.iso.fit(raw, y[~fit_mask])
+            self.iso = LogisticRegression(C=1.0).fit(_logit(raw).reshape(-1, 1), y[~fit_mask])
         # revenue regressor on revealed frauds only
         frauds = train[train.label_fraud == 1]
         self.r_fallback = float(frauds.label_revenue.median()) if len(frauds) else 0.0
@@ -73,10 +79,8 @@ class RiskModel:
     def predict_p(self, df):
         raw = self.predict_raw(df)
         if self.iso is not None:
-            cal = self.iso.predict(raw)
-            # isotonic is flat by construction; keep raw order to break ties
-            return cal + 1e-6 * raw
-        return raw
+            raw = self.iso.predict_proba(_logit(raw).reshape(-1, 1))[:, 1]
+        return np.clip(raw, 0.001, 0.98)
 
     def predict_r(self, df):
         if self.reg is None:

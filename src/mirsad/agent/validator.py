@@ -21,7 +21,7 @@ TRIVIAL = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0}
 # semantic guard: each hypothesis type must cite at least one evidence of a compatible kind
 _VALUE_FEATS = ("z_uv", "z_uv_kg", "l_uv", "l_uv_kg", "l_cif", "tax_rt", "z_tax_rt", "fob_cif", "iso_score")
 _RISK_FEATS = ("risk_importer", "risk_declarant", "risk_imp_hs4", "n_inspected_importer", "hist_count_importer",
-               "is_new_importer", "is_new_combo")
+               "is_new_importer", "is_new_combo", "ent_mean", "ent_trend", "link_risk", "ent_neff")
 
 
 def _compatible(hyp: str, eid: str, prefixes: tuple) -> bool:
@@ -36,7 +36,7 @@ HYP_EVIDENCE = {
     "sous-évaluation": ("DECL-", "PEER-", "SIM-", "SIMSET-", "SHAP-"),
     "fausse espèce": ("TARIF-",),
     "fausse origine": ("DECL-", "MIRROR-", "PEER-"),
-    "réseau": ("LINK-", "HIST-", "SIM-", "SIMSET-", "SHAP-"),
+    "réseau": ("LINK-", "HIST-", "SIM-", "SIMSET-", "SHAP-", "COMP-", "CTRL-"),
 }
 
 
@@ -172,6 +172,10 @@ def validate(dossier: dict, trace: list[dict], scorer: dict) -> list[str]:
             errs.append(f"base_legale: extrait non verbatim pour '{b['chunk_id']}'")
         if len(b["extrait"].split()) > 40:
             errs.append(f"base_legale: extrait > 40 mots pour '{b['chunk_id']}'")
+    legal_found = [c for c in idx.chunks if c.startswith("LEG-")]
+    if legal_found and not dossier["base_legale"]:
+        errs.append("base_legale vide alors que des extraits juridiques pertinents ont été retrouvés "
+                    f"({', '.join(legal_found[:3])}) : citer au moins une phrase citable")
     if len(dossier["resume"].split()) > 80:
         errs.append("resume > 80 mots")
     return errs

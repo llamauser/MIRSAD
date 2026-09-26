@@ -88,12 +88,66 @@ def get_risk_assessment(case_id: str) -> dict:
         "probabilite_fraude": _num(r.p, 4),
         "revenu_attendu_si_fraude_TND": _num(r.r_hat, 0),
         "montant_en_jeu_TND": _num(r.er, 0),
+        "segment": r.get("segment"),
+        "motif_selection": WHY.get(r.get("selected_by", ""), "non sélectionnée"),
+        "alerte_tendance_active": bool(r.get("alert", False)),
         "texte": (f"Voie {r.lane} décidée par le scoreur déterministe : P(fraude) = "
                   f"{fmt(100 * r.p, 2 if r.p > 0.99 else 1)} %, montant en jeu (P × revenu attendu) = {fmt(r.er, 0)} TND simulés."),
         "facteurs_shap": facts,
         "controles_recommandes_regles": recommended_checks(r, facts, L),
         "note": "Scores issus du modèle LightGBM calibré ; l'agent ne peut pas modifier la voie.",
     }
+
+
+WHY = {"exploitation": "montant en jeu parmi les plus élevés de la semaine (exploitation)",
+       "exploration": "entreprise peu connue : contrôle d'exploration (échantillonnage de Thompson)",
+       "audit": "audit aléatoire d'une entreprise « Confiance » (mesure du faux-vert)"}
+
+
+def get_company_profile(importer_id: str) -> dict:
+    """② score dynamique de conformité + ③ segment, lus dans le registre de risque (semaine de la démo)."""
+    from .. import register
+    ctx = get_context()
+    h = register.company_history(importer_id)
+    h = h[h.week <= ctx.week]
+    if not len(h):
+        return {"evidence_id": f"COMP-{importer_id}", "erreur": "entreprise absente du registre"}
+    cur = h.iloc[-1]
+    past = register.outcomes(importer_id, ctx.week)
+    lo = max(0.0, cur.ent_mean - 1.645 * cur.ent_sd)
+    hi = min(1.0, cur.ent_mean + 1.645 * cur.ent_sd)
+    return {
+        "evidence_id": f"COMP-{importer_id}",
+        "entreprise": importer_id, "semaine": int(cur.week),
+        "score_risque_0_100": _num(100 * cur.ent_mean, 1),
+        "intervalle_90_pct": [_num(100 * lo, 1), _num(100 * hi, 1)],
+        "controles_effectifs": _num(cur.ent_neff, 1),
+        "tendance_4_semaines_points": _num(100 * cur.ent_trend, 1),
+        "risque_reseau_declarants_pct": _num(100 * cur.link_risk, 1),
+        "segment": cur.segment,
+        "controles_passes": [{"evidence_id": f"CTRL-{r.id}", "semaine": int(r.week), "sh6": r.hs6,
+                              "motif": r.selected_by, "resultat": "fraude" if r.label_fraud else "conforme",
+                              "redressement_TND": _num(r.label_revenue, 0)} for r in past.tail(5).itertuples()],
+        "note": ("Score = loi bêta a posteriori (a priori : taux de fraude des contrôles aléatoires), mise à jour par "
+                 "chaque contrôle, avec une demi-vie de 12 semaines. Segment : Surveillé = peu connue, Critique = "
+                 "connue et risquée, Confiance = connue et conforme."),
+    }
+
+
+def get_trend_alerts(hs_code: str) -> dict:
+    """⑦ alertes de tendance (signaux faibles) sur le chapitre / la position SH, jusqu'à la semaine de la démo."""
+    from .. import register
+    ctx = get_context()
+    al = register.alerts()
+    hs = str(hs_code)
+    if len(al):
+        al = al[(al.week <= ctx.week) & (((al.cle_type == "hs2") & (al.cle == hs[:2])) |
+                                         ((al.cle_type == "hs4") & (al.cle == hs[:4])))]
+    return {"evidence_id": f"TREND-{hs[:4]}",
+            "alertes": [{"evidence_id": r.alert_id, "signal": r.signal, "cle": r.cle, "semaine": int(r.week),
+                         "valeur": _num(r.valeur, 2), "reference": _num(r.reference, 2), "z": _num(r.z, 1)}
+                        for r in al.tail(5).itertuples()] if len(al) else [],
+            "note": "Signaux calculés sur les seules données déclarées (sans étiquette) ; indicateur, pas une preuve."}
 
 
 def get_entity_history(kind: str, entity_id: str) -> dict:
@@ -212,6 +266,8 @@ def search_regulations(query: str, k: int = 4) -> dict:
 
 
 TOOLS = {
+    "get_company_profile": get_company_profile,
+    "get_trend_alerts": get_trend_alerts,
     "get_declaration": get_declaration,
     "get_risk_assessment": get_risk_assessment,
     "get_entity_history": get_entity_history,
@@ -235,6 +291,10 @@ _S = {"type": "string"}
 TOOL_SCHEMAS = [
     _fn("get_risk_assessment", "Score déterministe (P fraude, montant en jeu, voie) et facteurs SHAP. À appeler en premier.",
         {"case_id": _S}, ["case_id"]),
+    _fn("get_company_profile", "Score dynamique de conformité de l'entreprise (0-100, incertitude, tendance, "
+        "segment) et ses contrôles passés, depuis le registre de risque.", {"importer_id": _S}, ["importer_id"]),
+    _fn("get_trend_alerts", "Alertes de tendance (signaux faibles) sur le chapitre ou la position SH.",
+        {"hs_code": _S}, ["hs_code"]),
     _fn("get_declaration", "Champs de la déclaration (et description commerciale non fiable si disponible).",
         {"case_id": _S}, ["case_id"]),
     _fn("get_entity_history", "Historique passé d'une entité : importateur, declarant, bureau ou pays.",

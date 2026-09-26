@@ -68,6 +68,19 @@ def fact_text(f: str, row: pd.Series) -> str:
         return f"{int(row[f])} contrôles passés de cet importateur avec résultat connu."
     if f == "days_since_first":
         return f"Importateur connu depuis {int(row[f])} jours."
+    if f == "ent_mean":
+        return (f"Score de conformité dynamique de l'entreprise {row.get('importer', '')} : "
+                f"{fmt(100 * row[f], 1)} / 100 de risque (probabilité de fraude estimée, contrôles passés révélés).")
+    if f == "ent_sd":
+        return f"Incertitude sur le score de l'entreprise : ± {fmt(100 * row[f], 1)} points (écart-type a posteriori)."
+    if f == "ent_neff":
+        return f"L'entreprise compte {fmt(row[f], 1)} contrôle(s) effectif(s) récent(s) (pondérés par l'ancienneté)."
+    if f == "ent_trend":
+        sens = "hausse" if row[f] > 0 else "baisse"
+        return f"Tendance du score de l'entreprise sur 4 semaines : {sens} de {fmt(abs(100 * row[f]), 1)} points."
+    if f == "link_risk":
+        return (f"Risque propagé par le réseau : les déclarants utilisés par l'entreprise ont un taux de fraude "
+                f"estimé moyen de {fmt(100 * row[f], 1)} %.")
     if f == "iso_score":
         return f"Score d'anomalie multivariée (Isolation Forest) : {fmt(row[f], 2)}."
     if f == "l_cif":
@@ -95,14 +108,15 @@ class Explainer:
     def facts(self, row: pd.Series, case_id: str, top: int = 5) -> list[dict]:
         if self.ex is None:
             return []
-        x = row[MODEL_FEATURES].astype(float).values.reshape(1, -1)
+        feats = getattr(self.model, "features", MODEL_FEATURES)
+        x = row[feats].astype(float).values.reshape(1, -1)
         sv = self.ex.shap_values(x)
         sv = sv[1] if isinstance(sv, list) else sv
         sv = np.asarray(sv).reshape(-1)
         order = np.argsort(-np.abs(sv))[:top]
         out = []
         for i in order:
-            f = MODEL_FEATURES[i]
+            f = feats[i]
             out.append({
                 "evidence_id": f"SHAP-{case_id}-{f}",
                 "variable": f,

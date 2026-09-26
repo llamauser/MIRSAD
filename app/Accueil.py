@@ -35,30 +35,33 @@ if m:
                "(seules les déclarations contrôlées révèlent leur résultat), données synthétiques BACUDA et scénario de "
                "fraude injecté. Comparaisons à budget égal.")
 
-st.subheader("Architecture")
+st.subheader("Le cycle de risque MIRSAD")
+st.caption("Chaque étape lit la précédente et écrit dans un registre de risque unique. Les étapes suivent le processus de "
+           "gestion des risques de l'OMD : identifier → analyser → évaluer et prioriser → traiter → surveiller.")
 st.graphviz_chart("""
 digraph G {
-  rankdir=TB; bgcolor="transparent"; nodesep=0.35; ranksep=0.45;
-  node [shape=box, style="rounded,filled", fillcolor="#eef2f6", color="#0b1f3a", fontname="Helvetica", fontsize=11];
+  rankdir=LR; bgcolor="transparent"; nodesep=0.3; ranksep=0.35;
+  node [shape=box, style="rounded,filled", fillcolor="#eef2f6", color="#0b1f3a", fontname="Helvetica", fontsize=10];
   edge [color="#52514e"];
-  A [label="Adaptateur de données\\n(config.yaml → schéma canonique)"];
-  F [label="Variables\\n(valeur, profils de risque, historique)\\npassé uniquement"];
-  M [label="Modèle de risque\\nP(fraude) × revenu attendu\\n= montant en jeu (TND)"];
-  P [label="Politique de sélection\\nbudget r, exploration ε\\n→ Rouge / Orange / Vert"];
-  S [label="Simulateur\\nétiquettes sélectives\\n+ schéma injecté"];
-  G [label="Agent d'enquête (outils)\\nLLM local sur site → API → gabarit\\ndéclaration · SHAP · historique · liens\\nprix comparables · cas similaires\\nespèce SH · miroir · réglementation", fillcolor="#e6f2f1"];
-  V [label="Validateur\\npreuves, nombres, citations verbatim,\\nvoie inchangée", fillcolor="#fdf1e3"];
-  D [label="Dossier d'enquête\\n(français, vérifié)"];
-  X [label="Module miroir\\nUN Comtrade (Tunisie réelle)"];
-  {rank=same; A; F; M; P; S;}
-  {rank=same; X; G; V; D;}
-  A -> F -> M -> P -> S;
-  P -> G [label=" cas rouges"];
-  X -> G [style=dotted];
-  G -> V -> D;
-  V -> G [label=" rejet : 1 correction\\npuis fournisseur suivant", style=dashed, constraint=false];
+  D [label="① DÉTECTER\nsignaux d'anomalie\nvaleur · poids · tarif · réseau · miroir"];
+  C [label="② CONNAÎTRE\nscore dynamique entreprise\n(loi bêta, incertitude)"];
+  S [label="③ SEGMENTER\nConfiance · Standard\nSurveillé · Critique"];
+  T [label="④ CIBLER ★\nP(fraude) × montant\nbudget par segment", fillcolor="#e6f2f1"];
+  I [label="⑤ INSTRUIRE\nagent d'enquête\n+ validateur"];
+  A [label="⑥ APPRENDRE\nrésultat du contrôle\n(l'humain décide)"];
+  M [label="⑦ SURVEILLER\nsignaux faibles\nnouvelles tendances"];
+  R [label="Registre de risque\n(lu et écrit par chaque étape)", shape=cylinder, fillcolor="#fdf1e3"];
+  D -> C -> S -> T -> I -> A;
+  A -> C [label=" met à jour", style=dashed, constraint=false];
+  A -> M [constraint=false];
+  M -> T [label=" budget d'exploration", style=dashed, constraint=false];
+  {D C S T I A M} -> R [style=dotted, arrowhead=none, color="#b8b8b3"];
 }
 """)
+st.markdown("**Positionnement.** Défi principal : **T2, ciblage et orientation des contrôles** (étape ④). Défi "
+            "complémentaire : **T20, score dynamique de conformité des entreprises** (étape ②). Les autres étapes sont des "
+            "**briques qui alimentent T2**, pas des défis revendiqués : T6 (anomalies sur les déclarations), T5 "
+            "(segmentation), T12 (signaux faibles).")
 
 legal = ROOT / "data/legal/omd_kyoto_revisee_ch6_controle_douanier.txt"
 KYOTO = ("La douane a recours à l’analyse des risques pour désigner les personnes et les marchandises à examiner, "
@@ -69,4 +72,5 @@ if legal.exists() and KYOTO in " ".join(legal.read_text(encoding="utf-8").split(
 st.info("La Douane tunisienne a annoncé en mai 2026 l'intégration d'un module d'apprentissage automatique dans le "
         "système national de sélectivité (Directinfo, Tuniscope, Réalités). MIRSAD est pensé comme une **couche "
         "complémentaire** : explication, montant en jeu et dossier d'enquête, avec l'agent humain qui décide.")
-st.markdown("**Pages :** Carte des fuites · File du jour · Dossier · Simulation · Espèce (SH)")
+st.markdown("**Parcours de démonstration :** une alerte de tendance (①⑦) → l'entreprise derrière (②③) → sa déclaration "
+            "en Rouge (④) → le dossier vérifié (⑤) → « Fraude confirmée » → le score de l'entreprise monte (⑥).")

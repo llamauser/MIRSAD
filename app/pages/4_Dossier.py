@@ -2,7 +2,7 @@ import json
 
 import streamlit as st
 
-from common import fr, lane_html, load_json, page
+from common import fr, lane_html, load_json, load_parquet, page
 
 page("Dossier")
 st.title("Dossier d'enquête")
@@ -92,16 +92,23 @@ with right:
         st.markdown(f"- {x}")
 
 st.divider()
-st.subheader("Décision de l'agent")
-key = f"decision_{cid}"
+st.subheader("⑥ Décision de l'agent → mise à jour du score de l'entreprise")
+imp = decl_out.get("importateur")
+comp = load_parquet("data/processed/company_scores.parquet")
+fb = st.session_state.setdefault("feedback", {}).setdefault(imp, {"fraude": 0, "conforme": 0}) if imp else None
 b1, b2, b3 = st.columns([1, 1, 3])
-if b1.button("✅ Fraude confirmée", key=f"f_{cid}"):
-    st.session_state[key] = "Fraude confirmée"
-if b2.button("☑️ Conforme", key=f"c_{cid}"):
-    st.session_state[key] = "Conforme"
-if key in st.session_state:
-    b3.info(f"Décision enregistrée (session uniquement) : **{st.session_state[key]}**. En production, ce retour "
-            "alimente les profils de risque et le réentraînement.")
+if fb is not None and b1.button("✅ Fraude confirmée", key=f"f_{cid}"):
+    fb["fraude"] += 1
+if fb is not None and b2.button("☑️ Conforme", key=f"c_{cid}"):
+    fb["conforme"] += 1
+if fb is not None and comp is not None and (fb["fraude"] or fb["conforme"]):
+    row = comp[(comp.importer == imp)].sort_values("week").iloc[-1]
+    a_, b_ = row.ent_a + fb["fraude"], row.ent_b + fb["conforme"]
+    b3.success(f"Score de l'entreprise **{imp}** : {fr(100 * row.ent_mean, 1)} → **{fr(100 * a_ / (a_ + b_), 1)}** / 100 "
+               f"({fb['fraude']} fraude(s), {fb['conforme']} conforme(s) saisis). Voir la page « Fiche entreprise ».")
+else:
+    b3.caption("Le résultat du contrôle met à jour la loi bêta de l'entreprise (②) et sera pris en compte au "
+               "réentraînement de la semaine suivante (④).")
 
 with st.expander("🔗 Chaîne de preuves : appels d'outils de l'enquête", expanded=False):
     for s in trace:
