@@ -17,7 +17,7 @@ from ..context import get_context
 from ..explain import Explainer, fmt, recommended_checks
 from ..features import MODEL_FEATURES
 from ..graph import build_graph, links
-from ..rag import get_corpus
+from ..rag import get_corpus, sentences
 from . import guard
 
 DESC_PATH = "data/espece/demo_case_descriptions.json"
@@ -192,14 +192,24 @@ def get_mirror_evidence(hs_code: str) -> dict:
 
 
 def search_regulations(query: str, k: int = 4) -> dict:
-    res = get_corpus().search(query, k=k)
-    legal = [r for r in res if r["chunk_id"].startswith("LEG-")]
+    """Legal chunks first (data/legal), then HS descriptions. Texts are verbatim corpus chunks."""
+    k = max(1, min(int(k), 8))
+    corpus = get_corpus()
+    legal = corpus.search(query, k=k, kind="legal")
+    hs = corpus.search(query, k=max(1, k - len(legal)) if legal else k, kind="hs")
+    res = legal + hs[:2]
     return {"evidence_id": "REG-" + hashlib.md5(query.encode("utf-8")).hexdigest()[:8],
             "requete": query,
-            "corpus_juridique_disponible": any(c["kind"] == "legal" for c in get_corpus().chunks),
-            "resultats": [{"chunk_id": r["chunk_id"], "source": r["source"], "text": r["text"]} for r in res],
+            "corpus_juridique_disponible": any(c["kind"] == "legal" for c in corpus.chunks),
+            # legal chunks: only their quotable verbatim sentences (compact for small local models);
+            # the validator checks quotes against the full chunk text in the corpus
+            "resultats": [({"chunk_id": r["chunk_id"], "source": r["source"],
+                            "phrases_citables": sentences(r["text"])[:6]} if r["chunk_id"].startswith("LEG-")
+                           else {"chunk_id": r["chunk_id"], "source": r["source"], "text": r["text"]})
+                          for r in res],
             "note": ("Aucun texte juridique n'a été chargé : base légale à confirmer par l'agent."
-                     if not legal else "Extraits verbatim du corpus chargé.")}
+                     if not legal else "Extraits verbatim du corpus chargé (chunk_id LEG-…) ; les HS-… sont des "
+                                       "libellés du Système harmonisé, pas des textes juridiques.")}
 
 
 TOOLS = {

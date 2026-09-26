@@ -18,6 +18,26 @@ from .schema import DOSSIER_SCHEMA
 NUM_RX = re.compile(r"(?<![A-Za-z0-9_\-])\d{1,3}(?:[   ]\d{3})+(?:[.,]\d+)?(?![A-Za-z0-9])"
                     r"|(?<![A-Za-z0-9_\-])\d+(?:[.,]\d+)?(?![A-Za-z0-9])")
 TRIVIAL = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0}
+# semantic guard: each hypothesis type must cite at least one evidence of a compatible kind
+_VALUE_FEATS = ("z_uv", "z_uv_kg", "l_uv", "l_uv_kg", "l_cif", "tax_rt", "z_tax_rt", "fob_cif", "iso_score")
+_RISK_FEATS = ("risk_importer", "risk_declarant", "risk_imp_hs4", "n_inspected_importer", "hist_count_importer",
+               "is_new_importer", "is_new_combo")
+
+
+def _compatible(hyp: str, eid: str, prefixes: tuple) -> bool:
+    if not eid.startswith(prefixes):
+        return False
+    if eid.startswith("SHAP-"):
+        feat = eid.split("-", 2)[-1]
+        return feat in (_VALUE_FEATS if hyp == "sous-évaluation" else _RISK_FEATS if hyp == "réseau" else ())
+    return True
+
+HYP_EVIDENCE = {
+    "sous-évaluation": ("DECL-", "PEER-", "SIM-", "SHAP-"),
+    "fausse espèce": ("TARIF-",),
+    "fausse origine": ("DECL-", "MIRROR-", "PEER-"),
+    "réseau": ("LINK-", "HIST-", "SIM-", "SHAP-"),
+}
 
 
 def parse_num(s: str) -> tuple[float, int]:
@@ -68,11 +88,17 @@ class TraceIndex:
             for c in (v, v * 100, v / 1000, v / 1e6):
                 for d in range(0, 4):
                     self.keys.add((d, round(c, d)))
+        # retrieved chunks: full text from the output if present, else from the corpus (outputs may only carry
+        # the quotable sentences); a chunk counts only if it was actually returned by a tool in this trace
         self.chunks: dict[str, dict] = {}
         for o in self.outputs:
             for item in (o.get("resultats", []) if isinstance(o, dict) else []):
                 if isinstance(item, dict) and "chunk_id" in item:
-                    self.chunks[item["chunk_id"]] = item
+                    text = item.get("text")
+                    if text is None:
+                        from ..rag import get_corpus
+                        text = get_corpus().by_id.get(item["chunk_id"], {}).get("text", "")
+                    self.chunks[item["chunk_id"]] = {**item, "text": text}
 
     def has_number(self, v: float, dec: int) -> bool:
         if v in TRIVIAL:
@@ -110,6 +136,10 @@ def validate(dossier: dict, trace: list[dict], scorer: dict) -> list[str]:
         for raw, v, dec in numbers_in_text(text):
             if not idx.has_number(v, dec):
                 errs.append(f"{field}: nombre '{raw}' introuvable dans les sorties d'outils")
+    for h in dossier["hypotheses"]:
+        ok_prefix = HYP_EVIDENCE.get(h["type"])
+        if ok_prefix and not any(_compatible(h["type"], e, ok_prefix) for e in h["evidence_ids"]):
+            errs.append(f"hypotheses: « {h['type']} » sans preuve compatible (attendu : {', '.join(ok_prefix)})")
     for f in dossier["faits"]:
         if not f["evidence_ids"]:
             errs.append(f"faits: fait sans evidence_id « {f['texte'][:50]} »")

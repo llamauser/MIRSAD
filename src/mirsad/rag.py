@@ -6,6 +6,7 @@ legal text: if data/legal/ is empty, only HS descriptions are searchable.
 from __future__ import annotations
 
 import hashlib
+import re
 from functools import lru_cache
 from pathlib import Path
 
@@ -76,6 +77,40 @@ class Corpus:
             if len(out) >= k:
                 break
         return out
+
+
+def sentences(chunk_text: str, max_words: int = 40) -> list[str]:
+    """Quotable sentences of a chunk: verbatim substrings (whitespace-normalised), each <= max_words words."""
+    text = " ".join(chunk_text.split())
+    out = []
+    for s in re.split(r"(?<=[.;:])\s+", text):
+        w = s.split()
+        if w and w[0] == "Norme":  # WCO numbering residue ("6.4. Norme La douane ...")
+            w = w[1:]
+        if len(w) >= 6:
+            out.append(" ".join(w[:max_words]))
+    return out
+
+
+def _sent_score(q: set, s: str) -> tuple:
+    return (len(q & set(tokens(s))), -abs(len(s.split()) - 30))
+
+
+def best_extract(chunk_text: str, query: str, max_words: int = 40) -> str:
+    """Most query-relevant quotable sentence of a chunk."""
+    q = set(tokens(query))
+    sents = sentences(chunk_text, max_words)
+    if not sents:
+        return " ".join(chunk_text.split()[:max_words])
+    return max(sents, key=lambda s: _sent_score(q, s))
+
+
+def best_quote(results: list[dict], query: str) -> tuple[dict, str] | None:
+    """Best (chunk, verbatim sentence) across several retrieved legal chunks."""
+    q = set(tokens(query))
+    cands = [(c, s) for c in results if c["chunk_id"].startswith("LEG-")
+             for s in (c.get("phrases_citables") or sentences(c.get("text", "")))]
+    return max(cands, key=lambda cs: _sent_score(q, cs[1])) if cands else None
 
 
 @lru_cache(maxsize=1)

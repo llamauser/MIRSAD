@@ -55,14 +55,27 @@ simulation:
   r_grid: [0.02, 0.05, 0.10, 0.20]
   eps_grid: [0.0, 0.1, 0.2]
   seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-  policies: [random, rules, model_p, model_er, mirsad]
-  default_eps: 0.1
+  policies: [random, rules, model_p, mirsad]
+  default_eps: 0.0      # operating point (best mean Revenue@5%); exploration is a setting
+  chart_eps: 0.2        # exploration variant shown on chart A
   demo_r: 0.05
 
 llm:
-  model: gpt-4o-mini
   temperature: 0
   max_steps: 8
+  # Providers are tried in order; each dossier must pass the validator, otherwise the next provider is tried,
+  # and finally the deterministic template (no LLM) is used.
+  local:                       # 1) on-premises LLM via Ollama (declarations never leave the machine)
+    enabled: true
+    base_url: http://localhost:11434/v1
+    model: mirsad-qwen3:8b     # qwen3:8b + num_ctx 16384 (see ollama/Modelfile)
+    model_small: mirsad-qwen3:8b
+    extra_body: {reasoning_effort: none}   # disable Qwen3 "thinking" for fast, deterministic tool use
+    time_budget_s: 420         # per investigation; beyond it the next provider is used
+  api:                         # 2) OpenAI API fallback (keys from .env: OPENAI_API_KEYS / OPENAI_API_KEY)
+    enabled: true
+    model: gpt-4.1             # temperature 0 supported (GPT-5 family is not)
+    model_small: gpt-4.1-mini
 
 mirror:
   reporter: 788          # Tunisia

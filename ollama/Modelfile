@@ -1,0 +1,5 @@
+# MIRSAD local LLM: Qwen3 8B (Q4_K_M, ~4.9 GB) with a 16k context for the investigation agent.
+# Fits an 8 GB GPU when the Ollama server runs with OLLAMA_FLASH_ATTENTION=1 and OLLAMA_KV_CACHE_TYPE=q8_0.
+FROM qwen3:8b
+PARAMETER num_ctx 16384
+PARAMETER temperature 0

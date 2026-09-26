@@ -7,3 +7,5 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/features_*.parquet
 .venv/
+data/legal/_raw/
+results/_*.log

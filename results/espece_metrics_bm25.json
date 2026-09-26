@@ -1,17 +1,17 @@
 {
   "jeu": "jeu de démonstration construit par l'équipe (50 descriptions) — évaluation optimiste : le glossaire FR→EN et les descriptions ont été rédigés par la même équipe",
-  "mode": "llm",
+  "mode": "bm25",
   "n": 50,
-  "top1_hs6": 0.98,
-  "top3_hs6": 1.0,
-  "top1_hs4": 1.0,
-  "top3_hs4": 1.0,
-  "alerte_precision": 1.0,
-  "alerte_rappel": 0.636,
-  "tp": 7,
-  "fp": 0,
-  "fn": 4,
+  "top1_hs6": 0.56,
+  "top3_hs6": 0.9,
+  "top1_hs4": 0.9,
+  "top3_hs4": 0.94,
+  "alerte_precision": 0.667,
+  "alerte_rappel": 0.545,
+  "tp": 6,
+  "fp": 3,
+  "fn": 5,
   "injections_detectees": "3/3",
   "faux_positifs_injection": 0,
-  "ecart_droits_total_TND_illustratif": 39660.0
+  "ecart_droits_total_TND_illustratif": 59950.0
 }

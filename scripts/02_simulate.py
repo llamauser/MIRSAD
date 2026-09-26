@@ -16,7 +16,8 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 from joblib import Parallel, delayed  # noqa: E402
 
-from mirsad.charts import EPS_COLORS, INK, INK2, POLICY_COLORS, POLICY_LABELS, style_axes  # noqa: E402
+from mirsad.charts import (EPS_COLORS, INK, INK2, POLICY_COLORS, SERIES_COLORS, SERIES_ORDER,  # noqa: E402
+                           series_label, style_axes)
 from mirsad.config import load_config, p  # noqa: E402
 from mirsad.simulate import run, summarize  # noqa: E402
 
@@ -31,7 +32,7 @@ for r in sc["r_grid"]:
     for seed in sc["seeds"]:
         for pol in sc["policies"]:
             if pol == "mirsad":
-                jobs += [(pol, r, e, seed) for e in sc["eps_grid"] if e > 0]  # eps=0 == model_er
+                jobs += [(pol, r, e, seed) for e in sc["eps_grid"]]
             else:
                 jobs.append((pol, r, 0.0, seed))
 print(f"{len(jobs)} runs")
@@ -66,13 +67,16 @@ json.dump(metrics, open(p("results/metrics.json"), "w", encoding="utf-8"), inden
 
 # ---- Chart A: Revenue@k vs r per policy (eps=default for mirsad) ------------
 mean = summ.groupby(["policy", "r", "eps"]).revenue_at_k.mean().reset_index()
-chart_a = mean[(mean.policy != "mirsad") | (mean.eps == sc["default_eps"])]
+chart_a = mean[(mean.policy != "mirsad") | mean.eps.isin([0.0, sc["chart_eps"]])]
 chart_a.to_csv(p("results/chart_a.csv"), index=False)
 fig, ax = plt.subplots(figsize=(8, 4.8), dpi=150)
-for pol in ["random", "rules", "model_p", "model_er", "mirsad"]:
-    d = chart_a[chart_a.policy == pol].sort_values("r")
-    ax.plot(d.r * 100, d.revenue_at_k * 100, color=POLICY_COLORS[pol], lw=2, marker="o", ms=5,
-            label=POLICY_LABELS[pol])
+for key in SERIES_ORDER:
+    pol, e = key
+    d = chart_a[(chart_a.policy == pol) & (chart_a.eps == (e if pol == "mirsad" else 0.0))].sort_values("r")
+    if pol == "mirsad" and e not in (0.0, sc["chart_eps"]):
+        continue
+    ax.plot(d.r * 100, d.revenue_at_k * 100, color=SERIES_COLORS[key], lw=2.5 if key == ("mirsad", 0.0) else 1.8,
+            marker="o", ms=5, label=series_label(pol, e), ls="--" if (pol == "mirsad" and e > 0) else "-")
 style_axes(ax)
 ax.legend(frameon=False, fontsize=8, loc="upper left", labelcolor=INK2)
 ax.set_xlabel("Budget d'inspection r (% des déclarations / semaine)", color=INK2)
@@ -86,7 +90,7 @@ fig.savefig(p("results/charts/chart_a_revenue_vs_budget.png"))
 # ---- Chart B: cumulative injected revenue caught after W0, by eps (r=demo) --
 r0 = sc["demo_r"]
 b = weekly[(weekly.r == r0) & (weekly.week >= W0) &
-           (((weekly.policy == "model_er")) | (weekly.policy == "mirsad"))].copy()
+           (weekly.policy == "mirsad")].copy()
 b = b.sort_values("week")
 b["cum"] = b.groupby(["policy", "eps", "seed"]).rev_inj_sel.cumsum()
 tot = weekly[(weekly.r == r0) & (weekly.week >= W0) & (weekly.policy == "random") & (weekly.seed == 0)]
@@ -118,6 +122,7 @@ fig.savefig(p("results/charts/chart_b_injected_scheme.png"))
 
 # ---- demo artefacts: MIRSAD r=demo_r, eps=default, seed 0, demo week --------
 _, keep, _ = run(static, cfg, "mirsad", r0, sc["default_eps"], 0, keep_week=DEMO_WEEK, end_week=DEMO_WEEK)
+print(f"demo: MIRSAD r={r0} eps={sc['default_eps']} seed=0 week={DEMO_WEEK}")
 keep["batch"].to_parquet(p("results/demo_week.parquet"))
 keep["revealed"].to_parquet(p("results/demo_revealed.parquet"))
 pickle.dump(keep["model"], open(p("results/demo_model.pkl"), "wb"))

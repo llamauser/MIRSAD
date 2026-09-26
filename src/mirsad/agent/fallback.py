@@ -7,6 +7,7 @@ from __future__ import annotations
 import time
 
 from ..explain import fmt
+from ..rag import best_quote
 from .tools import call_tool
 
 
@@ -32,11 +33,18 @@ def run_tools(case_id: str) -> list[dict]:
     if "description_commerciale" in decl:
         step("check_tariff_classification", case_id=case_id)
     step("get_mirror_evidence", hs_code=decl["sh6"][:2])
-    top = (risk.get("facteurs_shap") or [{}])[0].get("variable", "")
-    q = ("valeur en douane sous-évaluation contrôle" if top.startswith(("z_uv", "l_uv", "l_cif"))
-         else "contrôle douanier déclaration fraude")
-    step("search_regulations", query=f"{q} {decl['sh6']}", k=4)
+    for q in LEGAL_QUERIES:
+        step("search_regulations", query=q, k=8)
     return trace
+
+
+# one query per legal question the dossier may need (valuation, risk-based selection, powers of inspection)
+LEGAL_QUERIES = [
+    "la valeur en douane des marchandises importées sera la valeur transactionnelle, c'est-à-dire le prix "
+    "effectivement payé ou à payer",
+    "la douane a recours à l'analyse des risques pour désigner les marchandises à examiner",
+    "agents des douanes procéder à la visite des marchandises",
+]
 
 
 def _out(trace, tool):
@@ -56,7 +64,7 @@ def build(case_id: str, trace: list[dict]) -> dict:
     risk, decl = _out(trace, "get_risk_assessment"), _out(trace, "get_declaration")
     hist, lk = _out(trace, "get_entity_history"), _out(trace, "find_links")
     peer, sim = _out(trace, "get_peer_prices"), _out(trace, "find_similar_cases")
-    tarif, regs = _out(trace, "check_tariff_classification"), _out(trace, "search_regulations")
+    tarif = _out(trace, "check_tariff_classification")
     rid, did = risk["evidence_id"], decl["evidence_id"]
 
     faits = [{"texte": risk["texte"], "evidence_ids": [rid]}]
@@ -117,11 +125,18 @@ def build(case_id: str, trace: list[dict]) -> dict:
                      "evidence_ids": [rid]})
 
     base = []
-    for c in regs.get("resultats", []):
-        if c["chunk_id"].startswith("LEG-"):
-            base.append({"chunk_id": c["chunk_id"], "source": c["source"],
-                         "extrait": " ".join(c["text"].split()[:30])})
-            break
+    hyp_types = {h["type"] for h in hyps}
+    wanted = [(LEGAL_QUERIES[1], True), (LEGAL_QUERIES[0], "sous-évaluation" in hyp_types),
+              (LEGAL_QUERIES[2], any("physique" in c.lower() or "pesage" in c.lower()
+                                     for c in risk.get("controles_recommandes_regles", [])))]
+    for q, needed in wanted:
+        if not needed:
+            continue
+        out = next((s["output"] for s in trace if s["tool"] == "search_regulations" and s["args"].get("query") == q), {})
+        best = best_quote(out.get("resultats", []), q)
+        if best and best[0]["chunk_id"] not in {b["chunk_id"] for b in base}:
+            c, sent = best
+            base.append({"chunk_id": c["chunk_id"], "source": c["source"], "extrait": sent})
     incert = ["Données synthétiques (BACUDA) et montants simulés : aucune conclusion sur des cas réels.",
               "Les fraudes connues ne proviennent que des déclarations inspectées par le passé (étiquettes sélectives)."]
     if not base:

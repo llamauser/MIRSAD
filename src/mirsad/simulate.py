@@ -33,6 +33,8 @@ def run(static: pd.DataFrame, cfg: dict, policy: str, r: float, eps: float, seed
             n_rev = int(round(sc["warm_reveal_share"] * len(b)))
             pos = rng.choice(len(b), size=n_rev, replace=False)
             revealed_parts.append(b.iloc[pos])
+            if audit:
+                audits.append({"week": w, "event": "reveal", "ids": set(b.id.iloc[pos])})
             continue
         if policy in NEEDS_MODEL:
             if model is None or (w - sc["start_week"]) % sc.get("retrain_every", 1) == 0:
@@ -40,7 +42,7 @@ def run(static: pd.DataFrame, cfg: dict, policy: str, r: float, eps: float, seed
                                   num_leaves=mc["num_leaves"], seed=mc["seed"] + seed)
                 model.fit(revealed, calib_week=int(revealed.week.max()))
                 if audit:
-                    audits.append({"week": w, "train_ids": set(revealed.id),
+                    audits.append({"week": w, "event": "train", "ids": set(revealed.id),
                                    "train_max_week": int(revealed.week.max())})
             b = b.join(model.score(b))
         else:
@@ -65,6 +67,8 @@ def run(static: pd.DataFrame, cfg: dict, policy: str, r: float, eps: float, seed
         if keep_week is not None and w == keep_week:
             keep = {"batch": b.assign(lane=lanes), "revealed": revealed, "model": model}
         revealed_parts.append(b.iloc[sel].drop(columns=["p", "r_hat", "er"]))
+        if audit:
+            audits.append({"week": w, "event": "reveal", "ids": set(b.id.iloc[sel])})
     out = pd.DataFrame(rows).assign(policy=policy, r=r, eps=eps, seed=seed)
     return out, keep, audits
 

@@ -29,9 +29,11 @@ trace = load_json(f"results/traces/{cid}.json") or []
 mode = d.get("_mode")
 last_errs = (d.get("_validation") or [{}])[-1].get("erreurs", [])
 badges = {
-    "llm_valide": ("#0f766e", f"Rédigé par LLM ({d.get('_modele')}) · validé"),
-    "llm_valide_apres_correction": ("#0f766e", f"LLM ({d.get('_modele')}) · validé après 1 correction"),
-    "fallback": ("#6b5b00", "Généré sans LLM (gabarit déterministe) · validé" if not last_errs else "Gabarit · ERREURS"),
+    "llm_local_valide": ("#0f766e", f"LLM local sur site ({d.get('_modele')}) · validé"),
+    "llm_local_valide_apres_correction": ("#0f766e", f"LLM local ({d.get('_modele')}) · validé après 1 correction"),
+    "llm_api_valide": ("#1d4ed8", f"API OpenAI ({d.get('_modele')}) · validé"),
+    "llm_api_valide_apres_correction": ("#1d4ed8", f"API OpenAI ({d.get('_modele')}) · validé après 1 correction"),
+    "fallback": ("#6b5b00", "Gabarit déterministe (sans LLM) · validé" if not last_errs else "Gabarit · ERREURS"),
 }
 col, txt = badges.get(mode, ("#777", mode))
 st.markdown(f'{lane_html(d["voie"])} &nbsp; <span class="badge" style="color:{col};border-color:{col}">{txt}</span>'
@@ -54,6 +56,14 @@ for s in trace:
 def chips(ids):
     return " ".join(f'<span class="chip" title="{evid.get(i, "")}">{i}</span>' for i in ids)
 
+
+decl_out = next((s["output"] for s in trace if s["tool"] == "get_declaration"), {})
+if decl_out.get("description_commerciale"):
+    box = st.warning if decl_out.get("injection_flag") else st.info
+    box("**Description commerciale fournie par le déclarant (donnée non fiable, jamais exécutée comme instruction)**"
+        + ("  
+⚠ Tentative d'injection détectée par le filtre : la voie reste celle du scoreur." if decl_out.get("injection_flag") else ""))
+    st.code(decl_out["description_commerciale"], language=None)
 
 st.subheader("Résumé")
 st.write(d["resume"])
@@ -98,9 +108,21 @@ with st.expander("🔗 Chaîne de preuves : appels d'outils de l'enquête", expa
         st.markdown(f"**{s['step']}. `{s['tool']}`** ({s.get('duree_ms', 0)} ms), arguments : `{json.dumps(s['args'], ensure_ascii=False)}`")
         st.json(s["output"], expanded=False)
 with st.expander("🛡️ Validation"):
-    st.write("Le validateur rejette tout dossier dont un identifiant de preuve, un nombre ou une citation ne se retrouve "
-             "pas dans les sorties d'outils, ou dont la voie diffère du scoreur.")
-    st.json(d.get("_validation"))
+    st.write("Chaîne : LLM local sur site → API OpenAI → gabarit déterministe. Le validateur rejette tout dossier dont "
+             "un identifiant de preuve, un nombre ou une citation ne se retrouve pas dans les sorties d'outils, ou dont "
+             "la voie diffère du scoreur.")
+    for v in d.get("_validation") or []:
+        head = v.get("fournisseur") or ("Gabarit déterministe" if v.get("fallback") else "")
+        errs = v.get("erreurs", [])
+        if "erreur" in v:
+            st.markdown(f"- **{head}** : indisponible ({v['erreur'][:120]})")
+        else:
+            st.markdown(f"- **{head}** {('tentative ' + str(v['tentative'])) if 'tentative' in v else ''} : "
+                        + ("✅ validé" if not errs else f"❌ rejeté ({len(errs)} erreur(s))"))
+            for e in errs[:8]:
+                st.caption(f"   • {e}")
+    if d.get("_duree_s") is not None:
+        st.caption(f"Durée totale de l'enquête : {d['_duree_s']} s · fournisseur retenu : {d.get('_fournisseur')}")
 with st.expander("🎯 Vérité terrain (simulation uniquement)"):
     st.write(f"Étiquette réelle dans le jeu synthétique : **{'fraude' if meta['label_fraud_revele_apres'] else 'conforme'}** · "
              f"schéma : **{'injecté (simulé)' if meta['scheme'] == 'injected' else 'historique'}**. Cette information "

@@ -4,8 +4,10 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-POLICIES = ["random", "rules", "model_p", "model_er", "mirsad"]
-NEEDS_MODEL = {"model_p", "model_er", "mirsad"}
+# mirsad = rank by expected recovered revenue ER = p * R_hat; eps > 0 adds exploration.
+# model_p = ablation ranking by probability only.
+POLICIES = ["random", "rules", "model_p", "mirsad"]
+NEEDS_MODEL = {"model_p", "mirsad"}
 LANE_ROUGE, LANE_ORANGE, LANE_VERT = "Rouge", "Orange", "Vert"
 
 
@@ -18,7 +20,7 @@ def rank_score(policy: str, b: pd.DataFrame, rng: np.random.Generator) -> np.nda
         return b.risk_importer.values - 1e-3 * np.nan_to_num(b.tax_rt.values, nan=1.0)
     if policy == "model_p":
         return b.p.values
-    return b.er.values  # model_er, mirsad
+    return b.er.values  # mirsad
 
 
 def explore_weight(b: pd.DataFrame) -> np.ndarray:

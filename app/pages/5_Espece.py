@@ -11,14 +11,22 @@ st.markdown("À partir de la description commerciale, MIRSAD propose les 3 sous-
 
 m = load_json("results/espece_metrics.json")
 res = load_csv("results/espece_results.csv", dtype={"gold": str, "declare": str, "top1": str})
+runs = [("BM25 seul (sans LLM)", "results/espece_metrics_bm25.json"),
+        ("BM25 + reclassement API (gpt-4.1-mini)", "results/espece_metrics_openai.json"),
+        ("BM25 + reclassement LLM local", "results/espece_metrics_local.json")]
+table = []
+for name, f in runs:
+    x = load_json(f)
+    if x:
+        table.append({"Mode": name, "Top-1 SH6": pct(x["top1_hs6"], 0), "Top-3 SH6": pct(x["top3_hs6"], 0),
+                      "Top-1 SH4": pct(x["top1_hs4"], 0),
+                      "Alertes précision / rappel": f"{pct(x['alerte_precision'], 0)} / {pct(x['alerte_rappel'], 0)}",
+                      "Injections détectées": x["injections_detectees"]})
+if table:
+    st.dataframe(table, width="stretch", hide_index=True)
 if m:
-    c = st.columns(5)
-    c[0].metric("Top-1 SH6", pct(m["top1_hs6"], 0))
-    c[1].metric("Top-3 SH6", pct(m["top3_hs6"], 0))
-    c[2].metric("Top-1 SH4", pct(m["top1_hs4"], 0))
-    c[3].metric("Alertes : précision / rappel", f"{pct(m['alerte_precision'], 0)} / {pct(m['alerte_rappel'], 0)}")
-    c[4].metric("Injections détectées", m["injections_detectees"])
-    st.caption(f"Mode : **{m['mode']}** · {m['jeu']}. Taux de droits **illustratifs** (pas le tarif tunisien).")
+    st.caption(f"Tableau détaillé ci-dessous : dernier mode exécuté (**{m['mode']}**). {m['jeu']}. "
+               "Taux de droits **illustratifs** (pas le tarif tunisien).")
 
 st.subheader("Essai en direct")
 examples = {

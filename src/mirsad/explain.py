@@ -1,9 +1,15 @@
 """SHAP -> French fact sentences with exact values, plus rule-based recommended checks."""
 from __future__ import annotations
 
+import sys
+
 import numpy as np
 import pandas as pd
-import shap
+
+# shap optionally imports OpenCV for image maskers; a local OpenCV built for NumPy 1.x crashes noisily on import.
+# We never use image explainers, so make that optional import fail cleanly instead.
+sys.modules.setdefault("cv2", None)
+import shap  # noqa: E402
 
 from .features import MODEL_FEATURES
 

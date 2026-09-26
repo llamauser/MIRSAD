@@ -1,6 +1,6 @@
 import streamlit as st
 
-from common import fr, kpi, load_json, metric, page, pct
+from common import ROOT, fr, kpi, load_json, metric, page, pct
 
 page("Accueil")
 st.title("MIRSAD — le copilote de ciblage douanier")
@@ -16,12 +16,12 @@ st.markdown(
 m = load_json("results/metrics.json")
 if m:
     r = 0.05
-    er = metric(m, "model_er", r, 0.0, "revenue_at_k")
+    er = metric(m, "mirsad", r, 0.0, "revenue_at_k")
     rnd = metric(m, "random", r, 0.0, "revenue_at_k")
     rules = metric(m, "rules", r, 0.0, "revenue_hist_at_k")
-    er_h = metric(m, "model_er", r, 0.0, "revenue_hist_at_k")
-    vert = metric(m, "model_er", r, 0.0, "share_vert")
-    fg = metric(m, "model_er", r, 0.0, "false_green_rev")
+    er_h = metric(m, "mirsad", r, 0.0, "revenue_hist_at_k")
+    vert = metric(m, "mirsad", r, 0.0, "share_vert")
+    fg = metric(m, "mirsad", r, 0.0, "false_green_rev")
     c = st.columns(4)
     kpi(c[0], pct(er["mean"]), "du revenu récupérable capturé en contrôlant 5 % des déclarations",
         f"MIRSAD (classement par montant en jeu), ± {fr(100 * er['std'], 1)} points sur {len(m['seeds'])} graines")
@@ -46,8 +46,8 @@ digraph G {
   M [label="Modèle de risque\\nP(fraude) × revenu attendu\\n= montant en jeu (TND)"];
   P [label="Politique de sélection\\nbudget r, exploration ε\\n→ Rouge / Orange / Vert"];
   S [label="Simulateur\\nétiquettes sélectives\\n+ schéma injecté"];
-  G [label="Agent d'enquête (LLM + outils)\\ndéclaration · SHAP · historique · liens\\nprix comparables · cas similaires\\nespèce SH · miroir · réglementation", fillcolor="#e6f2f1"];
-  V [label="Validateur\\npreuves, nombres, citations,\\nvoie inchangée", fillcolor="#fdf1e3"];
+  G [label="Agent d'enquête (outils)\\nLLM local sur site → API → gabarit\\ndéclaration · SHAP · historique · liens\\nprix comparables · cas similaires\\nespèce SH · miroir · réglementation", fillcolor="#e6f2f1"];
+  V [label="Validateur\\npreuves, nombres, citations verbatim,\\nvoie inchangée", fillcolor="#fdf1e3"];
   D [label="Dossier d'enquête\\n(français, vérifié)"];
   X [label="Module miroir\\nUN Comtrade (Tunisie réelle)"];
   {rank=same; A; F; M; P; S;}
@@ -56,9 +56,15 @@ digraph G {
   P -> G [label=" cas rouges"];
   X -> G [style=dotted];
   G -> V -> D;
-  V -> G [label=" rejet : 1 correction\\npuis gabarit", style=dashed, constraint=false];
+  V -> G [label=" rejet : 1 correction\\npuis fournisseur suivant", style=dashed, constraint=false];
 }
 """)
+
+legal = ROOT / "data/legal/omd_kyoto_revisee_ch6_controle_douanier.txt"
+KYOTO = ("La douane a recours à l’analyse des risques pour désigner les personnes et les marchandises à examiner, "
+         "y compris les moyens de transport, et l’étendue de cette vérification.")
+if legal.exists() and KYOTO in " ".join(legal.read_text(encoding="utf-8").split()):  # quoted only if verbatim in corpus
+    st.markdown(f"> « {KYOTO} »  \n> — Convention de Kyoto révisée (OMD), Annexe générale, norme 6.4")
 
 st.info("La Douane tunisienne a annoncé en mai 2026 l'intégration d'un module d'apprentissage automatique dans le "
         "système national de sélectivité (Directinfo, Tuniscope, Réalités). MIRSAD est pensé comme une **couche "

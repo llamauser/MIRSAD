@@ -1,9 +1,9 @@
 {
-  "auc_roc": 0.8042395690436652,
-  "auc_pr": 0.2644451174469432,
+  "auc_roc": 0.8016869830649884,
+  "auc_pr": 0.2641377754968869,
   "base_rate": 0.08076398362892223,
-  "revenue_at_10pct_by_p": 0.4088717906791542,
-  "revenue_at_10pct_by_er": 0.4247340642969396,
+  "revenue_at_10pct_by_p": 0.4044236318656529,
+  "revenue_at_10pct_by_er": 0.41711405636353177,
   "n_train": 12721,
   "n_test": 7330,
   "note": "Sanity split only (train Jan-Feb all labels, test March). Not the headline evaluation."

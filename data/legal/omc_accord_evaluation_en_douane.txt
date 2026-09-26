@@ -1,0 +1,728 @@
+SOURCE: OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane), texte français, https://www.wto.org/french/docs_f/legal_f/20-val_01_f.htm (le site précise que les textes reproduits n'ont pas le statut juridique des documents originaux)
+Introduction
+Générale
+1.
+La base première pour la détermination de la valeur en douane dans
+le cadre du présent accord est la “valeur transactionnelle” telle
+qu'elle est définie à l'article premier. Cet article doit être
+lu conjointement avec l'article 8 qui prévoit, entre autres, des
+ajustements au prix effectivement payé ou à payer, lorsque
+certains éléments spécifiques qui sont considérés comme faisant
+partie de la valeur en douane sont à la charge de l'acheteur mais ne
+sont pas inclus dans le prix effectivement payé ou à payer pour les
+marchandises importées. L'article 8 prévoit également
+l'inclusion, dans la valeur transactionnelle, de certaines prestations
+de l'acheteur en faveur du vendeur sous forme de marchandises ou de
+services déterminés plutôt que sous forme d'argent. Les
+articles 2 à 7 énoncent les méthodes à utiliser pour déterminer
+la valeur en douane si cette détermination ne peut se faire par
+application des dispositions de l'article premier.
+2.
+Lorsque la valeur en douane ne peut pas être déterminée par
+application des dispositions de l'article premier, l'administration
+des douanes et l'importateur devraient normalement se concerter pour dégager
+la base de la valeur par application des dispositions de l'article 2
+ou de l'article 3. Il peut arriver, par exemple, que
+l'importateur possède des renseignements concernant la valeur en
+douane de marchandises identiques ou similaires importées dont
+l'administration des douanes du point d'importation ne dispose pas
+directement. A l'inverse, l'administration des douanes peut
+avoir des renseignements concernant la valeur en douane de
+marchandises identiques ou similaires importées auxquels
+l'importateur n'a pas facilement accès. Une consultation entre
+les deux parties permettra d'échanger des renseignements, tout en
+respectant les obligations relatives au secret commercial, en vue de déterminer
+la base correcte pour l'évaluation en douane.
+3.
+Les articles 5 et 6 fournissent deux bases de détermination de
+la valeur en douane lorsque celle-ci ne peut pas être déterminée
+sur la base de la valeur transactionnelle des marchandises importées
+ou de marchandises identiques ou similaires importées. En vertu
+du paragraphe 1 de l'article 5, la valeur en douane est déterminée
+sur la base du prix auquel les marchandises sont vendues en l'état où
+elles sont importées à un acheteur qui n'est pas lié au vendeur
+dans le pays d'importation. L'importateur a également le droit,
+à sa demande, de faire évaluer par application des dispositions de
+l'article 5 les marchandises qui font l'objet d'une ouvraison ou
+d'une transformation après l'importation. En vertu de l'article 6,
+la valeur en douane est déterminée sur la base de la valeur calculée.
+Ces deux méthodes présentent certaines difficultés et, pour cette
+raison, l'importateur a le droit, en vertu des dispositions de
+l'article 4, de choisir l'ordre dans lequel les deux méthodes
+seront appliquées.
+4.
+L'article 7 énonce la manière de déterminer la valeur en
+douane dans les cas où aucun des articles précédents ne le permet.
+Les Membres,
+Eu égard aux Négociations commerciales multilatérales,
+Désireux de favoriser la réalisation des objectifs du GATT de
+1994 et d'assurer des avantages supplémentaires au commerce
+international des pays en développement,
+Reconnaissant l'importance des dispositions de l'article VII
+du GATT de 1994 et désireux d'élaborer des règles pour leur
+application en vue d'assurer plus d'uniformité et de certitude dans
+leur mise en oeuvre,
+Reconnaissant la nécessité d'un système équitable, uniforme
+et neutre d'évaluation en douane des marchandises, qui exclut
+l'utilisation de valeurs en douane arbitraires ou fictives,
+Reconnaissant que la base de l'évaluation en douane des
+marchandises devrait, dans toute la mesure du possible, être la
+valeur transactionnelle des marchandises à évaluer,
+Reconnaissant que la valeur en douane devrait être établie
+selon des critères simples et équitables, compatibles avec la
+pratique commerciale, et que les procédures d'évaluation devraient
+être d'application générale, sans distinction entre sources
+d'approvisionnement,
+Reconnaissant que les procédures d'évaluation ne devraient
+pas être utilisées pour combattre le dumping,
+Conviennent de ce qui suit:
+Partie
+I: Règles d'Evaluation en Douane
+Article premier
+1.
+La valeur en douane des marchandises importées sera la valeur
+transactionnelle, c'est-à-dire le prix effectivement payé ou à
+payer pour les marchandises lorsqu'elles sont vendues pour
+l'exportation à destination du pays d'importation, après ajustement
+conformément aux dispositions de l'article 8, pour autant
+a)
+qu'il n'existe pas de restrictions concernant la cession ou
+l'utilisation des marchandises par l'acheteur, autres que des
+restrictions qui
+i)
+sont imposées ou exigées par la loi ou par les autorités
+publiques du pays d'importation,
+ii)
+limitent la zone géographique dans laquelle les marchandises
+peuvent être revendues, ou
+iii) n'affectent pas substantiellement la valeur des marchandises;
+b)
+que la vente ou le prix n'est pas subordonné à des conditions
+ou à des prestations dont la valeur n'est pas déterminable pour ce
+qui se rapporte aux marchandises à évaluer;
+c)
+qu'aucune partie du produit de toute revente, cession ou
+utilisation ultérieure des marchandises par l'acheteur ne revient
+directement ou indirectement au vendeur, sauf si un ajustement
+approprié peut être opéré en vertu des dispositions de l'article 8;
+et
+d)
+que l'acheteur et le vendeur ne sont pas liés ou, s'ils le
+sont, que la valeur transactionnelle est acceptable à des fins douanières
+en vertu des dispositions du paragraphe 2.
+2.
+a) Pour déterminer si la valeur transactionnelle est acceptable
+aux fins d'application du paragraphe 1, le fait que l'acheteur et
+le vendeur sont liés au sens de l'article 15 ne constituera pas
+en soi un motif suffisant pour considérer la valeur transactionnelle
+comme inacceptable. Dans un tel cas, les circonstances propres à la
+vente seront examinées, et la valeur transactionnelle admise pour
+autant que ces liens n'ont pas influencé le prix. Si, compte tenu des
+renseignements fournis par l'importateur ou obtenus d'autres sources,
+l'administration des douanes a des motifs de considérer que les liens
+ont influencé le prix, elle communiquera ses motifs à l'importateur
+et lui donnera une possibilité raisonnable de répondre. Si
+l'importateur le demande, les motifs lui seront communiqués par écrit.
+b)
+Dans une vente entre personnes liées, la valeur
+transactionnelle sera acceptée et les marchandises seront évalué es
+conformément aux dispositions du paragraphe 1 lorsque
+l'importateur démontrera que ladite valeur est très proche de l'une
+des valeurs ci-après, se situant au même moment ou à peu près au même
+moment:
+i)
+valeur transactionnelle lors de ventes, à des acheteurs non liés,
+de marchandises identiques ou similaires pour l'exportation à
+destination du même pays d'importation;
+ii)
+valeur en douane de marchandises identiques ou similaires,
+telle qu'elle est déterminée par application des dispositions de
+l'article 5;
+iii) valeur en douane de marchandises identiques ou similaires,
+telle qu'elle est déterminée par application des dispositions de
+l'article 6.
+Dans l'application des critères qui précèdent, il sera
+dûment tenu compte des différences démontr ées entre les niveaux
+commerciaux, les quantités, les éléments énumérés à l'article 8,
+et les coûts supportés par le vendeur lors de ventes dans lesquelles
+le vendeur et l'acheteur ne sont pas liés et qu'il ne supporte pas
+lors de ventes dans lesquelles le vendeur et l'acheteur sont liés.
+c)
+Les critères énoncés au paragraphe 2 b) sont à
+utiliser à l'initiative de l'importateur, et à des fins de
+comparaison seulement. Des valeurs de substitution ne peuvent pas être
+établies en vertu du paragraphe 2 b).
+Article
+2
+1.
+a) Si la valeur en
+douane des marchandises importées ne peut pas être déterminé e par
+application des dispositions de l'article premier, la valeur en douane
+sera la valeur transactionnelle de marchandises identiques, vendues
+pour l'exportation à destination du même pays d'importation et
+exportées au même moment ou à peu près au même moment que les
+marchandises à évaluer.
+b)
+Lors de l'application du présent article, la valeur en douane sera déterminée
+en se référant à la valeur transactionnelle de marchandises
+identiques, vendues au même niveau commercial et sensiblement en même
+quantité que les marchandises à évaluer. En l'absence de telles
+ventes, on se référera à la valeur transactionnelle de marchandises
+identiques, vendues à un niveau commercial différent et/ou en
+quantité différente, ajustée pour tenir compte des différences que
+le niveau commercial et/ou la quantité auraient pu entraîner, à la
+condition que de tels ajustements, qu'ils conduisent à une
+augmentation ou une diminution de la valeur, puissent se fonder sur
+des éléments de preuve produits établissant clairement qu'ils sont
+raisonnables et exacts.
+2.
+Lorsque les coûts et frais visés au paragraphe 2 de l'article 8
+seront compris dans la valeur transactionnelle, cette valeur sera
+ajustée pour tenir compte des différences notables qui peuvent
+exister entre les coûts et frais afférents, d'une part aux
+marchandises importées, et d'autre part aux marchandises identiques
+considérées, par suite de différences dans les distances et les
+modes de transport.
+3.
+Si, lors de l'application du présent article, plus d'une valeur
+transactionnelle de marchandises identiques est constatée, on se référera
+à la valeur transactionnelle la plus basse pour déterminer la valeur
+en douane des marchandises importées.
+Article
+3
+1.
+a) Si la valeur en
+douane des marchandises importées ne peut pas être déterminée par
+application des dispositions des articles premier et 2, la valeur en
+douane sera la valeur transactionnelle de marchandises similaires,
+vendues pour l'exportation à destination du même pays d'importation
+et exportées au même moment ou à peu près au même moment que les
+marchandises à évaluer.
+b)
+Lors de l'application du présent article, la valeur en douane sera déterminée
+en se référant à la valeur transactionnelle de marchandises
+similaires, vendues au même niveau commercial et sensiblement en même
+quantité que les marchandises à évaluer. En l'absence de telles
+ventes, on se référera à la valeur transactionnelle de marchandises
+similaires, vendues à un niveau commercial différent et/ou en
+quantité différente, ajustée pour tenir compte des différences que
+le niveau commercial et/ou la quantité auraient pu entraîner, à la
+condition que de tels ajustements, qu'ils conduisent à une
+augmentation ou une diminution de la valeur, puissent se fonder sur
+des éléments de preuve produits établissant clairement qu'ils sont
+raisonnables et exacts.
+2.
+Lorsque les coûts et frais visés au paragraphe 2 de l'article 8
+seront compris dans la valeur transactionnelle, cette valeur sera
+ajustée pour tenir compte des différences notables qui peuvent
+exister entre les coûts et frais afférents, d'une part aux
+marchandises importées, et d'autre part aux marchandises similaires
+considérées, par suite de différences dans les distances et les
+modes de transport.
+3.
+Si, lors de l'application du présent article, plus d'une valeur
+transactionnelle de marchandises similaires est constatée, on se référera
+à la valeur transactionnelle la plus basse pour déterminer la valeur
+en douane des marchandises importées.
+Article
+4
+Si
+la valeur en douane des marchandises importées ne peut pas être déterminée
+par application des dispositions des articles premier, 2 et 3, la
+valeur en douane sera déterminée par application des dispositions de
+l'article 5 ou, lorsque la valeur en douane ne pourra pas être déterminée
+par application de cet article, par application des dispositions de
+l'article 6; toutefois, à la demande de l'importateur, l'ordre
+d'application des articles 5 et 6 sera inversé.
+Article
+5
+1.
+a) Si les marchandises
+importées, ou des marchandises identiques ou similaires importées,
+sont vendues dans le pays d'importation en l'état où elles sont
+importées, la valeur en douane des marchandises importées, déterminée
+par application des dispositions du présent article, se fondera sur
+le prix unitaire correspondant aux ventes des marchandises importées
+ou de marchandises identiques ou similaires importées totalisant la
+quantit é la plus élevée, ainsi faites à des personnes non liées
+aux vendeurs, au moment ou à peu près au moment de l'importation des
+marchandises à évaluer, sous réserve de déductions se rapportant
+aux éléments ci-après:
+i)
+commissions généralement payées ou convenues, ou marges généralement
+pratiqué es pour bénéfices et frais généraux relatifs aux ventes,
+dans ce pays, de marchandises importées de la même espèce ou de la
+même nature;
+ii)
+rais
+habituels de transport et d'assurance, ainsi que frais connexes
+encourus dans le pays d'importation;
+iii) le
+cas échéant, coûts et frais visés au paragraphe 2 de
+l'article 8; et
+iv) droits
+de douane et autres taxes nationales à payer dans le pays
+d'importation en raison de l'importation ou de la vente des
+marchandises.
+b)
+Si ni les marchandises importées, ni des marchandises identiques ou
+similaires importées, ne sont vendues au moment ou à peu près au
+moment de l'importation des marchandises à évaluer, la valeur en
+douane se fondera, sous réserve par ailleurs des dispositions du
+paragraphe 1 a), sur le prix unitaire auquel les
+marchandises importées, ou des marchandises identiques ou similaires
+importées, sont vendues dans le pays d'importation en l'état où
+elles sont importées, à la date la plus proche qui suit
+l'importation des marchandises à évaluer, mais dans les 90 jours
+suivant cette importation.
+2.
+Si ni les marchandises importées, ni des marchandises identiques ou
+similaires importées, ne sont vendues dans le pays d'importation en
+l'état où elles sont importées, la valeur en douane se fondera, si
+l'importateur le demande, sur le prix unitaire correspondant aux
+ventes de marchandises importées totalisant la quantité la plus élevée,
+faites après ouvraison ou transformation ultérieure, à des
+personnes, dans le pays d'importation, qui ne sont pas liées aux
+vendeurs, compte dûment tenu de la valeur ajoutée par l'ouvraison ou
+la transformation et des déductions prévues au paragraphe 1 a).
+Article
+6
+1.
+La valeur en douane des marchandises importées, déterminée par
+application des dispositions du présent article, se fondera sur une
+valeur calculée. La valeur calculée sera égale à la somme
+a)
+du coût ou de la valeur des matières et des opérations de
+fabrication ou autres, mises en oeuvre pour produire les marchandises
+importées,
+b)
+d'un montant pour les bénéfices et frais généraux, égal à celui
+qui entre gén éralement dans les ventes de marchandises de la même
+nature ou de la même espèce que les marchandises à évaluer, qui
+sont faites par des producteurs du pays d'exportation pour
+l'exportation à destination du pays d'importation,
+c)
+du coût ou de la valeur de toute autre dépense dont il y a lieu de
+tenir compte selon l'option en matière d'évaluation choisie par
+chaque Membre en vertu du paragraphe 2 de l'article 8.
+2.
+Aucun Membre ne pourra requérir ou obliger une personne ne résidant
+pas sur son territoire de produire, pour examen, une comptabilité ou
+d'autres pièces, ou de permettre l'accès à une comptabilité ou à
+d'autres pièces, aux fins de la détermination d'une valeur calculée.
+Néanmoins, les renseignements communiqués par le producteur des
+marchandises aux fins de la détermination de la valeur en douane par
+application des dispositions du pr ésent article pourront être vérifiés
+dans un autre pays par les autorités du pays d'importation, avec
+l'accord du producteur et à la condition que ces autorités donnent
+un préavis suffisant au gouvernement du pays en question et que ce
+dernier ne fasse pas opposition à l'enquête.
+Article
+7
+1.
+Si la valeur en douane des marchandises importées ne peut pas être déterminée
+par application des dispositions des articles premier à 6, elle sera
+déterminée par des moyens raisonnables compatibles avec les
+principes et les dispositions générales du présent accord et de
+l'article VII du GATT de 1994 et sur la base des données
+disponibles dans le pays d'importation.
+2.
+La valeur en douane déterminée par application des dispositions du
+présent article ne se fondera pas
+a)
+sur le prix de vente, dans le pays d'importation, de marchandises
+produites dans ce pays,
+b)
+sur un système prévoyant l'acceptation, à des fins douanières, de
+la plus élevée de deux valeurs possibles,
+c)
+sur le prix de marchandises sur le marché intérieur du pays
+d'exportation,
+d)
+sur le coût de production, autre que les valeurs calculées qui
+auront été déterminées pour des marchandises identiques ou
+similaires conformément aux dispositions de l'article 6,
+e)
+sur le prix de marchandises vendues pour l'exportation à destination
+d'un pays autre que le pays d'importation,
+f)
+sur des valeurs en douane minimales, ou
+g)
+sur des valeurs arbitraires ou fictives.
+3.
+S'il en fait la demande, l'importateur sera informé par écrit de la
+valeur en douane déterminée par application des dispositions du pré
+sent article et de la méthode utilisée pour la déterminer.
+Article
+8
+1.
+Pour déterminer la valeur en douane par application des dispositions
+de l'article premier, on ajoutera au prix effectivement payé ou à
+payer pour les marchandises importées
+a)
+les éléments suivants, dans la mesure où ils sont supportés par
+l'acheteur mais n'ont pas été inclus dans le prix effectivement payé
+ou à payer pour les marchandises:
+i)
+commissions et frais de courtage, à l'exception des commissions
+d'achat,
+ii)
+coût des contenants traités, à des fins douanières, comme ne
+faisant qu'un avec la marchandise,
+iii)
+coût de l'emballage, comprenant aussi bien la main-d'oeuvre que les
+matériaux;
+b)
+la valeur, imputée de façon appropriée, des produits et services ci-après
+lorsqu'ils sont fournis directement ou indirectement par l'acheteur,
+sans frais ou à coût réduit, et utilisés lors de la production et
+de la vente pour l'exportation des marchandises importées, dans la
+mesure où cette valeur n'a pas été incluse dans le prix
+effectivement payé ou à payer:
+i)
+matières, composants, parties et éléments similaires incorporés
+dans les marchandises importées,
+ii)
+outils, matrices, moules et objets similaires utilisés pour la
+production des marchandises importées,
+iii)
+matières consommées dans
+la production des marchandises importées,
+iv) travaux
+d'ingénierie, d'étude, d'art et de design, plans et croquis, exécutés
+ailleurs que dans le pays d'importation et nécessaires pour la
+production des marchandises importées;
+c)
+les redevances et les droits de licence relatifs aux marchandises à
+évaluer, que l'acheteur est tenu d'acquitter, soit directement soit
+indirectement, en tant que condition de la vente des marchandises à
+évaluer, dans la mesure où ces redevances et droits de licence n'ont
+pas été inclus dans le prix effectivement payé ou à payer;
+d)
+la valeur de toute partie du produit de toute revente, cession ou
+utilisation ultérieure des marchandises importées qui revient
+directement ou indirectement au vendeur.
+2.
+Lors de l'élaboration de sa législation, chaque Membre prendra des
+dispositions pour inclure dans la valeur en douane, ou en exclure, en
+totalité ou en partie, les éléments suivants:
+a)
+frais de transport des marchandises importées jusqu'au port ou lieu
+d'importation,
+b)
+frais de chargement, de déchargement et de manutention connexes au
+transport des marchandises importées jusqu'au port ou lieu
+d'importation, et
+c)
+coût de l'assurance.
+3.
+Tout élément qui sera ajouté par application des dispositions du présent
+article au prix effectivement payé ou à payer sera fondé
+exclusivement sur des données objectives et quantifiables.
+4.
+Pour la détermination de la valeur en douane, aucun élément ne sera
+ajouté au prix effectivement payé ou à payer, à l'exception de
+ceux qui sont prévus par le présent article.
+Article
+9
+1.
+Lorsqu'il sera nécessaire de convertir une monnaie pour déterminer
+la valeur en douane, le taux de change à utiliser sera celui qui aura
+été dûment publié par les autorités compétentes du pays
+d'importation concerné et reflétera de façon aussi effective que
+possible, pour chaque période couverte par une telle publication, la
+valeur courante de cette monnaie dans les transactions commerciales,
+exprimée dans la monnaie du pays d'importation.
+2.
+Le taux de conversion à utiliser sera celui en vigueur au moment de
+l'exportation ou au moment de l'importation, selon ce qui sera prévu
+par chaque Membre.
+Article
+10
+Tous
+les renseignements qui seraient de nature confidentielle, ou qui
+seraient fournis à titre confidentiel aux fins de l'évaluation en
+douane, seront traités comme strictement confidentiels par les
+autorités concernées qui ne les divulgueront pas sans l'autorisation
+expresse de la personne ou du gouvernement qui les aura fournis, sauf
+dans la mesure où elles pourraient être tenues de le faire dans le
+cadre de procédures judiciaires.
+Article
+11
+1.
+La législation de chaque Membre prévoira un droit d'appel n'entraînant
+aucune pénalité, concernant toute détermination de la valeur en
+douane, pour l'importateur ou toute autre personne qui pourrait être
+redevable des droits.
+2.
+Un premier droit d'appel n'entraînant aucune pénalité pourra être
+ouvert devant une instance de l'administration des douanes ou un
+organe ind épendant, mais la législation de chaque Membre prévoira
+un droit d'appel n'entraînant aucune pénalité devant une instance
+judiciaire.
+3.
+Notification de la décision rendue en appel sera faite à l'appelant
+et les raisons de la décision seront exposées par écrit. L'appelant
+sera également informé de tous droits éventuels à un appel ultérieur.
+Article
+12
+Les
+lois, règlements, décisions judiciaires et décisions
+administratives d'application générale donnant effet au présent
+accord seront publiés par le pays d'importation concerné conformément
+à l'article X du GATT de 1994.
+Article
+13
+Si,
+au cours de la détermination de la valeur en douane de marchandises
+importées, il devient nécessaire de différer la d étermination définitive
+de cette valeur, l'importateur des marchandises pourra néanmoins les
+retirer de la douane, à condition de fournir, si demande lui en est
+faite, une garantie suffisante sous la forme d'une caution, d'un dépôt
+ou d'un autre instrument approprié, couvrant l'acquittement des
+droits de douane dont les marchandises pourront en définitive être
+passibles. La législation de chaque Membre prévoira des dispositions
+applicables dans ces circonstances.
+Article
+14
+Les
+notes figurant à l'Annexe I du présent accord font partie intégrante
+de cet accord, et les articles de l'Accord doivent ê tre lus et
+appliqués conjointement avec les notes qui s'y rapportent. Les
+Annexes II et III font également partie intégrante du présent
+accord.
+Article
+15
+1.
+Dans le présent accord,
+a)
+l'expression “valeur en douane des marchandises importées”,
+s'entend de la valeur des marchandises déterminée en vue de la
+perception de droits de douane ad valorem sur les marchandises
+importées;
+b)
+l'expression “pays d'importation” s'entend du pays ou territoire
+douanier d'importation; et
+c)
+le terme “produites” signifie également cultivées, fabriquées
+ou extraites.
+2.
+Dans le présent accord,
+a)
+l'expression “marchandises identiques” s'entend des marchandises
+qui sont les mêmes à tous égards, y compris les caractéristiques
+physiques, la qualité et la réputation. Des différences d'aspect
+mineures n'empêcheraient pas des marchandises conformes par ailleurs
+à la définition d' être considérées comme identiques;
+b)
+l'expression “marchandises similaires” s'entend des marchandises
+qui, sans être pareilles à tous égards, présentent des caractéristiques
+semblables et sont composées de matières semblables, ce qui leur
+permet de remplir les mêmes fonctions et d'être commercialement
+interchangeables. La qualité des marchandises, leur réputation et
+l'existence d'une marque de fabrique ou de commerce sont au nombre des
+facteurs à prendre en considération pour déterminer si des
+marchandises sont similaires;
+c)
+les expressions “marchandises identiques” et “marchandises
+similaires” ne s'appliquent pas aux marchandises qui incorporent ou
+comportent, selon le cas, des travaux d'ingénierie, d'étude, d'art
+ou de design, ou des plans et des croquis, pour lesquels aucun
+ajustement n'a été fait par application des dispositions du
+paragraphe 1 b) iv) de l'article 8 du fait que ces
+travaux ont été exécutés dans le pays d'importation;
+d)
+des marchandises ne seront considérées comme “marchandises
+identiques” ou “marchandises similaires” que si elles ont ét é
+produites dans le même pays que les marchandises à évaluer;
+e)
+des marchandises produites par une personne différente ne seront
+prises en considération que s'il n'existe pas de marchandises
+identiques ou de marchandises similaires, selon le cas, produites par
+la même personne que les marchandises à évaluer.
+3.
+Dans le présent accord, l'expression “marchandises de la même
+nature ou de la même espèce” s'entend des marchandises classées
+dans un groupe ou une gamme de marchandises produites par une branche
+de production particulière ou un secteur particulier d'une branche de
+production, et comprend les marchandises identiques ou similaires.
+4.
+Aux fins du présent accord, des personnes ne seront réputées être
+liées que
+a)
+si l'une fait partie de la direction ou du conseil d'administration de
+l'entreprise de l'autre, et réciproquement,
+b)
+si elles ont juridiquement la qualité d'associés,
+c)
+si l'une est l'employeur de l'autre,
+d)
+si une personne quelconque possède, contrôle ou détient directement
+ou indirectement 5 pour cent ou plus des actions ou parts émises
+avec droit de vote, de l'une et de l'autre,
+e)
+si l'une d'elles contrôle l'autre directement ou indirectement,
+f)
+si toutes deux sont directement ou indirectement contrôlées par une
+tierce personne,
+g)
+si, ensemble, elles contrôlent directement ou indirectement une
+tierce personne, ou
+h)
+si elles sont membres de la même famille.
+5.
+Les personnes qui sont associées en affaires entre elles du fait que
+l'une est l'agent, le distributeur ou le concessionnaire exclusif de
+l'autre, quelle que soit la dé signation employée, seront réputées
+être liées aux fins du présent accord si elles répondent à l'un
+des crit ères énoncés au paragraphe 4.
+Article
+16
+Sur
+demande présentée par écrit, l'importateur aura le droit de se
+faire remettre par l'administration des douanes du pays d'importation
+une explication écrite de la manière dont la valeur en douane des
+marchandises importées par lui aura été déterminée.
+Article
+17
+Aucune
+disposition du présent accord ne sera interprétée comme
+restreignant ou contestant les droits d'une administration des douanes
+de s'assurer de la véracité ou de l'exactitude de toute affirmation,
+pièce ou déclaration présentée aux fins de l'évaluation en douane.
+Partie
+II: Administration
+de l'Accord, Consultations et Règlement des Différends
+Article
+18: Institutions
+1.
+Il est institué un Comité de l'évaluation en douane (dénommé dans
+le présent accord le “Comité”), composé de représentants de
+chacun des Membres. Le Comité élira son Président et se réunira
+normalement une fois l'an, ou selon les modalités envisagées par les
+dispositions pertinentes du présent accord, afin de ménager aux
+Membres la possibilité de procéder à des consultations sur les
+questions concernant l'administration du système d'évaluation en
+douane par tout Membre, dans la mesure où elle pourrait affecter le
+fonctionnement dudit accord ou la réalisation de ses objectifs, et
+afin d'exercer les autres attributions qui pourront lui être confiées
+par les Membres. Le Secrétariat de l'OMC assurera le secrétariat du
+Comité.
+2.
+Il sera institué un Comité technique de l'évaluation en douane (dénommé
+dans le présent accord le “Comité technique”), placé sous les
+auspices du Conseil de coopération douanière (dénommé dans le présent
+accord le “CCD”), qui exercera les attributions énoncées à
+l'Annexe II du présent accord et s'acquittera de ses fonctions
+conformément aux règles de procédure reprises dans ladite annexe.
+Article
+19: Consultations et règlement des différends
+1.
+Sauf dispositions contraires du présent accord, le Mémorandum
+d'accord sur le règlement des différends est applicable aux
+consultations et au règlement des différends au titre du présent
+accord.
+2.
+Dans le cas où un Membre considérera qu'un avantage résultant pour
+lui directement ou indirectement du présent accord se trouve annulé
+ou compromis, ou que la réalisation de l'un des objectifs dudit
+accord est entravée, du fait des actions d'un autre ou d'autres
+Membres, il pourra, en vue d'arriver à une solution mutuellement
+satisfaisante de la question, demander à tenir des consultations avec
+le ou les Membres en question. Chaque Membre examinera avec compréhension
+toute demande de consultations formulée par un autre Membre.
+3.
+Le Comité technique fournira, sur demande, des conseils et une aide
+aux Membres procédant à des consultations.
+4.
+A la demande d'une partie au différend, ou de sa propre initiative,
+un groupe spécial établi pour examiner un différend en rapport avec
+les dispositions du présent accord pourra demander au Comité
+technique de procéder à l'examen de toute question nécessitant un
+examen technique. Le groupe spé cial déterminera le mandat du Comité
+technique pour le différend en question et fixera un délai pour la réception
+du rapport du Comité technique. Le groupe spécial prendra le rapport
+du Comité technique en considération. Au cas où le Comité
+technique ne parviendrait pas à un consensus sur une question dont il
+aura été saisi conformément aux dispositions du présent paragraphe,
+le groupe spécial devrait ménager aux parties au différend la
+possibilité de lui présenter leurs vues sur la question.
+5.
+Les renseignements confidentiels communiqués au groupe spécial ne
+seront pas divulgués sans l'autorisation formelle de la personne, de
+l'organisme ou de l'autorité qui les aura fournis. Lorsque ces
+renseignements seront demandés au groupe spécial mais que leur
+divulgation par celui-ci ne sera pas autorisée, il en sera remis un résumé
+non confidentiel avec l'autorisation de la personne, de l'organisme ou
+de l'autorité qui les aura fournis.
+Partie III: Traitement
+Spécial et Différencié
+Article
+20
+1.
+Les pays en développement Membres qui n'étaient pas parties à
+l'Accord relatif à la mise en oeuvre de l'article VII de
+l'Accord général sur les tarifs douaniers et le commerce, en date du
+12 avril 1979, pourront différer l'application des
+dispositions du présent accord pendant une période qui n'excédera
+pas cinq ans à compter du jour où l'Accord sur l'OMC sera entré en
+vigueur pour lesdits Membres. Les pays en développement Membres qui
+opteront pour une application différée du présent accord
+notifieront leur décision au Directeur général de l'OMC.
+2.
+Outre les dispositions du paragraphe 1, les pays en développement
+Membres qui n'étaient pas parties à l'Accord relatif à la mise en
+oeuvre de l'article VII de l'Accord général sur les tarifs
+douaniers et le commerce, en date du 12 avril 1979, pourront
+différer l'application du paragraphe 2 b) iii) de
+l'article premier et de l'article 6 pendant une période qui
+n'excédera pas trois ans après qu'ils auront mis en application
+toutes les autres dispositions du présent accord. Les pays en développement
+Membres qui opteront pour une application différée des dispositions
+visées au présent paragraphe notifieront leur décision au Directeur
+général de l'OMC.
+3.
+Les pays développés Membres fourniront, selon des modalités
+convenues d'un commun accord, une assistance technique aux pays en développement
+Membres qui en feront la demande. Sur cette base, les pays développés
+Membres établiront des programmes d'assistance technique qui pourront
+comporter, entre autres, la formation de personnel, une assistance
+pour l'établissement de mesures de mise en oeuvre, l'accès aux
+sources d'information concernant la méthodologie en matière d'évaluation
+en douane, et des conseils au sujet de l'application des dispositions
+du présent accord.
+Partie
+IV: Dispositions
+Finales
+Article
+21: Réserves
+Il
+ne pourra pas être formulé de réserves en ce qui concerne des
+dispositions du présent accord sans le consentement des autres
+Membres.
+Article
+22: Législation nationale
+1.
+Chaque Membre assurera, au plus tard à la date où les dispositions
+du présent accord entreront en application en ce qui le concerne, la
+conformité de ses lois, règlements et procédures administratives
+avec les dispositions dudit accord.
+2.
+Chaque Membre informera le Comité de toute modification apportée à
+ses lois et règlements en rapport avec les dispositions du présent
+accord, ainsi qu'à l'administration de ces lois et règlements.
+Article
+23: Examen
+Le
+Comité procédera chaque année à un examen de la mise en oeuvre et
+du fonctionnement du présent accord, en tenant compte de ses
+objectifs. Le Comité informera chaque année le Conseil du commerce
+des marchandises des faits intervenus pendant la période sur laquelle
+portera cet examen.
+Article
+24: Secrétariat
+Le
+Secrétariat de l'OMC assurera le secrétariat du présent accord,
+sauf en ce qui concerne les attributions spécifiquement conférées
+au Comité technique dont le secrétariat sera assuré par le Secrétariat
+du CCD.

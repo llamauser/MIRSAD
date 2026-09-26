@@ -2,14 +2,14 @@
 
 Without OPENAI_API_KEY: deterministic fallback dossiers, clearly marked « généré sans LLM »."""
 import json
-import os
 import sys
 import warnings
 
 import _bootstrap  # noqa: F401
 
-from mirsad.agent.loop import check_model, investigate
-from mirsad.config import load_config, p
+from mirsad.agent.loop import investigate
+from mirsad.llm import providers
+from mirsad.config import p
 from mirsad.context import get_context
 
 warnings.filterwarnings("ignore")
@@ -35,19 +35,16 @@ descs[inj_case] = {
 desc_file.write_text(json.dumps(descs, ensure_ascii=False, indent=2), encoding="utf-8")
 
 use_llm = "--no-llm" not in sys.argv
-ok, msg = check_model(load_config()["llm"]["model"]) if use_llm else (False, "désactivé")
-print(f"LLM: {ok} ({msg})")
-if not ok:
-    use_llm = False
-    if not os.environ.get("OPENAI_API_KEY"):
-        print("!! OPENAI_API_KEY absente : dossiers générés sans LLM (fallback déterministe).")
+provs = providers() if use_llm else ()
+print("LLM providers (in order):", [p.label for p in provs] or "aucun → gabarit déterministe")
 
 index = []
 for cid in top + [inj_case]:
     res = investigate(cid, use_llm=use_llm)
     res["demo_injection"] = cid == inj_case
     d = res["dossier"]
-    json.dump(res["dossier"] | {"_mode": res["mode"], "_modele": res["modele"],
+    json.dump(res["dossier"] | {"_mode": res["mode"], "_modele": res["modele"], "_fournisseur": res["fournisseur"],
+                                "_duree_s": res["duree_s"],
                                 "_raison_fallback": res.get("raison_fallback"),
                                 "_validation": res["validation"], "_demo_injection": res["demo_injection"]},
               open(p(f"results/dossiers/{cid}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=2,
@@ -55,7 +52,7 @@ for cid in top + [inj_case]:
     json.dump(res["trace"], open(p(f"results/traces/{cid}.json"), "w", encoding="utf-8"), ensure_ascii=False,
               indent=2, default=str)
     last = res["validation"][-1].get("erreurs", [])
-    index.append({"case_id": cid, "mode": res["mode"], "voie": d["voie"], "montant_en_jeu_TND": d["montant_en_jeu_TND"],
+    index.append({"case_id": cid, "mode": res["mode"], "fournisseur": res["fournisseur"], "voie": d["voie"], "montant_en_jeu_TND": d["montant_en_jeu_TND"],
                   "probabilite_fraude": d["probabilite_fraude"], "valide": not last, "n_etapes": len(res["trace"]),
                   "demo_injection": res["demo_injection"], "scheme": str(ctx.batch.loc[cid, "scheme"]),
                   "label_fraud_revele_apres": int(ctx.batch.loc[cid, "label_fraud"])})

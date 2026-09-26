@@ -112,7 +112,8 @@ def history_features(history: pd.DataFrame, batch: pd.DataFrame) -> pd.DataFrame
                                    if "declarant" in batch else 0.0)
     if len(first):
         fs = batch[["importer"]].merge(first.rename("first").reset_index(), on="importer", how="left")["first"]
-        out["days_since_first"] = (batch.date.values - fs.values).astype("timedelta64[D]").astype(float)
+        # NaT (importer never seen) -> NaN -> 0; dividing keeps NaT as NaN instead of int64 min
+        out["days_since_first"] = (batch.date.values - fs.values) / np.timedelta64(1, "D")
         out["days_since_first"] = out["days_since_first"].fillna(0.0)
     else:
         out["days_since_first"] = 0.0

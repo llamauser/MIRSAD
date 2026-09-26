@@ -39,6 +39,10 @@ m = {
     "faux_positifs_injection": int((out.injection_detectee.astype(bool) & (out.injection == 0)).sum()),
     "ecart_droits_total_TND_illustratif": float(out.ecart_droits_TND.sum()),
 }
+m["modes_par_ligne"] = out["mode"].value_counts().to_dict()
 json.dump(m, open(p("results/espece_metrics.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+tag = "bm25" if m["mode"] == "bm25" else ("local" if "local" in m["mode"] else "openai")
+json.dump(m, open(p(f"results/espece_metrics_{tag}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+out.to_csv(p(f"results/espece_results_{tag}.csv"), index=False)
 print(json.dumps(m, ensure_ascii=False, indent=1))
 print(out[~out.top3_hs6][["id", "gold", "top3", "description"]].to_string())
