@@ -1,108 +1,271 @@
 {
   "case_id": "SGD70597",
   "voie": "Rouge",
-  "montant_en_jeu_TND": 23110.0,
+  "montant_en_jeu_TND": 17047.0,
   "probabilite_fraude": 0.9999,
-  "resume": "Déclaration SGD70597 (IMPNEW003, SH 870333) orientée en voie Rouge par le scoreur. Principal facteur : Taux de fraude lissé de l'importateur IMPNEW003 : 70,3 % (sur les contrôles passés révélés).",
+  "resume": "Déclaration SGD70597 classée voie Rouge avec P(fraude) = 99,99 %. L'importateur IMPNEW003 a déclaré 138 unités de SH4 8703 à valeur CIF de 58 898 TND simulés. L'agent doit inspecter physiquement la marchandise.",
   "faits": [
     {
-      "texte": "Voie Rouge décidée par le scoreur déterministe : P(fraude) = 99,99 %, montant en jeu (P × revenu attendu) = 23 110 TND simulés.",
+      "texte": "Déclaration SGD70597 de l'importateur IMPNEW003, déclarant DEC9510, SH4 8703, valeur CIF 58 898 TND simulés.",
       "evidence_ids": [
-        "RISK-SGD70597"
+        "DECL-SGD70597"
       ]
     },
     {
-      "texte": "Taux de fraude lissé de l'importateur IMPNEW003 : 70,3 % (sur les contrôles passés révélés).",
-      "evidence_ids": [
-        "SHAP-SGD70597-risk_importer"
-      ]
-    },
-    {
-      "texte": "Taux de fraude lissé du couple importateur × SH4 8703 : 69,0 % (sur les contrôles passés révélés).",
-      "evidence_ids": [
-        "SHAP-SGD70597-risk_imp_hs4"
-      ]
-    },
-    {
-      "texte": "13 contrôles passés de cet importateur avec résultat connu.",
-      "evidence_ids": [
-        "SHAP-SGD70597-n_inspected_importer"
-      ]
-    },
-    {
-      "texte": "28 déclarations passées de cet importateur.",
-      "evidence_ids": [
-        "SHAP-SGD70597-hist_count_importer"
-      ]
-    },
-    {
-      "texte": "Prix unitaire déclaré 426,80 contre une médiane de 1 793,80 sur 322 déclarations passées comparables.",
-      "evidence_ids": [
-        "DECL-SGD70597",
-        "PEER-870333-CNTRY376"
-      ]
-    },
-    {
-      "texte": "L'importateur IMPNEW003 a 28 déclarations passées ; 13 contrôles avec résultat connu, dont 13 fraudes confirmées.",
+      "texte": "L'importateur IMPNEW003 a déclaré 28 fois passées, dont 5 contrôles révélés avec 5 fraudes confirmées.",
       "evidence_ids": [
         "HIST-importer-IMPNEW003"
       ]
     },
     {
-      "texte": "Le déclarant DEC9697 présente un taux de fraude lissé de 48,1 % sur 7 contrôles révélés.",
+      "texte": "Le prix unitaire déclaré (426,8 TND) est inférieur au prix unitaire médian des mêmes SH6 (1 793,8 TND) dans le même pays.",
+      "evidence_ids": [
+        "PEER-870333-CNTRY376"
+      ]
+    },
+    {
+      "texte": "L'importateur IMPNEW003 est lié à 1 416 importateurs à risque, dont 1416 importateurs liés via le déclarant DEC9510.",
       "evidence_ids": [
         "LINK-IMPNEW003"
       ]
     },
     {
-      "texte": "Fraude confirmée similaire : SGD67872 (semaine 38, SH 870432), revenu redressé 4 756 TND simulés.",
+      "texte": "Le rapport FOB/CIF est de 0,99, ce qui diminue légèrement le risque, mais ne suffit pas à justifier la voie Rouge.",
       "evidence_ids": [
-        "SIM-SGD67872"
-      ]
-    },
-    {
-      "texte": "Fraude confirmée similaire : SGD60437 (semaine 35, SH 870323), revenu redressé 2 069 TND simulés.",
-      "evidence_ids": [
-        "SIM-SGD60437"
+        "DECL-SGD70597",
+        "RISK-SGD70597"
       ]
     }
   ],
   "hypotheses": [
     {
       "type": "sous-évaluation",
-      "justification": "Prix unitaire déclaré 426,80, inférieur à la médiane 1 793,80 des déclarations comparables.",
+      "justification": "Prix unitaire déclaré (426,8 TND) inférieur au prix unitaire médian des mêmes SH6 (1 793,8 TND) dans le même pays.",
       "evidence_ids": [
-        "DECL-SGD70597",
         "PEER-870333-CNTRY376"
       ]
     },
     {
       "type": "réseau",
-      "justification": "Historique de fraudes révélées sur l'importateur et/ou ses déclarants liés (voir taux de fraude lissés).",
+      "justification": "L'importateur IMPNEW003 est lié à 1 416 importateurs à risque, dont 1416 importateurs liés via le déclarant DEC9510.",
       "evidence_ids": [
-        "LINK-IMPNEW003",
-        "SHAP-SGD70597-risk_importer",
-        "SHAP-SGD70597-risk_imp_hs4"
+        "LINK-IMPNEW003"
       ]
     }
   ],
-  "base_legale": [],
+  "base_legale": [
+    {
+      "chunk_id": "LEG-omc_accord_evaluatio-014",
+      "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane)",
+      "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+    }
+  ],
   "controles_recommandes": [
     "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
   ],
   "incertitudes": [
-    "Base légale : à confirmer par l'agent (aucun texte juridique chargé dans le corpus).",
-    "Données synthétiques (BACUDA) et montants simulés : aucune conclusion sur des cas réels.",
-    "Les fraudes connues ne proviennent que des déclarations inspectées par le passé (étiquettes sélectives)."
+    "Données synthétiques (TND simulés)",
+    "Étiquettes sélectives (SH4 8703, SH6 870333)",
+    "Limites de l'historique de l'importateur (semaines passées uniquement)"
   ],
   "niveau_confiance": "élevé",
-  "_mode": "fallback",
-  "_modele": null,
-  "_raison_fallback": "généré sans LLM",
+  "_mode": "llm_local_valide_apres_correction",
+  "_modele": "mirsad-qwen3:8b",
+  "_fournisseur": "LLM local (mirsad-qwen3:8b)",
+  "_duree_s": 268.0,
+  "_raison_fallback": null,
   "_validation": [
     {
-      "fallback": true,
-      "erreurs": []
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 1,
+      "erreurs": [
+        "hypotheses: « fausse origine » sans preuve compatible (attendu : DECL-, MIRROR-, PEER-)"
+      ],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 5.7,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 5.3,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 3.6,
+          "tokens_sortie": 31
+        },
+        {
+          "type": "outils",
+          "s": 3.9,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 3.8,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 6.4,
+          "tokens_sortie": 35
+        },
+        {
+          "type": "outils",
+          "s": 6.6,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 4.5,
+          "tokens_sortie": 43
+        },
+        {
+          "type": "dossier",
+          "s": 120.9,
+          "tokens_sortie": 1012
+        }
+      ],
+      "duree_s": 161.6,
+      "brouillon_rejete": {
+        "case_id": "SGD70597",
+        "voie": "Rouge",
+        "montant_en_jeu_TND": 17047.0,
+        "probabilite_fraude": 0.9999,
+        "resume": "Déclaration SGD70597 classée voie Rouge avec P(fraude) = 99,99 %. L'importateur IMPNEW003 a déclaré 138 unités de SH4 8703 à valeur CIF de 58 898 TND simulés. L'agent doit inspecter physiquement la marchandise.",
+        "faits": [
+          {
+            "texte": "Déclaration SGD70597 de l'importateur IMPNEW003, déclarant DEC9510, SH4 8703, valeur CIF 58 898 TND simulés.",
+            "evidence_ids": [
+              "DECL-SGD70597"
+            ]
+          },
+          {
+            "texte": "L'importateur IMPNEW003 a déclaré 28 fois passées, dont 5 contrôles révélés avec 5 fraudes confirmées.",
+            "evidence_ids": [
+              "HIST-importer-IMPNEW003"
+            ]
+          },
+          {
+            "texte": "Le prix unitaire déclaré (426,8 TND) est inférieur au prix unitaire médian des mêmes SH6 (1 793,8 TND) dans le même pays.",
+            "evidence_ids": [
+              "PEER-870333-CNTRY376"
+            ]
+          },
+          {
+            "texte": "L'importateur IMPNEW003 est lié à 1 416 importateurs à risque, dont 1416 importateurs liés via le déclarant DEC9510.",
+            "evidence_ids": [
+              "LINK-IMPNEW003"
+            ]
+          },
+          {
+            "texte": "Le rapport FOB/CIF est de 0,99, ce qui diminue légèrement le risque, mais ne suffit pas à justifier la voie Rouge.",
+            "evidence_ids": [
+              "DECL-SGD70597",
+              "RISK-SGD70597"
+            ]
+          }
+        ],
+        "hypotheses": [
+          {
+            "type": "sous-évaluation",
+            "justification": "Prix unitaire déclaré (426,8 TND) inférieur au prix unitaire médian des mêmes SH6 (1 793,8 TND) dans le même pays.",
+            "evidence_ids": [
+              "PEER-870333-CNTRY376"
+            ]
+          },
+          {
+            "type": "réseau",
+            "justification": "L'importateur IMPNEW003 est lié à 1 416 importateurs à risque, dont 1416 importateurs liés via le déclarant DEC9510.",
+            "evidence_ids": [
+              "LINK-IMPNEW003"
+            ]
+          },
+          {
+            "type": "fausse origine",
+            "justification": "Origine déclarée CNTRY376, mais les cas similaires ont des origines variées (CNTRY884, CNTRY959, CNTRY351, CNTRY759).",
+            "evidence_ids": [
+              "SIMSET-SGD70597"
+            ]
+          }
+        ],
+        "base_legale": [
+          {
+            "chunk_id": "LEG-omc_accord_evaluatio-014",
+            "source": "OMC — Accord sur la mise en œuvre de l'article VII du GATT de 1994 (évaluation en douane)",
+            "extrait": "Si, lors de l'application du présent article, plus d'une valeur transactionnelle de marchandises identiques est constatée, on se référera à la valeur transactionnelle la plus basse pour déterminer la valeur en douane des marchandises importées."
+          }
+        ],
+        "controles_recommandes": [
+          "Examen physique de la marchandise / prélèvement d'échantillon (vérification de l'espèce)"
+        ],
+        "incertitudes": [
+          "Données synthétiques (TND simulés)",
+          "Étiquettes sélectives (SH4 8703, SH6 870333)",
+          "Limites de l'historique de l'importateur (semaines passées uniquement)"
+        ],
+        "niveau_confiance": "élevé"
+      }
+    },
+    {
+      "fournisseur": "LLM local (mirsad-qwen3:8b)",
+      "tentative": 2,
+      "erreurs": [],
+      "appels_llm": [
+        {
+          "type": "outils",
+          "s": 5.7,
+          "tokens_sortie": 30
+        },
+        {
+          "type": "outils",
+          "s": 5.3,
+          "tokens_sortie": 26
+        },
+        {
+          "type": "outils",
+          "s": 3.6,
+          "tokens_sortie": 31
+        },
+        {
+          "type": "outils",
+          "s": 3.9,
+          "tokens_sortie": 37
+        },
+        {
+          "type": "outils",
+          "s": 3.8,
+          "tokens_sortie": 33
+        },
+        {
+          "type": "outils",
+          "s": 6.4,
+          "tokens_sortie": 35
+        },
+        {
+          "type": "outils",
+          "s": 6.6,
+          "tokens_sortie": 28
+        },
+        {
+          "type": "outils",
+          "s": 4.5,
+          "tokens_sortie": 43
+        },
+        {
+          "type": "dossier",
+          "s": 120.9,
+          "tokens_sortie": 1012
+        },
+        {
+          "type": "dossier",
+          "s": 106.4,
+          "tokens_sortie": 883
+        }
+      ],
+      "duree_s": 268.0
     }
   ],
   "_demo_injection": false

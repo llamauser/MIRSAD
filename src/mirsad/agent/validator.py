@@ -107,10 +107,29 @@ class TraceIndex:
 
 
 def _schema_errors(d: dict) -> list[str]:
-    errs = []
-    for k in DOSSIER_SCHEMA["required"]:
-        if k not in d:
-            errs.append(f"champ manquant : {k}")
+    """Required fields, enums and basic types (needed when the LLM ran in plain JSON mode)."""
+    if not isinstance(d, dict):
+        return ["le dossier n'est pas un objet JSON"]
+    errs = [f"champ manquant : {k}" for k in DOSSIER_SCHEMA["required"] if k not in d]
+    if errs:
+        return errs
+    props = DOSSIER_SCHEMA["properties"]
+    for k in ("voie", "niveau_confiance"):
+        if d[k] not in props[k]["enum"]:
+            errs.append(f"{k} hors valeurs permises : {d[k]!r}")
+    for k in ("montant_en_jeu_TND", "probabilite_fraude"):
+        if not isinstance(d[k], (int, float)):
+            errs.append(f"{k} doit être un nombre")
+    for k, sub in (("faits", ("texte", "evidence_ids")), ("hypotheses", ("type", "justification", "evidence_ids")),
+                   ("base_legale", ("chunk_id", "source", "extrait"))):
+        if not isinstance(d[k], list) or any(not isinstance(x, dict) or any(s not in x for s in sub) for x in d[k]):
+            errs.append(f"{k} : structure invalide (attendu {', '.join(sub)})")
+    for h in d["hypotheses"] if isinstance(d["hypotheses"], list) else []:
+        if isinstance(h, dict) and h.get("type") not in props["hypotheses"]["items"]["properties"]["type"]["enum"]:
+            errs.append(f"type d'hypothèse inconnu : {h.get('type')!r}")
+    for k in ("controles_recommandes", "incertitudes"):
+        if not isinstance(d[k], list):
+            errs.append(f"{k} doit être une liste")
     return errs
 
 

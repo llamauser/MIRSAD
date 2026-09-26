@@ -13,7 +13,7 @@ import time
 from .. import llm
 from ..config import load_config
 from . import fallback
-from .schema import RESPONSE_FORMAT
+from .schema import DOSSIER_SCHEMA, RESPONSE_FORMAT
 from .tools import TOOL_SCHEMAS, call_tool
 from .validator import dumps, validate
 
@@ -40,7 +40,9 @@ Règles impératives :
    « fausse origine » = indice sur le pays d'origine (DECL-, MIRROR-, SHAP-…-risk_country) ;
    « réseau » = liens ou historique à risque (LINK-, HIST-, SHAP-…-risk_importer/declarant/imp_hs4) ;
    « autre » = tout le reste (par ex. tentative d'injection, GUARD-).
-7. Faits : 4 à 8 faits courts. Liste les incertitudes (données synthétiques, étiquettes sélectives, limites).
+7. Faits : 4 à 8 faits courts, fidèles au sens exact des champs des outils (ne transforme pas un nombre de liens en
+   « liens à risque »). Ne commente pas la pertinence de la voie : elle est décidée par le scoreur.
+   Liste les incertitudes (données synthétiques, étiquettes sélectives, limites).
 8. resume ≤ 60 mots. Données et montants sont synthétiques (« TND simulés »)."""
 
 MODE = {("local", 0): "llm_local_valide", ("local", 1): "llm_local_valide_apres_correction",
@@ -90,7 +92,14 @@ def _run_provider(prov: llm.Provider, case_id: str, cfg: dict, log: list) -> dic
     scorer = fallback.scorer_view(trace)
     messages.append({"role": "user", "content": "Rédige maintenant le dossier JSON final."})
     for attempt in range(2):
-        resp = chat("dossier", messages=messages, temperature=cfg["temperature"], response_format=RESPONSE_FORMAT)
+        if prov.json_mode == "json_object":  # lighter decoding; the JSON schema is given in the prompt instead
+            rf = {"type": "json_object"}
+            if attempt == 0:
+                messages[-1]["content"] += ("\nRéponds uniquement par un objet JSON conforme à ce schéma :\n"
+                                            + json.dumps(DOSSIER_SCHEMA, ensure_ascii=False))
+        else:
+            rf = RESPONSE_FORMAT
+        resp = chat("dossier", messages=messages, temperature=cfg["temperature"], response_format=rf)
         try:
             dossier = json.loads(resp.choices[0].message.content)
             errs = validate(dossier, trace, scorer)
