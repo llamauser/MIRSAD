@@ -1,0 +1,74 @@
+
+======================================================================
+COMPRESSED AIR LEAK DETECTION MODEL - TRAINING REPORT
+======================================================================
+
+Date: 2026-02-14 13:49:57
+
+DATASET INFORMATION:
+-------------------
+- Total audio files: 1920
+- No leak samples: 960
+- Leak samples: 960
+- Audio duration: 30 seconds
+- Sample rate: 48kHz (resampled to 22kHz)
+- Noise conditions: work_low, work, hydr_low, lab, hydr
+
+FEATURE EXTRACTION:
+------------------
+- Total features extracted: 114
+- Feature types:
+  - MFCCs (80 features: 20 coefficients × 4 statistics)
+  - Spectral features (6 features)
+  - Zero Crossing Rate (2 features)
+  - Chroma features (24 features)
+  - RMS Energy (2 features)
+
+MODEL PERFORMANCE:
+-----------------
+- Best Model: Random Forest
+- Test Accuracy: 0.9306 (93.06%)
+- AUC Score: 0.9729 (97.29%)
+- Sensitivity (Leak Detection): 88.19%
+- Specificity (No-Leak Detection): 97.92%
+
+CONFUSION MATRIX:
+----------------
+                Predicted
+                No Leak  |  Leak
+Actual  No Leak    141   |   3
+        Leak        17   |  127
+
+PERFORMANCE BY NOISE CONDITION:
+------------------------------
+- hydr:      92.06%
+- hydr_low:  96.83%
+- lab:       93.48%
+- work:      87.04%
+- work_low:  95.16%
+
+TOP 5 IMPORTANT FEATURES:
+------------------------
+1. chroma_6_std (4.36%)
+2. mfcc_5_max (2.84%)
+3. mfcc_6_max (2.49%)
+4. chroma_8_std (2.06%)
+5. mfcc_9_max (2.05%)
+
+FILES GENERATED:
+---------------
+- leak_detection_model.pkl - Complete model package
+- random_forest_model.pkl - Random Forest model only
+- scaler.pkl - Feature scaler
+- features.npy - Extracted features
+- labels.npy - Labels
+- dataset_info.csv - Dataset metadata
+
+RECOMMENDATIONS:
+---------------
+1. Model performs best in low-noise conditions (hydr_low, work_low)
+2. Consider collecting more samples for 'work' condition
+3. Model is more conservative (fewer false alarms, more missed leaks)
+4. For critical applications, adjust threshold to increase sensitivity
+
+======================================================================

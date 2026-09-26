@@ -1,0 +1,3044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Industrial Pipeline Monitoring System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: #0a0e1a;
+      color: #e0e0e0;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Industrial background with grid pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(rgba(10, 14, 26, 0.95), rgba(10, 14, 26, 0.95)),
+        url('https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1920&q=80') center/cover;
+      z-index: -2;
+    }
+
+    /* Animated grid overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 150, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 150, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -1;
+      animation: gridScroll 20s linear infinite;
+    }
+
+    @keyframes gridScroll {
+      0% { background-position: 0 0; }
+      100% { background-position: 50px 50px; }
+    }
+
+    /* Warehouse 3D grid */
+    .wh-map {
+      margin-top: 28px;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(0, 150, 255, 0.3);
+      border-radius: 16px;
+    }
+
+    .wh-map-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .wh-map-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 20px;
+      color: #0096ff;
+    }
+
+    .wh-map-subtitle {
+      font-size: 12px;
+      color: #7a8da5;
+      margin-top: 4px;
+    }
+
+    .wh-map-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .wh-zone-btn {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 150, 255, 0.3);
+      background: rgba(0, 150, 255, 0.08);
+      color: #8fd0ff;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .wh-zone-btn.active {
+      background: rgba(0, 150, 255, 0.25);
+      color: #ffffff;
+      border-color: rgba(0, 150, 255, 0.6);
+      box-shadow: 0 0 10px rgba(0, 150, 255, 0.4);
+    }
+
+    .wh-map-body {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .wh-3d-scene {
+      flex: 1 1 520px;
+      min-height: 360px;
+      perspective: 900px;
+      background: radial-gradient(circle at top, rgba(0, 150, 255, 0.08), transparent 60%);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px dashed rgba(0, 150, 255, 0.2);
+    }
+
+    .wh-3d-canvas {
+      width: 100%;
+      height: 360px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(10, 14, 26, 0.9), rgba(8, 12, 22, 0.95));
+      border: 1px solid rgba(0, 150, 255, 0.2);
+    }
+
+    .wh-3d-canvas canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+
+    .wh-3d-stack {
+      transform-style: preserve-3d;
+      transform: rotateX(55deg) rotateZ(45deg);
+      transform-origin: center center;
+      transition: transform 0.3s ease;
+    }
+
+    .wh-zone {
+      margin-bottom: 18px;
+    }
+
+    .wh-zone-title {
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: #7a8da5;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .wh-level {
+      margin-bottom: 16px;
+      transform: translateZ(var(--level-depth));
+    }
+
+    .wh-level-label {
+      font-size: 11px;
+      color: #8fd0ff;
+      margin-bottom: 6px;
+    }
+
+    .wh-level-grid {
+      display: grid;
+      gap: 6px;
+    }
+
+    .wh-cell {
+      position: relative;
+      height: 56px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(0, 150, 255, 0.2);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 6px;
+      color: #7a8da5;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .wh-cell:hover {
+      transform: translateZ(10px);
+      border-color: rgba(0, 150, 255, 0.6);
+      box-shadow: 0 0 10px rgba(0, 150, 255, 0.2);
+    }
+
+    .wh-cell.occupied {
+      background: linear-gradient(135deg, rgba(0, 150, 255, 0.18), rgba(15, 23, 42, 0.9));
+      color: #e2e8f0;
+    }
+
+    .wh-cell.selected {
+      border-color: rgba(255, 107, 0, 0.9);
+      box-shadow: 0 0 14px rgba(255, 107, 0, 0.5);
+    }
+
+    .wh-cell.path {
+      animation: routePulse 1.2s infinite;
+    }
+
+    .wh-cell-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .wh-cell-meta {
+      font-size: 10px;
+      color: #9ab5d1;
+    }
+
+    .wh-map-panel {
+      flex: 1 1 260px;
+      min-width: 240px;
+      max-width: 360px;
+      background: rgba(10, 14, 26, 0.7);
+      border: 1px solid rgba(0, 150, 255, 0.2);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .wh-panel-title {
+      font-size: 12px;
+      color: #7a8da5;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .wh-panel-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(0, 150, 255, 0.1);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 16px;
+      min-height: 80px;
+    }
+
+    .wh-path-step {
+      font-size: 12px;
+      color: #d1e7ff;
+      margin-bottom: 6px;
+    }
+
+    .wh-product-selected {
+      border-color: rgba(255, 107, 0, 0.7) !important;
+      box-shadow: 0 0 18px rgba(255, 107, 0, 0.25);
+    }
+
+    @keyframes routePulse {
+      0% { box-shadow: 0 0 0 rgba(0, 150, 255, 0.2); }
+      50% { box-shadow: 0 0 18px rgba(0, 150, 255, 0.7); }
+      100% { box-shadow: 0 0 0 rgba(0, 150, 255, 0.2); }
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 300px;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 14, 26, 0.98) 100%);
+      padding: 0;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5), inset -1px 0 0 rgba(0, 150, 255, 0.2);
+      overflow-y: auto;
+      border-right: 1px solid rgba(0, 150, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .sidebar-header {
+      padding: 30px 20px;
+      background: linear-gradient(135deg, rgba(0, 150, 255, 0.1), rgba(255, 107, 0, 0.1));
+      border-bottom: 2px solid rgba(0, 150, 255, 0.3);
+    }
+
+    .sidebar-header h2 {
+      color: #0096ff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
+      margin-bottom: 8px;
+    }
+
+    .sidebar-header .subtitle {
+      color: #ff6b00;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 20px 15px;
+    }
+
+    .sidebar-menu li {
+      margin: 15px 0;
+    }
+
+    .sidebar-menu button {
+      width: 100%;
+      padding: 16px 20px;
+      border: 1px solid rgba(0, 150, 255, 0.2);
+      background: linear-gradient(135deg, rgba(0, 150, 255, 0.05), rgba(0, 150, 255, 0.02));
+      color: #0096ff;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sidebar-menu button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 150, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .sidebar-menu button:hover::before {
+      left: 100%;
+    }
+
+    .sidebar-menu button:hover {
+      background: linear-gradient(135deg, rgba(0, 150, 255, 0.15), rgba(0, 150, 255, 0.05));
+      border-color: rgba(0, 150, 255, 0.4);
+      box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
+      transform: translateX(5px);
+    }
+
+    .sidebar-menu button.active {
+      background: linear-gradient(135deg, rgba(255, 107, 0, 0.2), rgba(255, 107, 0, 0.1));
+      border-color: rgba(255, 107, 0, 0.5);
+      color: #ff6b00;
+      box-shadow: 0 0 20px rgba(255, 107, 0, 0.4), inset 0 0 10px rgba(255, 107, 0, 0.1);
+      font-weight: 700;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0;
+      position: relative;
+    }
+
+    .app {
+      max-width: 100%;
+      margin: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 40px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 42px;
+      color: #0096ff;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 0 0 20px rgba(0, 150, 255, 0.5), 0 0 40px rgba(0, 150, 255, 0.2);
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #0096ff, #ff6b00, transparent);
+      box-shadow: 0 0 10px rgba(0, 150, 255, 0.8);
+    }
+
+    .status {
+      font-size: 13px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 500;
+      color: #0096ff;
+      margin-bottom: 16px;
+      padding: 12px 18px;
+      background: rgba(0, 150, 255, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(0, 150, 255, 0.3);
+      border-left: 4px solid #0096ff;
+      backdrop-filter: blur(10px);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 0 20px rgba(0, 150, 255, 0.1);
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    /* Audio Analyzer View */
+    .input-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+      flex: 1;
+      padding: 12px 14px;
+      border: 1px solid rgba(0, 150, 255, 0.3);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Rajdhani', sans-serif;
+      background: rgba(15, 23, 42, 0.5);
+      color: #a0b3cc;
+      backdrop-filter: blur(5px);
+    }
+
+    button {
+      padding: 12px 24px;
+      border: 2px solid rgba(0, 150, 255, 0.4);
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(0, 150, 255, 0.1), rgba(0, 150, 255, 0.05));
+      color: #0096ff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(0, 150, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    button:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    button:hover {
+      border-color: #0096ff;
+      box-shadow: 0 0 25px rgba(0, 150, 255, 0.4), inset 0 0 20px rgba(0, 150, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      border-color: rgba(160, 179, 204, 0.2);
+      color: rgba(160, 179, 204, 0.5);
+    }
+
+    #audioPreview {
+      margin-bottom: 20px;
+    }
+
+    #audioPreview audio {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    #loading {
+      display: none;
+      margin-bottom: 16px;
+      padding: 14px 18px;
+      background: rgba(255, 193, 7, 0.1);
+      border: 1px solid rgba(255, 193, 7, 0.4);
+      border-left: 4px solid #ffc107;
+      border-radius: 8px;
+      color: #ffc107;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      backdrop-filter: blur(10px);
+    }
+
+    .result-box {
+      background: rgba(76, 175, 80, 0.05);
+      border: 2px solid rgba(76, 175, 80, 0.4);
+      padding: 18px;
+      margin-top: 12px;
+      border-radius: 10px;
+      display: none;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(76, 175, 80, 0.1);
+    }
+
+    .result-box.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-box.error {
+      background: rgba(230, 57, 70, 0.05);
+      border-color: rgba(230, 57, 70, 0.4);
+      box-shadow: 0 0 20px rgba(230, 57, 70, 0.1);
+    }
+
+    .prediction-label {
+      color: #4caf50;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+    }
+
+    .result-box.error .prediction-label {
+      color: #ff6b00;
+      text-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+    }
+
+    .confidence-bar {
+      background: rgba(76, 175, 80, 0.1);
+      height: 28px;
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(76, 175, 80, 0.3);
+    }
+
+    .result-box.error .confidence-bar {
+      background: rgba(255, 107, 0, 0.1);
+      border-color: rgba(255, 107, 0, 0.3);
+    }
+
+    .confidence-fill {
+      background: linear-gradient(90deg, #4caf50, #66bb6a);
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+    }
+
+    .result-box.error .confidence-fill {
+      background: linear-gradient(90deg, #ff6b00, #ff8533);
+      box-shadow: 0 0 15px rgba(255, 107, 0, 0.5);
+    }
+
+    .confidence-text {
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+      letter-spacing: 1px;
+    }
+
+    /* Pipeline System View */
+    .pipeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid rgba(0, 150, 255, 0.2);
+    }
+
+    .pipeline-header > div:first-child {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0096ff;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(0, 150, 255, 0.3);
+    }
+
+    .pipeline-status {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 25px;
+      background: rgba(76, 175, 80, 0.1);
+      border: 2px solid rgba(76, 175, 80, 0.4);
+      color: #4caf50;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 20px rgba(76, 175, 80, 0.2);
+    }
+
+    .pipeline-status::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #4caf50;
+      box-shadow: 0 0 10px #4caf50;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.8); }
+    }
+
+    .pipeline-status.alert {
+      background: rgba(255, 107, 0, 0.1);
+      border-color: rgba(255, 107, 0, 0.4);
+      color: #ff6b00;
+      box-shadow: 0 0 20px rgba(255, 107, 0, 0.2);
+    }
+
+    .pipeline-status.alert::before {
+      background: #ff6b00;
+      box-shadow: 0 0 10px #ff6b00;
+      animation: alertPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes alertPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+
+    .sensors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 28px;
+      margin-top: 24px;
+    }
+
+    .sensor-card {
+      border: 2px solid rgba(0, 150, 255, 0.3);
+      border-radius: 16px;
+      padding: 28px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(10, 14, 26, 0.9));
+      text-align: center;
+      transition: all 0.4s ease;
+      position: relative;
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(0, 150, 255, 0.05);
+    }
+
+    .sensor-card::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, transparent, rgba(0, 150, 255, 0.3), transparent);
+      border-radius: 16px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: -1;
+    }
+
+    .sensor-card:hover {
+      box-shadow: 0 12px 48px rgba(0, 150, 255, 0.3), inset 0 0 40px rgba(0, 150, 255, 0.1);
+      border-color: rgba(0, 150, 255, 0.6);
+      transform: translateY(-6px);
+    }
+
+    .sensor-card:hover::before {
+      opacity: 1;
+    }
+
+    .sensor-card.alert {
+      border-color: rgba(255, 107, 0, 0.6);
+      background: linear-gradient(135deg, rgba(25, 20, 15, 0.9), rgba(30, 15, 10, 0.95));
+      animation: alertGlow 2s ease-in-out infinite;
+      box-shadow: 0 8px 32px rgba(255, 107, 0, 0.4), inset 0 0 30px rgba(255, 107, 0, 0.1);
+    }
+
+    @keyframes alertGlow {
+      0%, 100% {
+        box-shadow: 0 8px 32px rgba(255, 107, 0, 0.4), inset 0 0 30px rgba(255, 107, 0, 0.1);
+      }
+      50% {
+        box-shadow: 0 12px 48px rgba(255, 107, 0, 0.6), inset 0 0 40px rgba(255, 107, 0, 0.2);
+      }
+    }
+
+    .sensor-status-indicator {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.05));
+      color: #4caf50;
+      border: 3px solid rgba(76, 175, 80, 0.4);
+      box-shadow: 0 0 30px rgba(76, 175, 80, 0.3), inset 0 0 20px rgba(76, 175, 80, 0.1);
+      position: relative;
+    }
+
+    .sensor-status-indicator::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 3px solid rgba(76, 175, 80, 0.3);
+      transform: translate(-50%, -50%) scale(1.2);
+      opacity: 0.5;
+    }
+
+    .sensor-card.alert .sensor-status-indicator {
+      background: linear-gradient(135deg, rgba(255, 107, 0, 0.2), rgba(255, 107, 0, 0.08));
+      color: #ff6b00;
+      border-color: rgba(255, 107, 0, 0.6);
+      box-shadow: 0 0 35px rgba(255, 107, 0, 0.5), inset 0 0 25px rgba(255, 107, 0, 0.15);
+      animation: indicatorPulse 1.5s ease-in-out infinite;
+    }
+
+    .sensor-card.alert .sensor-status-indicator::after {
+      border-color: rgba(255, 107, 0, 0.4);
+    }
+
+    @keyframes indicatorPulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 35px rgba(255, 107, 0, 0.5), inset 0 0 25px rgba(255, 107, 0, 0.15);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 45px rgba(255, 107, 0, 0.7), inset 0 0 30px rgba(255, 107, 0, 0.2);
+      }
+    }
+
+    .sensor-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #0096ff;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(0, 150, 255, 0.4);
+    }
+
+    .sensor-status-text {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      color: #7a8da5;
+      margin-bottom: 18px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .sensor-file-input {
+      margin-bottom: 14px;
+    }
+
+    .sensor-file-input input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px dashed rgba(0, 150, 255, 0.3);
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: 'Rajdhani', sans-serif;
+      background: rgba(15, 23, 42, 0.4);
+      color: #a0b3cc;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .sensor-file-input input:hover {
+      border-color: rgba(0, 150, 255, 0.5);
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .sensor-upload-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+
+    .sensor-alert {
+      background: rgba(255, 193, 7, 0.08);
+      border: 1px solid rgba(255, 193, 7, 0.4);
+      color: #ffc107;
+      padding: 12px 16px;
+      border-radius: 10px;
+      display: none;
+      font-size: 12px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      margin-top: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 15px rgba(255, 193, 7, 0.1);
+    }
+
+    .sensor-alert.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .sensor-alert.error {
+      background: rgba(255, 107, 0, 0.08);
+      border-color: rgba(255, 107, 0, 0.4);
+      color: #ff6b00;
+      box-shadow: 0 0 15px rgba(255, 107, 0, 0.1);
+    }
+
+    #responses {
+      border: 1px dashed rgba(0, 150, 255, 0.3);
+      padding: 18px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(10px);
+      min-height: 120px;
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      margin-top: 20px;
+      color: #4caf50;
+      line-height: 1.6;
+      box-shadow: inset 0 0 20px rgba(0, 150, 255, 0.05);
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(0, 150, 255, 0.6), rgba(0, 150, 255, 0.4));
+      border-radius: 5px;
+      border: 2px solid rgba(10, 14, 26, 0.8);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, rgba(0, 150, 255, 0.8), rgba(0, 150, 255, 0.6));
+      box-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
+    }
+
+    /* Worker Confirmation Styles */
+    .confirmation-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(0, 150, 255, 0.2);
+    }
+
+    .confirm-btn, .reject-btn {
+      flex: 1;
+      padding: 10px;
+      font-size: 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    .confirm-btn {
+      background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.08));
+      border: 2px solid rgba(255, 107, 0, 0.4);
+      color: #ff6b00;
+    }
+
+    .confirm-btn:hover {
+      background: linear-gradient(135deg, rgba(255, 107, 0, 0.25), rgba(255, 107, 0, 0.15));
+      box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
+    }
+
+    .reject-btn {
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.08));
+      border: 2px solid rgba(76, 175, 80, 0.4);
+      color: #4caf50;
+    }
+
+    .reject-btn:hover {
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.25), rgba(76, 175, 80, 0.15));
+      box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+    }
+
+    .confirmation-status {
+      margin-top: 8px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .confirmation-status.confirmed {
+      background: rgba(255, 107, 0, 0.1);
+      border: 1px solid rgba(255, 107, 0, 0.3);
+      color: #ff6b00;
+    }
+
+    .confirmation-status.rejected {
+      background: rgba(76, 175, 80, 0.1);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      color: #4caf50;
+    }
+
+    /* Federated Training Styles */
+    .fl-dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .fl-metric-card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(10, 14, 26, 0.9));
+      border: 2px solid rgba(0, 150, 255, 0.3);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(0, 150, 255, 0.05);
+    }
+
+    .fl-metric-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      color: #7a8da5;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .fl-metric-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 48px;
+      color: #0096ff;
+      font-weight: 900;
+      text-shadow: 0 0 20px rgba(0, 150, 255, 0.5);
+      line-height: 1;
+    }
+
+    .fl-metric-subtitle {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      color: #7a8da5;
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .fl-progress-bar {
+      width: 100%;
+      height: 12px;
+      background: rgba(0, 150, 255, 0.1);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 16px;
+      border: 1px solid rgba(0, 150, 255, 0.3);
+    }
+
+    .fl-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0096ff, #00d4ff);
+      border-radius: 6px;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 15px rgba(0, 150, 255, 0.5);
+    }
+
+    .fl-client-list {
+      margin-top: 16px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .fl-client-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: rgba(0, 150, 255, 0.05);
+      border: 1px solid rgba(0, 150, 255, 0.2);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+    }
+
+    .fl-client-name {
+      color: #0096ff;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .fl-client-status {
+      color: #4caf50;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+
+    .fl-chart-container {
+      margin-top: 20px;
+      height: 200px;
+      border: 1px solid rgba(0, 150, 255, 0.2);
+      border-radius: 8px;
+      padding: 16px;
+      background: rgba(0, 150, 255, 0.03);
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .fl-chart-bar {
+      flex: 1;
+      background: linear-gradient(180deg, #0096ff, #004d80);
+      border-radius: 4px 4px 0 0;
+      min-height: 20px;
+      transition: height 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 150, 255, 0.4);
+      position: relative;
+    }
+
+    .fl-chart-bar:hover {
+      background: linear-gradient(180deg, #00d4ff, #0096ff);
+      box-shadow: 0 0 20px rgba(0, 150, 255, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>⚙️ Control Panel</h2>
+    <ul class="sidebar-menu">
+      <li><button class="nav-btn active" data-view="pipeline">🛢️ Pipeline System</button></li>
+      <li><button class="nav-btn" data-view="federated">🤖 Federated Training</button></li>
+      <li><button class="nav-btn" data-view="warehouse">📦 Smart Warehouse</button></li>
+    </ul>
+    <div style="position: absolute; bottom: 30px; left: 30px; right: 30px; padding: 15px; background: rgba(0, 150, 255, 0.05); border: 1px solid rgba(0, 150, 255, 0.2); border-radius: 8px; text-align: center;">
+      <div style="font-family: 'Rajdhani', sans-serif; font-size: 11px; color: #7a8da5; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">System Version</div>
+      <div style="font-family: 'Orbitron', sans-serif; font-size: 16px; color: #0096ff; font-weight: 700; text-shadow: 0 0 10px rgba(0, 150, 255, 0.3);">AI v2.0</div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <!-- Pipeline System View -->
+    <div class="view active" id="pipeline-view">
+      <div class="app">
+        <h1>⚙️ Pipeline Monitoring System</h1>
+        <div class="status" id="pipeline-status">🔌 Connecting to Server...</div>
+
+        <div class="pipeline-header">
+          <div>System Status</div>
+          <div class="pipeline-status" id="pipelineOverallStatus">✓ All Systems Normal</div>
+        </div>
+
+        <div class="sensors-grid" id="sensorsGrid"></div>
+      </div>
+    </div>
+
+    <!-- Federated Training View -->
+    <div class="view" id="federated-view">
+      <div class="app">
+        <h1>🤖 Federated Learning Dashboard</h1>
+        <div class="status">📊 Privacy-Preserving Distributed Training</div>
+
+        <div class="fl-dashboard">
+          <!-- Training Rounds Card -->
+          <div class="fl-metric-card">
+            <div class="fl-metric-title">Training Round</div>
+            <div class="fl-metric-value" id="fl-round">47</div>
+            <div class="fl-metric-subtitle">of 100 rounds</div>
+            <div class="fl-progress-bar">
+              <div class="fl-progress-fill" style="width: 47%;"></div>
+            </div>
+          </div>
+
+          <!-- Global Accuracy Card -->
+          <div class="fl-metric-card">
+            <div class="fl-metric-title">Global Accuracy</div>
+            <div class="fl-metric-value" id="fl-accuracy">94.2<span style="font-size: 24px;">%</span></div>
+            <div class="fl-metric-subtitle">+2.3% from last round</div>
+            <div class="fl-progress-bar">
+              <div class="fl-progress-fill" style="width: 94.2%;"></div>
+            </div>
+          </div>
+
+          <!-- Active Clients Card -->
+          <div class="fl-metric-card">
+            <div class="fl-metric-title">Active Clients</div>
+            <div class="fl-metric-value" id="fl-clients">8<span style="font-size: 24px;">/12</span></div>
+            <div class="fl-metric-subtitle">Edge devices participating</div>
+            <div class="fl-client-list">
+              <div class="fl-client-item">
+                <span class="fl-client-name">Pipeline-Sensor-01</span>
+                <span class="fl-client-status">✓ Active</span>
+              </div>
+              <div class="fl-client-item">
+                <span class="fl-client-name">Pipeline-Sensor-02</span>
+                <span class="fl-client-status">✓ Active</span>
+              </div>
+              <div class="fl-client-item">
+                <span class="fl-client-name">Pipeline-Sensor-03</span>
+                <span class="fl-client-status">✓ Active</span>
+              </div>
+              <div class="fl-client-item">
+                <span class="fl-client-name">Refinery-Node-A</span>
+                <span class="fl-client-status">✓ Active</span>
+              </div>
+              <div class="fl-client-item">
+                <span class="fl-client-name">Refinery-Node-B</span>
+                <span class="fl-client-status">✓ Active</span>
+              </div>
+              <div class="fl-client-item">
+                <span class="fl-client-name">Storage-Unit-01</span>
+                <span class="fl-client-status">✓ Active</span>
+              </div>
+              <div class="fl-client-item">
+                <span class="fl-client-name">Storage-Unit-02</span>
+                <span class="fl-client-status">✓ Active</span>
+              </div>
+              <div class="fl-client-item">
+                <span class="fl-client-name">Control-Center</span>
+                <span class="fl-client-status">✓ Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Model Loss Card -->
+          <div class="fl-metric-card">
+            <div class="fl-metric-title">Global Loss</div>
+            <div class="fl-metric-value" id="fl-loss" style="font-size: 36px;">0.158</div>
+            <div class="fl-metric-subtitle">-0.024 from previous</div>
+            <div class="fl-chart-container">
+              <div class="fl-chart-bar" style="height: 85%;"></div>
+              <div class="fl-chart-bar" style="height: 72%;"></div>
+              <div class="fl-chart-bar" style="height: 63%;"></div>
+              <div class="fl-chart-bar" style="height: 51%;"></div>
+              <div class="fl-chart-bar" style="height: 45%;"></div>
+              <div class="fl-chart-bar" style="height: 38%;"></div>
+              <div class="fl-chart-bar" style="height: 32%;"></div>
+              <div class="fl-chart-bar" style="height: 28%;"></div>
+              <div class="fl-chart-bar" style="height: 24%;"></div>
+              <div class="fl-chart-bar" style="height: 20%;"></div>
+            </div>
+          </div>
+
+          <!-- Communication Stats Card -->
+          <div class="fl-metric-card">
+            <div class="fl-metric-title">Data Transmitted</div>
+            <div class="fl-metric-value" id="fl-data" style="font-size: 36px;">2.4<span style="font-size: 18px;">GB</span></div>
+            <div class="fl-metric-subtitle">Model updates exchanged</div>
+          </div>
+
+          <!-- Privacy Budget Card -->
+          <div class="fl-metric-card">
+            <div class="fl-metric-title">Privacy Budget (ε)</div>
+            <div class="fl-metric-value" id="fl-epsilon" style="font-size: 36px;">3.2</div>
+            <div class="fl-metric-subtitle">Differential Privacy Guarantee</div>
+            <div class="fl-progress-bar">
+              <div class="fl-progress-fill" style="width: 32%; background: linear-gradient(90deg, #4caf50, #66bb6a);"></div>
+            </div>
+          </div>
+
+          <!-- Convergence Status Card -->
+          <div class="fl-metric-card">
+            <div class="fl-metric-title">Convergence Status</div>
+            <div class="fl-metric-value" style="font-size: 28px; color: #ffc107;">Improving</div>
+            <div class="fl-metric-subtitle">Est. 18 rounds to target</div>
+          </div>
+
+          <!-- Aggregation Method Card -->
+          <div class="fl-metric-card">
+            <div class="fl-metric-title">Aggregation Method</div>
+            <div style="font-size: 20px; color: #0096ff; font-family: 'Orbitron', sans-serif; font-weight: 700; margin-top: 12px; text-shadow: 0 0 10px rgba(0, 150, 255, 0.3);">FedAvg</div>
+            <div class="fl-metric-subtitle">Weighted by local samples</div>
+          </div>
+
+          <!-- Last Update Card -->
+          <div class="fl-metric-card">
+            <div class="fl-metric-title">Last Update</div>
+            <div id="fl-last-update" style="font-size: 18px; color: #0096ff; font-family: 'Rajdhani', sans-serif; font-weight: 600; margin-top: 12px;">2 minutes ago</div>
+            <div class="fl-metric-subtitle">Next round in 3 min</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Smart Warehouse View -->
+    <div class="view" id="warehouse-view">
+      <div class="app">
+        <h1>📦 Smart Warehouse Management</h1>
+        <div class="status" id="warehouse-status">🔌 Connecting to Warehouse Server...</div>
+
+        <!-- Action Bar -->
+        <div style="margin: 24px 0; display: flex; gap: 16px; flex-wrap: wrap;">
+          <button onclick="openBarcodeScanner()" style="padding: 14px 24px;">📸 Scan QR</button>
+          <button onclick="refreshWarehouseData()" style="padding: 14px 24px;">🔄 Refresh Data</button>
+          <button onclick="optimizeWarehouse()" style="padding: 14px 24px;">⚡ Optimize Slotting</button>
+          <button onclick="showNewProductForm()" style="padding: 14px 24px;">➕ Add Product</button>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="fl-dashboard">
+          <!-- Total Products -->
+          <div class="fl-metric-card">
+            <div class="fl-metric-title">Total Products</div>
+            <div class="fl-metric-value" id="wh-total-products">0</div>
+            <div class="fl-metric-subtitle">Items in inventory</div>
+          </div>
+
+          <!-- Low Stock Alerts -->
+          <div class="fl-metric-card">
+            <div class="fl-metric-title">Low Stock Alerts</div>
+            <div class="fl-metric-value" id="wh-low-stock" style="color: #ff6b00;">0</div>
+            <div class="fl-metric-subtitle">Need reordering</div>
+          </div>
+
+          <!-- Class A Items -->
+          <div class="fl-metric-card">
+            <div class="fl-metric-title">High Velocity (A)</div>
+            <div class="fl-metric-value" id="wh-class-a">0</div>
+            <div class="fl-metric-subtitle">Fast-moving items</div>
+          </div>
+
+          <!-- Pending Orders -->
+          <div class="fl-metric-card">
+            <div class="fl-metric-title">Pending Orders</div>
+            <div class="fl-metric-value" id="wh-pending-orders">0</div>
+            <div class="fl-metric-subtitle">Awaiting pickup</div>
+          </div>
+        </div>
+
+        <!-- Warehouse 3D Grid -->
+        <div class="wh-map">
+          <div class="wh-map-header">
+            <div>
+              <div class="wh-map-title">Warehouse 3D Boxes</div>
+              <div class="wh-map-subtitle">Live layout from current inventory dimensions</div>
+            </div>
+            <div class="wh-map-controls">
+              <button class="wh-zone-btn active" data-zone="ALL">All Zones</button>
+              <button class="wh-zone-btn" data-zone="A">Zone A</button>
+              <button class="wh-zone-btn" data-zone="B">Zone B</button>
+              <button class="wh-zone-btn" data-zone="C">Zone C</button>
+            </div>
+          </div>
+
+          <div class="wh-map-body">
+            <div class="wh-3d-scene">
+              <div id="warehouse-3d" class="wh-3d-canvas"></div>
+            </div>
+            <div class="wh-map-panel">
+              <div class="wh-panel-title">Selected Slot</div>
+              <div id="wh-selected-info" class="wh-panel-box">Select a cell or product to inspect.</div>
+
+              <div class="wh-panel-title">Route Preview</div>
+              <div id="wh-route-info" class="wh-panel-box">No active route.</div>
+
+              <div class="wh-panel-title">Rl Placement Scores</div>
+              <div id="wh-rl-scores" class="wh-panel-box">Select a product to score slots.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barcode Scanner Modal -->
+        <div id="barcode-scanner-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.95); z-index: 10000; align-items: center; justify-content: center;">
+          <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(10, 14, 26, 0.98)); border: 2px solid rgba(0, 150, 255, 0.4); border-radius: 16px; padding: 32px; max-width: 600px; width: 90%;">
+            <h2 style="color: #0096ff; font-family: 'Orbitron', sans-serif; margin-bottom: 24px;">📸 QR Code Scanner</h2>
+            
+            <!-- Camera View -->
+            <div id="camera-container" style="position: relative; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 20px;">
+              <video id="scanner-video" autoplay playsinline style="width: 100%; height: 400px; object-fit: cover; display: block;"></video>
+              <canvas id="scanner-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 250px; height: 250px; border: 3px solid #0096ff; border-radius: 12px; box-shadow: 0 0 0 99999px rgba(0, 0, 0, 0.5);"></div>
+              <div id="scan-status" style="position: absolute; top: 16px; left: 50%; transform: translateX(-50%); background: rgba(0, 150, 255, 0.9); color: #fff; padding: 8px 16px; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-weight: 700;">Point camera at QR code</div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; margin-bottom: 8px; color: #7a8da5; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; font-size: 12px;">Or Enter Manually</label>
+              <input type="text" id="scan-barcode" placeholder="Enter QR code value" style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(0, 150, 255, 0.3); border-radius: 8px; color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 16px;">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; margin-bottom: 8px; color: #7a8da5; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; font-size: 12px;">Action</label>
+              <select id="scan-type" style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(0, 150, 255, 0.3); border-radius: 8px; color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 16px;">
+                <option value="IN">INBOUND (Receiving)</option>
+                <option value="OUT">OUTBOUND (Picking)</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; margin-bottom: 8px; color: #7a8da5; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; font-size: 12px;">Quantity</label>
+              <input type="number" id="scan-quantity" value="1" min="1" style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(0, 150, 255, 0.3); border-radius: 8px; color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 16px;">
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+              <button onclick="processScan()" style="flex: 1; padding: 14px; background: linear-gradient(135deg, rgba(0, 150, 255, 0.2), rgba(0, 150, 255, 0.1)); border: 2px solid rgba(0, 150, 255, 0.5); color: #0096ff; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-weight: 700; cursor: pointer;">✓ Process</button>
+              <button onclick="closeBarcodeScanner()" style="flex: 1; padding: 14px; background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.08)); border: 2px solid rgba(255, 107, 0, 0.4); color: #ff6b00; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-weight: 700; cursor: pointer;">✗ Cancel</button>
+            </div>
+
+            <div id="scan-result" style="margin-top: 20px; padding: 14px; border-radius: 8px; display: none;"></div>
+          </div>
+        </div>
+
+        <!-- Product List -->
+        <div style="margin-top: 32px;">
+          <h2 style="color: #0096ff; font-family: 'Orbitron', sans-serif; font-size: 24px; margin-bottom: 16px;">Inventory</h2>
+          
+          <div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+            <select id="filter-velocity" onchange="filterProducts()" style="padding: 10px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(0, 150, 255, 0.3); border-radius: 8px; color: #fff; font-family: 'Rajdhani', sans-serif;">
+              <option value="">All Velocity Classes</option>
+              <option value="A">Class A (High)</option>
+              <option value="B">Class B (Medium)</option>
+              <option value="C">Class C (Low)</option>
+            </select>
+
+            <select id="filter-stock" onchange="filterProducts()" style="padding: 10px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(0, 150, 255, 0.3); border-radius: 8px; color: #fff; font-family: 'Rajdhani', sans-serif;">
+              <option value="">All Stock Levels</option>
+              <option value="low">Low Stock Only</option>
+            </select>
+
+            <input type="text" id="search-products" placeholder="Search products..." onkeyup="filterProducts()" style="flex: 1; min-width: 200px; padding: 10px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(0, 150, 255, 0.3); border-radius: 8px; color: #fff; font-family: 'Rajdhani', sans-serif;">
+          </div>
+
+          <div id="products-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">
+            <!-- Products will be loaded here -->
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div style="margin-top: 32px;">
+          <h2 style="color: #0096ff; font-family: 'Orbitron', sans-serif; font-size: 24px; margin-bottom: 16px;">Recent Activity</h2>
+          <div id="recent-activity" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(0, 150, 255, 0.3); border-radius: 12px; padding: 20px; max-height: 400px; overflow-y: auto;">
+            <!-- Activity will be loaded here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+    window.THREE = THREE;
+    window.OrbitControls = OrbitControls;
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+  <script>
+    // Pipeline elements
+    const sensorElements = {};
+    const sensorData = {
+      sensor1: { name: "Sensor 1 (North)", status: "ok", prediction: null, workerConfirmation: null },
+      sensor2: { name: "Sensor 2 (Central)", status: "ok", prediction: null, workerConfirmation: null },
+      sensor3: { name: "Sensor 3 (South)", status: "ok", prediction: null, workerConfirmation: null },
+    };
+
+    let socket;
+    let currentSensor = null;
+
+
+    // Navigation
+    document.querySelectorAll(".nav-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        document.querySelectorAll(".nav-btn").forEach((b) => b.classList.remove("active"));
+        e.target.classList.add("active");
+
+        document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
+        const view = document.getElementById(e.target.dataset.view + "-view");
+        if (view) view.classList.add("active");
+
+        if (e.target.dataset.view === "pipeline") {
+          initializePipelineSystem();
+        }
+      });
+    });
+
+    // Microphone recording state
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let recordingInterval = null;
+    let activeSensor = null;
+    let mediaStream = null;
+    let userClickedButton = false; // Safety flag to prevent auto-recording
+
+    function initializePipelineSystem() {
+      const grid = document.getElementById("sensorsGrid");
+      grid.innerHTML = "";
+
+      for (const [key, sensor] of Object.entries(sensorData)) {
+        const card = document.createElement("div");
+        card.className = "sensor-card";
+        card.id = `card-${key}`;
+
+        card.innerHTML = `
+          <div class="sensor-status-indicator">●</div>
+          <div class="sensor-name">${sensor.name}</div>
+          <div class="sensor-status-text" id="status-${key}">Status: Idle</div>
+          <button class="sensor-record-btn" id="btn-${key}" onclick="toggleRecording('${key}')">
+            🎤 Start Monitoring
+          </button>
+          <div class="sensor-alert" id="alert-${key}"></div>
+          <div class="confirmation-buttons" id="confirm-btns-${key}" style="display: none;">
+            <button class="confirm-btn" onclick="confirmLeak('${key}', true)">⚠️ Confirm Leak</button>
+            <button class="reject-btn" onclick="confirmLeak('${key}', false)">✓ False Alert</button>
+          </div>
+          <div class="confirmation-status" id="confirm-status-${key}" style="display: none;"></div>
+        `;
+
+        grid.appendChild(card);
+        sensorElements[key] = {
+          card: card,
+          statusText: document.getElementById(`status-${key}`),
+          button: document.getElementById(`btn-${key}`),
+          alert: document.getElementById(`alert-${key}`),
+          indicator: card.querySelector(".sensor-status-indicator"),
+        };
+      }
+    }
+
+    async function toggleRecording(sensorId) {
+      userClickedButton = true; // User explicitly clicked
+      console.log(`[toggleRecording] User clicked button for ${sensorId} | Current activeSensor: ${activeSensor}`);
+      
+      if (activeSensor === sensorId) {
+        // Stop recording
+        stopRecording();
+      } else {
+        // Stop any other recording first
+        if (activeSensor) {
+          stopRecording();
+        }
+        // Start recording for this sensor
+        await startRecording(sensorId);
+      }
+      
+      userClickedButton = false; // Reset after operation
+    }
+
+    async function startRecording(sensorId) {
+      // SAFETY CHECK: Only allow recording if user explicitly clicked the button
+      if (!userClickedButton) {
+        console.error(`[startRecording] BLOCKED! Attempted to start recording for ${sensorId} without user interaction!`);
+        console.trace('[startRecording] Call stack:');
+        return;
+      }
+      
+      console.log(`[startRecording] ✓ User action verified. Starting for ${sensorId}`);
+      console.trace('[startRecording] Called from:'); // Show call stack
+      
+      try {
+        // Request microphone if not already streaming
+        if (!mediaStream) {
+          console.log(`[startRecording] Requesting microphone access...`);
+          mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        }
+        
+        activeSensor = sensorId;
+        const btn = sensorElements[sensorId].button;
+        btn.textContent = "⏹ Stop Monitoring";
+        btn.style.background = "linear-gradient(135deg, rgba(255, 107, 0, 0.2), rgba(255, 107, 0, 0.1))";
+        btn.style.borderColor = "rgba(255, 107, 0, 0.6)";
+        btn.style.color = "#ff6b00";
+        btn.style.boxShadow = "0 0 25px rgba(255, 107, 0, 0.4)";
+        
+        sensorElements[sensorId].statusText.textContent = "Status: Recording...";
+        sensorElements[sensorId].indicator.textContent = "🔴";
+        sensorElements[sensorId].indicator.style.color = "#ff6b00";
+        sensorElements[sensorId].indicator.style.textShadow = "0 0 15px rgba(255, 107, 0, 0.8)";
+        
+        console.log(`[startRecording] Started continuous recording for ${sensorId}`);
+        
+        // Start continuous recording loop
+        continuousRecording(sensorId);
+        
+      } catch (err) {
+        if (err.name === 'NotAllowedError') {
+          alert("Microphone access denied. Please allow microphone access in browser settings:\n\n1. Click the 🔒 icon in address bar\n2. Set Microphone to 'Allow'\n3. Reload the page");
+        } else {
+          alert("Microphone error: " + err.message);
+        }
+      }
+    }
+
+    function stopRecording() {
+      console.log(`[stopRecording] Stopping recording for ${activeSensor}`);
+      
+      if (recordingInterval) {
+        clearInterval(recordingInterval);
+        recordingInterval = null;
+      }
+      
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+        mediaRecorder = null;
+      }
+      
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+        mediaStream = null;
+      }
+      
+      if (activeSensor) {
+        const btn = sensorElements[activeSensor].button;
+        btn.textContent = "🎤 Start Monitoring";
+        btn.style.background = "linear-gradient(135deg, rgba(0, 150, 255, 0.1), rgba(0, 150, 255, 0.05))";
+        btn.style.borderColor = "rgba(0, 150, 255, 0.4)";
+        btn.style.color = "#0096ff";
+        btn.style.boxShadow = "none";
+        
+        sensorElements[activeSensor].statusText.textContent = "Status: Idle";
+        sensorElements[activeSensor].indicator.textContent = "●";
+        sensorElements[activeSensor].indicator.style.color = "#4caf50";
+        sensorElements[activeSensor].indicator.style.textShadow = "0 0 10px rgba(76, 175, 80, 0.5)";
+        
+        activeSensor = null;
+      }
+    }
+
+    async function continuousRecording(sensorId) {
+      while (activeSensor === sensorId && mediaStream) {
+        await recordOneCycle(sensorId);
+        // Small delay between recordings
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+    }
+
+    function recordOneCycle(sensorId) {
+      return new Promise((resolve) => {
+        if (!mediaStream) {
+          resolve();
+          return;
+        }
+        
+        audioChunks = [];
+        mediaRecorder = new MediaRecorder(mediaStream);
+        
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) {
+            audioChunks.push(e.data);
+          }
+        };
+        
+        mediaRecorder.onstop = async () => {
+          if (audioChunks.length === 0) {
+            resolve();
+            return;
+          }
+          
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          const arrayBuffer = await audioBlob.arrayBuffer();
+          const timestamp = Date.now();
+          
+          console.log(`[Recording] Captured ${audioBlob.size} bytes for ${sensorId}`);
+          
+          if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.send(JSON.stringify({
+              type: "audio",
+              filename: `${sensorId}_${timestamp}.webm`,
+              data: Array.from(new Uint8Array(arrayBuffer)),
+              sensorId: sensorId,
+              isStreaming: true
+            }));
+          }
+          
+          resolve();
+        };
+        
+        mediaRecorder.start();
+        
+        // Record for 10 seconds to get more audio context
+        setTimeout(() => {
+          if (mediaRecorder && mediaRecorder.state === "recording") {
+            mediaRecorder.stop();
+          } else {
+            resolve();
+          }
+        }, 10000);
+      });
+    }
+
+    function setLoadingPipeline(sensorId, isLoading) {
+      const btn = sensorElements[sensorId].card.querySelector("button");
+      if (isLoading) {
+        btn.disabled = true;
+        btn.textContent = "Processing...";
+      } else {
+        btn.disabled = false;
+        btn.textContent = "Analyze Audio";
+      }
+    }
+
+    // Worker Confirmation System
+    function showConfirmationButtons(sensorId) {
+      const confirmBtns = document.getElementById(`confirm-btns-${sensorId}`);
+      const confirmStatus = document.getElementById(`confirm-status-${sensorId}`);
+      
+      if (confirmBtns && confirmStatus) {
+        // Reset confirmation state
+        sensorData[sensorId].workerConfirmation = null;
+        confirmBtns.style.display = 'flex';
+        confirmStatus.style.display = 'none';
+      }
+    }
+
+    function confirmLeak(sensorId, isConfirmed) {
+      const sensor = sensorData[sensorId];
+      sensor.workerConfirmation = isConfirmed;
+      
+      // Hide confirmation buttons
+      const confirmBtns = document.getElementById(`confirm-btns-${sensorId}`);
+      const confirmStatus = document.getElementById(`confirm-status-${sensorId}`);
+      
+      confirmBtns.style.display = 'none';
+      confirmStatus.style.display = 'block';
+      
+      if (isConfirmed) {
+        confirmStatus.className = 'confirmation-status confirmed';
+        confirmStatus.textContent = '⚠️ Leak Confirmed by Worker';
+        console.log(`[Worker Confirmation] ${sensorId}: LEAK CONFIRMED`);
+      } else {
+        confirmStatus.className = 'confirmation-status rejected';
+        confirmStatus.textContent = '✓ False Alert - No Leak';
+        console.log(`[Worker Confirmation] ${sensorId}: FALSE ALERT`);
+        
+        // Optionally remove alert styling after rejection
+        setTimeout(() => {
+          const sensorEl = sensorElements[sensorId];
+          if (sensorEl) {
+            sensorEl.card.classList.remove('alert');
+            sensorEl.indicator.textContent = '✓';
+            sensorEl.indicator.style.color = '#4caf50';
+            sensorEl.indicator.style.textShadow = '0 0 10px rgba(76, 175, 80, 0.5)';
+          }
+          sensor.status = 'ok';
+          updatePipelineStatus();
+        }, 2000);
+      }
+      
+      // Send confirmation to server
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({
+          type: 'worker_confirmation',
+          sensorId: sensorId,
+          confirmed: isConfirmed,
+          timestamp: Date.now()
+        }));
+      }
+    }
+
+    function updatePipelineStatus() {
+      const hasAlert = Object.values(sensorData).some((s) => s.status === "alert");
+      const overallStatus = document.getElementById("pipelineOverallStatus");
+
+      if (hasAlert) {
+        overallStatus.textContent = "⚠ ALERT - Problem Detected";
+        overallStatus.classList.add("alert");
+      } else {
+        overallStatus.textContent = "✓ All Systems Normal";
+        overallStatus.classList.remove("alert");
+      }
+    }
+
+    function connect() {
+      socket = new WebSocket(`ws://${window.location.host}`);
+
+      socket.addEventListener("open", () => {
+        document.getElementById("pipeline-status").textContent = "✅ Connected to Server";
+      });
+
+      socket.addEventListener("close", () => {
+        document.getElementById("pipeline-status").textContent = "⚠️ Disconnected - Reconnecting...";
+        setTimeout(connect, 1000);
+      });
+
+      socket.addEventListener("message", (event) => {
+        let payload;
+        try {
+          payload = JSON.parse(event.data);
+        } catch (err) {
+          return;
+        }
+
+        if (payload.type === "status") {
+          document.getElementById("pipeline-status").textContent = payload.message;
+          return;
+        }
+
+        if (payload.type === "error") {
+          console.error(`Error: ${payload.message}`);
+          if (currentSensor) {
+            setLoadingPipeline(currentSensor, false);
+          }
+          return;
+        }
+
+        // Handle broadcast sensor_update - updates ALL web pages
+        if (payload.type === "sensor_update") {
+          const sensorId = payload.sensorId;
+          const prediction = payload.prediction;
+          const confidence = payload.confidence;
+          
+          if (sensorData[sensorId]) {
+            sensorData[sensorId].prediction = prediction;
+            sensorData[sensorId].status = prediction === 1 ? "alert" : "ok";
+            
+            const sensorEl = sensorElements[sensorId];
+            if (sensorEl) {
+              sensorEl.statusText.textContent = `Prediction: ${prediction} (Confidence: ${Math.round(confidence * 100)}%)`;
+              
+              if (prediction === 1) {
+                sensorEl.card.classList.add("alert");
+                sensorEl.indicator.textContent = "⚠";
+                sensorEl.indicator.style.color = "#ff6b00";
+                sensorEl.indicator.style.textShadow = "0 0 20px rgba(255, 107, 0, 0.8)";
+                showConfirmationButtons(sensorId);
+              } else {
+                sensorEl.card.classList.remove("alert");
+                sensorEl.indicator.textContent = "✓";
+                sensorEl.indicator.style.color = "#4caf50";
+                sensorEl.indicator.style.textShadow = "0 0 10px rgba(76, 175, 80, 0.5)";
+              }
+            }
+            updatePipelineStatus();
+          }
+          return;
+        }
+
+        // Handle reset_sensors broadcast - clears all pages
+        if (payload.type === "reset_sensors") {
+          for (let sid in sensorData) {
+            sensorData[sid].prediction = null;
+            sensorData[sid].status = "unknown";
+            const sensorEl = sensorElements[sid];
+            if (sensorEl) {
+              sensorEl.statusText.textContent = "No data";
+              sensorEl.card.classList.remove("alert");
+              sensorEl.indicator.textContent = "●";
+              sensorEl.indicator.style.color = "#4caf50";
+              sensorEl.indicator.style.textShadow = "0 0 10px rgba(76, 175, 80, 0.5)";
+            }
+          }
+          updatePipelineStatus();
+          return;
+        }
+
+        // Handle warehouse events
+        if (payload.type === "WAREHOUSE_INBOUND" || payload.type === "WAREHOUSE_OUTBOUND") {
+          handleWarehouseEvent(payload);
+          return;
+        }
+
+        if (payload.type === "WAREHOUSE_PRODUCT_ADDED" || payload.type === "WAREHOUSE_OPTIMIZED") {
+          handleWarehouseEvent(payload);
+          return;
+        }
+
+        if (payload.type === "WAREHOUSE_ORDER_CREATED" || payload.type === "WAREHOUSE_ORDER_PROGRESS") {
+          handleWarehouseEvent(payload);
+          return;
+        }
+
+        if (payload.type === "response") {
+          handlePipelinePrediction(payload.message);
+        }
+      });
+    }
+
+    function handlePipelinePrediction(message) {
+      try {
+        const result = JSON.parse(message);
+        if (result.prediction !== undefined && currentSensor) {
+          const prediction = result.prediction;
+          const confidence = result.confidence;
+
+          sensorData[currentSensor].prediction = prediction;
+          sensorData[currentSensor].status = prediction === 1 ? "alert" : "ok";
+
+          const sensorEl = sensorElements[currentSensor];
+          sensorEl.statusText.textContent = `Prediction: ${prediction} (Confidence: ${Math.round(confidence * 100)}%)`;
+
+          if (prediction === 1) {
+            // Alert - problem detected
+            sensorEl.card.classList.add("alert");
+            sensorEl.indicator.textContent = "⚠";
+            sensorEl.indicator.style.color = "#ff6b00";
+            sensorEl.indicator.style.textShadow = "0 0 20px rgba(255, 107, 0, 0.8)";
+
+            sensorEl.alert.classList.add("show", "error");
+            sensorEl.alert.innerHTML = `<strong>⚠ ALERT</strong><br>Problem detected with ${Math.round(confidence * 100)}% confidence`;
+            showConfirmationButtons(currentSensor);
+          } else {
+            // OK - no problem
+            sensorEl.card.classList.remove("alert");
+            sensorEl.indicator.textContent = "✓";
+            sensorEl.indicator.style.color = "#4caf50";
+            sensorEl.indicator.style.textShadow = "0 0 10px rgba(76, 175, 80, 0.5)";
+            sensorEl.alert.classList.remove("show", "error");
+          }
+
+          setLoadingPipeline(currentSensor, false);
+          updatePipelineStatus();
+          currentSensor = null;
+          return;
+        }
+      } catch (e) {
+        // Not JSON
+      }
+
+      if (currentSensor) {
+        setLoadingPipeline(currentSensor, false);
+        currentSensor = null;
+      }
+    }
+
+    initializePipelineSystem();
+    console.log('[Page Init] Pipeline initialized. Buttons are ready. No auto-recording should occur.');
+    console.log('[Page Init] Active sensor:', activeSensor, '| Media stream:', mediaStream);
+    
+    // Federated Learning Mock Updates
+    let flRound = 47;
+    let flAccuracy = 94.2;
+    let flLoss = 0.158;
+    let flClients = 8;
+    
+    function updateFederatedStats() {
+      // Simulate training progress
+      if (flRound < 100) {
+        flRound += Math.random() > 0.7 ? 1 : 0;
+        flAccuracy = Math.min(99.9, flAccuracy + (Math.random() * 0.3 - 0.1));
+        flLoss = Math.max(0.01, flLoss - (Math.random() * 0.01));
+        flClients = Math.floor(Math.random() * 3) + 7; // 7-9 clients
+        
+        document.getElementById('fl-round').textContent = flRound;
+        document.getElementById('fl-accuracy').innerHTML = `${flAccuracy.toFixed(1)}<span style="font-size: 24px;">%</span>`;
+        document.getElementById('fl-loss').textContent = flLoss.toFixed(3);
+        document.getElementById('fl-clients').innerHTML = `${flClients}<span style="font-size: 24px;">/12</span>`;
+        
+        // Update progress bars
+        document.querySelector('.fl-progress-fill').style.width = `${flRound}%`;
+        const accuracyBar = document.querySelectorAll('.fl-progress-fill')[1];
+        if (accuracyBar) accuracyBar.style.width = `${flAccuracy}%`;
+        
+        // Update last update time
+        const now = new Date();
+        document.getElementById('fl-last-update').textContent = 'Just now';
+        setTimeout(() => {
+          document.getElementById('fl-last-update').textContent = '1 minute ago';
+        }, 60000);
+      }
+    }
+    
+    // Update federated stats every 15 seconds
+    setInterval(updateFederatedStats, 15000);
+    
+    // ===== SMART WAREHOUSE SYSTEM =====
+    
+    let warehouseProducts = [];
+    const WAREHOUSE_API = 'http://localhost:3000/api';
+    let warehouseZoneFilter = 'ALL';
+    let selectedWarehouseProductId = null;
+    let selectedWarehouseLocationKey = null;
+    let routeClearTimer = null;
+    let warehouseScene = null;
+    let warehouseCamera = null;
+    let warehouseRenderer = null;
+    let warehouseRaycaster = null;
+    let warehousePointer = null;
+    let warehouseControls = null;
+    let warehouseMeshes = [];
+    let warehouseMeshByProductId = new Map();
+    let selectedWarehouseBoxId = null;
+    let warehousePlacementMap = new Map();
+    const maxBoxesPerProduct = 120;
+    let warehouseFloor = null;
+    let warehouseGridHelper = null;
+    let warehouseRouteLine = null;
+    let warehouseRouteMarker = null;
+    let warehouseAnimating = false;
+    const warehouseLayout = {
+      slotSpacing: 3.6,
+      zoneOffset: 0,
+      maxRack: 1,
+      maxAisle: 1
+    };
+
+    function pad2(value) {
+      return String(value).padStart(2, '0');
+    }
+
+    function parseLocationString(location) {
+      if (!location || location === 'UNASSIGNED') return null;
+      const parts = location.split('-');
+      if (parts.length < 5) return null;
+      return {
+        zone: parts[0],
+        aisle: parts[1],
+        rack: parts[2],
+        level: parts[3],
+        position: parts[4]
+      };
+    }
+
+    function getLocationFromProduct(product) {
+      if (!product) return null;
+      if (product.storageLocation && product.storageLocation.zone) {
+        return product.storageLocation;
+      }
+      if (product.location) {
+        return parseLocationString(product.location);
+      }
+      return null;
+    }
+
+    function getLocationKey(location) {
+      if (!location) return null;
+      return `${location.zone}-${location.aisle}-${location.rack}-${location.level}-${location.position}`;
+    }
+
+    function getSlotKey(location) {
+      if (!location) return null;
+      return `${location.zone}-${location.aisle}-${location.rack}-${location.level}`;
+    }
+
+    function getNumericLocationValue(location, field, fallback) {
+      if (!location || !location[field]) return fallback;
+      const value = parseInt(location[field], 10);
+      return Number.isFinite(value) ? value : fallback;
+    }
+
+    function setupWarehouseMapControls() {
+      document.querySelectorAll('.wh-zone-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.wh-zone-btn').forEach(other => other.classList.remove('active'));
+          btn.classList.add('active');
+          warehouseZoneFilter = btn.dataset.zone || 'ALL';
+          renderWarehouseScene(warehouseProducts);
+        });
+      });
+    }
+
+    function initWarehouseScene() {
+      const container = document.getElementById('warehouse-3d');
+      if (!container || typeof THREE === 'undefined') return;
+      if (warehouseRenderer) return;
+
+      warehouseScene = new THREE.Scene();
+      warehouseScene.fog = new THREE.Fog(0x0b1220, 40, 140);
+
+      const width = container.clientWidth || 600;
+      const height = container.clientHeight || 360;
+      warehouseCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 200);
+      warehouseCamera.position.set(24, 22, 24);
+      warehouseCamera.lookAt(10, 0, 10);
+
+      warehouseRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      warehouseRenderer.setPixelRatio(window.devicePixelRatio || 1);
+      warehouseRenderer.setSize(width, height);
+      container.innerHTML = '';
+      container.appendChild(warehouseRenderer.domElement);
+
+      if (window.OrbitControls) {
+        warehouseControls = new OrbitControls(warehouseCamera, warehouseRenderer.domElement);
+        warehouseControls.enableDamping = true;
+        warehouseControls.dampingFactor = 0.08;
+        warehouseControls.minDistance = 10;
+        warehouseControls.maxDistance = 80;
+        warehouseControls.maxPolarAngle = Math.PI / 2.1;
+      }
+
+      const ambient = new THREE.AmbientLight(0x8fb7ff, 0.5);
+      warehouseScene.add(ambient);
+
+      const keyLight = new THREE.DirectionalLight(0xffffff, 0.9);
+      keyLight.position.set(20, 40, 15);
+      warehouseScene.add(keyLight);
+
+      const fillLight = new THREE.DirectionalLight(0x2b88ff, 0.4);
+      fillLight.position.set(-20, 20, -10);
+      warehouseScene.add(fillLight);
+
+      warehouseRaycaster = new THREE.Raycaster();
+      warehousePointer = new THREE.Vector2();
+      warehouseRenderer.domElement.addEventListener('pointerdown', onWarehousePointerDown);
+      window.addEventListener('resize', resizeWarehouseRenderer);
+
+      startWarehouseRenderLoop();
+    }
+
+    function resizeWarehouseRenderer() {
+      if (!warehouseRenderer || !warehouseCamera) return;
+      const container = document.getElementById('warehouse-3d');
+      if (!container) return;
+      const width = container.clientWidth || 600;
+      const height = container.clientHeight || 360;
+      warehouseRenderer.setSize(width, height);
+      warehouseCamera.aspect = width / height;
+      warehouseCamera.updateProjectionMatrix();
+      if (warehouseControls) {
+        warehouseControls.update();
+      }
+    }
+
+    function startWarehouseRenderLoop() {
+      if (warehouseAnimating || !warehouseRenderer) return;
+      warehouseAnimating = true;
+      const loop = () => {
+        if (!warehouseAnimating) return;
+        if (warehouseControls) {
+          warehouseControls.update();
+        }
+        warehouseRenderer.render(warehouseScene, warehouseCamera);
+        requestAnimationFrame(loop);
+      };
+      requestAnimationFrame(loop);
+    }
+
+    function renderWarehouseScene(products) {
+      initWarehouseScene();
+      if (!warehouseScene) return;
+      buildWarehouseBoxes(products || []);
+      highlightWarehouseSelection();
+    }
+
+    function buildWarehouseBoxes(products) {
+      clearWarehouseMeshes();
+      warehousePlacementMap.clear();
+
+      const items = (warehouseZoneFilter === 'ALL')
+        ? products
+        : products.filter(p => {
+            const loc = getLocationFromProduct(p);
+            return loc && loc.zone === warehouseZoneFilter;
+          });
+
+      if (!items || items.length === 0) {
+        updateWarehouseFloor(1, 1, 1);
+        return;
+      }
+
+      const zoneOrder = ['A', 'B', 'C', 'D'];
+      const zones = Array.from(new Set(items.map(p => {
+        const loc = getLocationFromProduct(p);
+        return loc ? loc.zone : 'A';
+      }))).sort((a, b) => zoneOrder.indexOf(a) - zoneOrder.indexOf(b));
+      const maxAisle = Math.max(1, ...items.map(p => getNumericLocationValue(getLocationFromProduct(p), 'aisle', 1)));
+      const maxRack = Math.max(1, ...items.map(p => getNumericLocationValue(getLocationFromProduct(p), 'rack', 1)));
+      const maxLevel = Math.max(1, ...items.map(p => getNumericLocationValue(getLocationFromProduct(p), 'level', 1)));
+      const maxZoneIndex = Math.max(0, ...items.map(p => {
+        const loc = getLocationFromProduct(p);
+        const idx = zoneOrder.indexOf(loc ? loc.zone : 'A');
+        return idx >= 0 ? idx : 0;
+      }));
+
+      warehouseLayout.maxRack = maxRack;
+      warehouseLayout.maxAisle = maxAisle;
+      warehouseLayout.zoneOffset = (maxRack + 2) * warehouseLayout.slotSpacing;
+
+      updateWarehouseFloor(maxZoneIndex + 1, maxRack, maxAisle);
+
+      const slotList = buildSlotList(zones, maxRack, maxAisle, maxLevel);
+      const slotCount = slotList.length;
+      const maxDemandScore = Math.max(1, ...items.map(p => p.demandScore || 0));
+
+      items.forEach(product => {
+        const location = getLocationFromProduct(product);
+        if (!location) return;
+
+        const size = getBoxSizeFromProduct(product);
+        const quantity = Math.max(1, product.quantity || 1);
+        const boxCount = Math.min(quantity, Math.max(1, slotCount), maxBoxesPerProduct);
+        const material = createWarehouseBoxMaterial(product);
+
+        const startIndex = getProductPlacementStartIndex(product, slotCount, maxDemandScore);
+        const stride = getProductPlacementStride(boxCount, slotCount);
+        const productKey = product.id || product._id || product.barcode;
+
+        for (let i = 0; i < boxCount; i += 1) {
+          const slotIndex = (startIndex + i * stride) % slotCount;
+          const slotLocation = slotList[slotIndex] || location;
+          const boxLocation = getDistributedLocation(slotLocation, i, maxRack, maxAisle, maxLevel) || slotLocation;
+          const basePosition = getWorldPositionFromLocation(boxLocation);
+          if (!basePosition) continue;
+
+          const geometry = new THREE.BoxGeometry(size.x, size.y, size.z);
+          const mesh = new THREE.Mesh(geometry, material.clone());
+          mesh.position.set(
+            basePosition.x,
+            basePosition.y + size.y / 2,
+            basePosition.z
+          );
+          mesh.userData = {
+            productId: product.id,
+            locationKey: getLocationKey(boxLocation),
+            baseColor: material.color.getHex(),
+            boxId: `${product.id}:${i + 1}`
+          };
+
+          if (!warehousePlacementMap.has(productKey)) {
+            warehousePlacementMap.set(productKey, getLocationKey(boxLocation));
+          }
+
+          warehouseScene.add(mesh);
+          warehouseMeshes.push(mesh);
+          if (!warehouseMeshByProductId.has(product.id)) {
+            warehouseMeshByProductId.set(product.id, []);
+          }
+          warehouseMeshByProductId.get(product.id).push(mesh);
+        }
+      });
+    }
+
+    function updateWarehouseFloor(zoneCount, maxRack, maxAisle) {
+      if (!warehouseScene) return;
+      const width = Math.max(12, zoneCount * warehouseLayout.zoneOffset);
+      const depth = Math.max(12, (maxAisle + 2) * warehouseLayout.slotSpacing);
+      const gridSize = Math.max(width, depth);
+      const divisions = Math.ceil(gridSize / warehouseLayout.slotSpacing);
+
+      if (warehouseFloor) {
+        warehouseScene.remove(warehouseFloor);
+        warehouseFloor.geometry.dispose();
+        warehouseFloor.material.dispose();
+      }
+
+      const floorGeometry = new THREE.PlaneGeometry(width, depth);
+      const floorMaterial = new THREE.MeshStandardMaterial({
+        color: 0x0f172a,
+        roughness: 0.8,
+        metalness: 0.05
+      });
+      warehouseFloor = new THREE.Mesh(floorGeometry, floorMaterial);
+      warehouseFloor.rotation.x = -Math.PI / 2;
+      warehouseFloor.position.set(width / 2 - warehouseLayout.slotSpacing, 0, depth / 2 - warehouseLayout.slotSpacing);
+      warehouseScene.add(warehouseFloor);
+
+      if (warehouseGridHelper) {
+        warehouseScene.remove(warehouseGridHelper);
+      }
+
+      warehouseGridHelper = new THREE.GridHelper(gridSize, divisions, 0x1d4ed8, 0x0f1f3a);
+      warehouseGridHelper.position.set(width / 2 - warehouseLayout.slotSpacing, 0.02, depth / 2 - warehouseLayout.slotSpacing);
+      warehouseScene.add(warehouseGridHelper);
+    }
+
+    function clearWarehouseMeshes() {
+      warehouseMeshes.forEach(mesh => {
+        warehouseScene.remove(mesh);
+        mesh.geometry.dispose();
+        if (Array.isArray(mesh.material)) {
+          mesh.material.forEach(mat => mat.dispose());
+        } else {
+          mesh.material.dispose();
+        }
+      });
+      warehouseMeshes = [];
+      warehouseMeshByProductId.clear();
+    }
+
+    function getWorldPositionFromLocation(location) {
+      if (!location) return null;
+      const zoneOrder = ['A', 'B', 'C', 'D'];
+      const zoneIndex = Math.max(0, zoneOrder.indexOf(location.zone));
+      const rack = getNumericLocationValue(location, 'rack', 1);
+      const aisle = getNumericLocationValue(location, 'aisle', 1);
+      const x = zoneIndex * warehouseLayout.zoneOffset + (rack - 1) * warehouseLayout.slotSpacing;
+      const z = (aisle - 1) * warehouseLayout.slotSpacing;
+      const level = getNumericLocationValue(location, 'level', 1);
+      const y = (level - 1) * 1.6 + 0.1;
+      return new THREE.Vector3(x, y, z);
+    }
+
+    function getDistributedLocation(baseLocation, index, maxRack, maxAisle, maxLevel) {
+      if (!baseLocation) return null;
+      const rackBase = getNumericLocationValue(baseLocation, 'rack', 1) - 1;
+      const aisleBase = getNumericLocationValue(baseLocation, 'aisle', 1) - 1;
+      const levelBase = getNumericLocationValue(baseLocation, 'level', 1) - 1;
+
+      const slotsPerLevel = Math.max(1, maxRack * maxAisle);
+      const levelOffset = Math.floor(index / slotsPerLevel);
+      const slotIndex = index % slotsPerLevel;
+      const aisleOffset = Math.floor(slotIndex / maxRack);
+      const rackOffset = slotIndex % maxRack;
+
+      const rack = (rackBase + rackOffset) % maxRack;
+      const aisle = (aisleBase + aisleOffset) % maxAisle;
+      const level = (levelBase + levelOffset) % maxLevel;
+
+      return {
+        ...baseLocation,
+        rack: pad2(rack + 1),
+        aisle: pad2(aisle + 1),
+        level: pad2(level + 1)
+      };
+    }
+
+    function buildSlotList(zones, maxRack, maxAisle, maxLevel) {
+      const slotList = [];
+      zones.forEach(zone => {
+        for (let level = 1; level <= maxLevel; level += 1) {
+          for (let aisle = 1; aisle <= maxAisle; aisle += 1) {
+            for (let rack = 1; rack <= maxRack; rack += 1) {
+              slotList.push({
+                zone,
+                aisle: pad2(aisle),
+                rack: pad2(rack),
+                level: pad2(level),
+                position: '01'
+              });
+            }
+          }
+        }
+      });
+
+      slotList.sort((a, b) => {
+        const aPos = getWorldPositionFromLocation(a);
+        const bPos = getWorldPositionFromLocation(b);
+        if (!aPos || !bPos) return 0;
+        const aDist = Math.hypot(aPos.x, aPos.z);
+        const bDist = Math.hypot(bPos.x, bPos.z);
+        return aDist - bDist;
+      });
+
+      return slotList;
+    }
+
+    function getProductPlacementStartIndex(product, slotCount, maxDemandScore) {
+      if (slotCount <= 0) return 0;
+      const velocity = product.velocityClass || 'C';
+      const demandScore = product.demandScore || 0;
+      const maxScore = Math.max(1, maxDemandScore || 1);
+      const demandWeight = Math.min(1, demandScore / maxScore);
+
+      let baseIndex = Math.floor(slotCount * 0.6);
+      if (velocity === 'A') baseIndex = 0;
+      if (velocity === 'B') baseIndex = Math.floor(slotCount * 0.3);
+
+      const demandShift = Math.round(slotCount * 0.2 * (1 - demandWeight));
+      return Math.max(0, baseIndex + demandShift);
+    }
+
+    function getProductPlacementStride(boxCount, slotCount) {
+      if (slotCount <= 0) return 1;
+      return Math.max(1, Math.floor(slotCount / Math.max(1, boxCount)));
+    }
+
+    function getSuggestedLocationForProduct(product) {
+      if (!product) return null;
+      const key = product.id || product._id || product.barcode;
+      return warehousePlacementMap.get(key) || null;
+    }
+
+    function getSlotOccupancyMap() {
+      const map = new Map();
+      warehouseMeshes.forEach(mesh => {
+        const key = mesh.userData.locationKey;
+        if (!key) return;
+        map.set(key, (map.get(key) || 0) + 1);
+      });
+      return map;
+    }
+
+    function getMaxDemandScore() {
+      return Math.max(1, ...warehouseProducts.map(p => p.demandScore || 0));
+    }
+
+    function scoreSlotForProduct(slot, product, context) {
+      const position = getWorldPositionFromLocation(slot);
+      if (!position) return 0;
+
+      const distance = Math.hypot(position.x, position.z);
+      const distanceScore = 1 - distance / context.maxDistance;
+      const velocityScore = product.velocityClass === 'A' ? 1 : product.velocityClass === 'B' ? 0.7 : 0.4;
+      const demandScore = (product.demandScore || 0) / context.maxDemandScore;
+
+      const key = getLocationKey(slot);
+      const occupancy = context.occupancyMap.get(key) || 0;
+      const congestionPenalty = context.maxOccupancy > 0 ? occupancy / context.maxOccupancy : 0;
+
+      const rawScore = (0.45 * distanceScore) + (0.35 * demandScore) + (0.2 * velocityScore) - (0.2 * congestionPenalty);
+      return Math.max(0, Math.min(1, rawScore));
+    }
+
+    function updatePlacementScorer(product) {
+      const panel = document.getElementById('wh-rl-scores');
+      if (!panel) return;
+
+      if (!product) {
+        panel.textContent = 'Select a product to score slots.';
+        return;
+      }
+
+      const items = warehouseProducts.filter(p => getLocationFromProduct(p));
+      if (items.length === 0) {
+        panel.textContent = 'No slots available.';
+        return;
+      }
+
+      const zoneOrder = ['A', 'B', 'C', 'D'];
+      const zones = Array.from(new Set(items.map(p => {
+        const loc = getLocationFromProduct(p);
+        return loc ? loc.zone : 'A';
+      }))).sort((a, b) => zoneOrder.indexOf(a) - zoneOrder.indexOf(b));
+
+      const maxAisle = Math.max(1, ...items.map(p => getNumericLocationValue(getLocationFromProduct(p), 'aisle', 1)));
+      const maxRack = Math.max(1, ...items.map(p => getNumericLocationValue(getLocationFromProduct(p), 'rack', 1)));
+      const maxLevel = Math.max(1, ...items.map(p => getNumericLocationValue(getLocationFromProduct(p), 'level', 1)));
+      const slotList = buildSlotList(zones, maxRack, maxAisle, maxLevel);
+
+      const maxDemandScore = getMaxDemandScore();
+      const occupancyMap = getSlotOccupancyMap();
+      const maxOccupancy = Math.max(1, ...Array.from(occupancyMap.values()), 1);
+      const maxDistance = Math.max(1, ...slotList.map(slot => {
+        const pos = getWorldPositionFromLocation(slot);
+        return pos ? Math.hypot(pos.x, pos.z) : 0;
+      }));
+
+      const context = { maxDemandScore, occupancyMap, maxOccupancy, maxDistance };
+      const suggested = getSuggestedLocationForProduct(product);
+
+      const scored = slotList.map(slot => ({
+        slot,
+        key: getLocationKey(slot),
+        score: scoreSlotForProduct(slot, product, context)
+      })).sort((a, b) => b.score - a.score).slice(0, 5);
+
+      panel.innerHTML = scored.map((entry, index) => {
+        const badge = entry.key === suggested ? '⭐' : index === 0 ? '★' : '•';
+        return `<div class="wh-path-step">${badge} ${entry.key} — ${(entry.score * 100).toFixed(0)}%</div>`;
+      }).join('');
+    }
+
+    function getBoxSizeFromProduct(product) {
+      const dims = product.dimensions || {};
+      const scale = 0.015;
+      const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+      return {
+        x: clamp((dims.width || 45) * scale, 0.4, 4.0),
+        y: clamp((dims.height || 45) * scale, 0.4, 4.5),
+        z: clamp((dims.length || 45) * scale, 0.4, 4.5)
+      };
+    }
+
+    function createWarehouseBoxMaterial(product) {
+      const velocityColors = {
+        A: 0x22c55e,
+        B: 0xf59e0b,
+        C: 0x38bdf8
+      };
+      const baseColor = velocityColors[product.velocityClass] || 0x64748b;
+      return new THREE.MeshStandardMaterial({
+        color: baseColor,
+        roughness: 0.6,
+        metalness: 0.08,
+        emissive: 0x000000
+      });
+    }
+
+    function onWarehousePointerDown(event) {
+      if (!warehouseRenderer || !warehouseRaycaster || !warehousePointer) return;
+      const rect = warehouseRenderer.domElement.getBoundingClientRect();
+      warehousePointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      warehousePointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      warehouseRaycaster.setFromCamera(warehousePointer, warehouseCamera);
+      const hits = warehouseRaycaster.intersectObjects(warehouseMeshes, false);
+      if (hits.length > 0) {
+        const mesh = hits[0].object;
+        if (mesh.userData && mesh.userData.productId) {
+          selectedWarehouseBoxId = mesh.userData.boxId || null;
+          selectWarehouseItemAtLocation(mesh.userData.productId, mesh.userData.locationKey);
+        }
+      }
+    }
+
+    function highlightWarehouseSelection() {
+      warehouseMeshes.forEach(mesh => {
+        const baseColor = mesh.userData.baseColor || mesh.material.color.getHex();
+        mesh.material.color.setHex(baseColor);
+        mesh.material.emissive.setHex(0x000000);
+        mesh.scale.set(1, 1, 1);
+      });
+
+      if (selectedWarehouseBoxId) {
+        const mesh = warehouseMeshes.find(item => item.userData.boxId === selectedWarehouseBoxId);
+        if (mesh) {
+          mesh.material.emissive.setHex(0xff6b00);
+          mesh.scale.set(1.05, 1.05, 1.05);
+        }
+        return;
+      }
+
+      if (selectedWarehouseProductId) {
+        const selectedMeshes = warehouseMeshByProductId.get(selectedWarehouseProductId) || [];
+        if (selectedMeshes.length > 0) {
+          const mesh = selectedMeshes[0];
+          mesh.material.emissive.setHex(0xff6b00);
+          mesh.scale.set(1.05, 1.05, 1.05);
+        }
+      }
+    }
+
+    function highlightProductCard(productId) {
+      document.querySelectorAll('.wh-product-selected').forEach(card => card.classList.remove('wh-product-selected'));
+      const card = document.querySelector(`[data-product-id="${productId}"]`);
+      if (card) card.classList.add('wh-product-selected');
+    }
+
+    function selectWarehouseItem(productId) {
+      selectedWarehouseBoxId = null;
+      selectWarehouseItemAtLocation(productId, null);
+    }
+
+    function selectWarehouseItemAtLocation(productId, locationKey) {
+      const product = warehouseProducts.find(p => p.id === productId);
+      if (!product) return;
+      const location = locationKey ? parseLocationString(locationKey) : getLocationFromProduct(product);
+      selectedWarehouseProductId = productId;
+      selectedWarehouseLocationKey = locationKey || getLocationKey(location);
+      if (!selectedWarehouseBoxId && locationKey) {
+        const mesh = warehouseMeshes.find(item => item.userData.locationKey === locationKey && item.userData.productId === productId);
+        if (mesh) {
+          selectedWarehouseBoxId = mesh.userData.boxId;
+        }
+      }
+      updateSelectedInfo(product, location);
+      updatePlacementScorer(product);
+      highlightProductCard(productId);
+      highlightWarehouseSelection();
+      showWarehousePathFromLocation(location, 'OUT');
+    }
+
+    function selectWarehouseLocation(location) {
+      selectedWarehouseProductId = null;
+      selectedWarehouseLocationKey = getLocationKey(location);
+      updateSelectedInfo(null, location);
+      updatePlacementScorer(null);
+      highlightProductCard(null);
+      highlightWarehouseSelection();
+      showWarehousePathFromLocation(location, 'IN');
+    }
+
+    function updateSelectedInfo(product, location) {
+      const info = document.getElementById('wh-selected-info');
+      if (!info) return;
+      const locText = location ? `${location.zone}-${location.aisle}-${location.rack}-${location.level}-${location.position}` : 'UNASSIGNED';
+
+      if (product) {
+        const dims = product.dimensions || {};
+        const dimsText = `${dims.length || '-'} x ${dims.width || '-'} x ${dims.height || '-'} cm`;
+        info.innerHTML = `
+          <div class="wh-cell-label">${product.name}</div>
+          <div class="wh-cell-meta">SKU: ${product.sku}</div>
+          <div class="wh-cell-meta">Stock: ${product.quantity}</div>
+          <div class="wh-cell-meta">Dimensions: ${dimsText}</div>
+          <div class="wh-cell-meta">Weight: ${product.weight || '-'} kg</div>
+          <div class="wh-cell-meta">Location: ${locText}</div>
+        `;
+      } else {
+        info.innerHTML = `
+          <div class="wh-cell-label">Empty Slot</div>
+          <div class="wh-cell-meta">Location: ${locText}</div>
+        `;
+      }
+    }
+
+    function showWarehousePathFromLocation(target, direction) {
+      const routeBox = document.getElementById('wh-route-info');
+      const location = typeof target === 'string'
+        ? parseLocationString(target)
+        : getLocationFromProduct(target) || target;
+
+      if (!routeBox || !location) {
+        if (routeBox) routeBox.textContent = 'No active route.';
+        return;
+      }
+
+      const forwardSteps = [
+        'Dock Entry',
+        `Zone ${location.zone}`,
+        `Aisle ${location.aisle}`,
+        `Rack ${location.rack}`,
+        `Level ${location.level}`,
+        `Position ${location.position}`
+      ];
+
+      const steps = direction === 'OUT'
+        ? [...forwardSteps].reverse()
+        : forwardSteps;
+
+      routeBox.innerHTML = steps.map(step => `<div class="wh-path-step">${step}</div>`).join('');
+      updateWarehouseRoute(location, direction);
+    }
+
+    function updateWarehouseRoute(location, direction) {
+      if (!warehouseScene || !location) return;
+      const target = getWorldPositionFromLocation(location);
+      if (!target) return;
+
+      if (warehouseRouteLine) {
+        warehouseScene.remove(warehouseRouteLine);
+        warehouseRouteLine.geometry.dispose();
+        warehouseRouteLine.material.dispose();
+        warehouseRouteLine = null;
+      }
+
+      if (!warehouseRouteMarker) {
+        const markerGeometry = new THREE.SphereGeometry(0.35, 16, 16);
+        const markerMaterial = new THREE.MeshStandardMaterial({
+          color: 0x38bdf8,
+          emissive: 0x1d4ed8,
+          emissiveIntensity: 0.6
+        });
+        warehouseRouteMarker = new THREE.Mesh(markerGeometry, markerMaterial);
+        warehouseScene.add(warehouseRouteMarker);
+      }
+
+      const entry = new THREE.Vector3(-warehouseLayout.slotSpacing, 0.2, -warehouseLayout.slotSpacing);
+      const mid = new THREE.Vector3(target.x, 0.2, entry.z);
+      const points = direction === 'OUT'
+        ? [target, mid, entry]
+        : [entry, mid, target];
+
+      const routeGeometry = new THREE.BufferGeometry().setFromPoints(points);
+      const routeMaterial = new THREE.LineBasicMaterial({ color: 0x38bdf8 });
+      warehouseRouteLine = new THREE.Line(routeGeometry, routeMaterial);
+      warehouseScene.add(warehouseRouteLine);
+
+      warehouseRouteMarker.position.set(target.x, target.y + 0.3, target.z);
+
+      if (routeClearTimer) clearTimeout(routeClearTimer);
+      const clearAfterMs = direction === 'IN' ? 12000 : 4000;
+      routeClearTimer = setTimeout(() => {
+        if (warehouseRouteLine) {
+          warehouseScene.remove(warehouseRouteLine);
+          warehouseRouteLine.geometry.dispose();
+          warehouseRouteLine.material.dispose();
+          warehouseRouteLine = null;
+        }
+      }, clearAfterMs);
+    }
+
+    function selectWarehouseByBarcode(barcode, fallbackLocation) {
+      if (!barcode) return;
+      const product = warehouseProducts.find(p => p.barcode === barcode);
+      if (product) {
+        selectWarehouseItem(product.id);
+      } else if (fallbackLocation) {
+        selectWarehouseLocation(parseLocationString(fallbackLocation));
+      }
+    }
+    
+    // Warehouse uses the same WebSocket connection as pipeline
+    function connectWarehouse() {
+      console.log('✓ Using unified WebSocket for warehouse');
+      document.getElementById('warehouse-status').textContent = '✅ Connected to Warehouse';
+      loadWarehouseData();
+    }
+    
+    // Handle warehouse events
+    function handleWarehouseEvent(data) {
+      console.log('Warehouse event:', data);
+      
+      switch (data.type) {
+        case 'WAREHOUSE_INBOUND':
+          showNotification(`Inbound: ${data.product.name} +${data.scanned}`, 'info');
+          const inboundSuggested = getSuggestedLocationForProduct(data.product) || data.product.location;
+          showWarehousePathFromLocation(inboundSuggested, 'IN');
+          selectWarehouseByBarcode(data.product.barcode, inboundSuggested);
+          loadWarehouseData();
+          break;
+        case 'WAREHOUSE_OUTBOUND':
+          showNotification(`Outbound: ${data.product.name} -${data.scanned}${data.product.lowStock ? ' ⚠️ Low Stock' : ''}`, 'info');
+          showWarehousePathFromLocation(data.product.location, 'OUT');
+          selectWarehouseByBarcode(data.product.barcode, data.product.location);
+          loadWarehouseData();
+          break;
+        case 'WAREHOUSE_PRODUCT_ADDED':
+          showNotification(`New Product: ${data.product.name}`, 'info');
+          const addedSuggested = getSuggestedLocationForProduct(data.product) || data.product.location;
+          showWarehousePathFromLocation(addedSuggested, 'IN');
+          loadWarehouseData();
+          break;
+        case 'WAREHOUSE_OPTIMIZED':
+          showNotification(`Warehouse optimized: ${data.recommendations} relocations suggested`, 'success');
+          loadWarehouseData();
+          break;
+        case 'WAREHOUSE_ORDER_CREATED':
+          showNotification(`Order ${data.order.orderNumber} created: ${data.order.itemCount} items`, 'info');
+          break;
+        case 'WAREHOUSE_ORDER_PROGRESS':
+          showNotification(`Order ${data.order.orderNumber}: ${data.order.completionPercentage}% complete`, 'info');
+          break;
+      }
+    }
+    
+    // Load warehouse data
+    async function loadWarehouseData() {
+      try {
+        // Load dashboard stats
+        const dashboardRes = await fetch(`${WAREHOUSE_API}/products/stats`);
+        const dashboard = await dashboardRes.json();
+        
+        document.getElementById('wh-total-products').textContent = dashboard.stats.totalProducts || 0;
+        document.getElementById('wh-low-stock').textContent = dashboard.stats.lowStockAlerts || 0;
+        document.getElementById('wh-class-a').textContent = dashboard.stats.highVelocityItems || 0;
+        document.getElementById('wh-pending-orders').textContent = dashboard.stats.pendingOrders || 0;
+        
+        // Load products
+        const productsRes = await fetch(`${WAREHOUSE_API}/products?limit=100`);
+        const productsData = await productsRes.json();
+        warehouseProducts = (productsData.products || []).map(p => ({
+          ...p,
+          id: p.id || p._id
+        }));
+        
+        renderProducts(warehouseProducts);
+        renderWarehouseScene(warehouseProducts);
+        
+        // Load recent activity
+        const activityRes = await fetch(`${WAREHOUSE_API}/scan/history?limit=10`);
+        const activityData = await activityRes.json();
+        renderRecentActivity(activityData.activity || []);
+        
+      } catch (error) {
+        console.error('Failed to load warehouse data:', error);
+        document.getElementById('warehouse-status').textContent = '❌ Failed to load data';
+      }
+    }
+    
+    // Render products grid
+    function renderProducts(products) {
+      const container = document.getElementById('products-list');
+      
+      if (!products || products.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #7a8da5;">No products found</div>';
+        return;
+      }
+      
+      container.innerHTML = products.map(p => `
+        <div class="fl-metric-card" data-product-id="${p.id}" onclick="selectWarehouseItem('${p.id}')" style="position: relative; cursor: pointer;">
+          <div style="position: absolute; top: 12px; right: 12px; background: ${p.velocityClass === 'A' ? '#4caf50' : p.velocityClass === 'B' ? '#ffc107' : '#7a8da5'}; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700;">
+            ${p.velocityClass}
+          </div>
+          
+          <div style="font-family: 'Orbitron', sans-serif; font-size: 18px; color: #0096ff; margin-bottom: 8px;">${p.name}</div>
+          <div style="font-family: 'Rajdhani', sans-serif; font-size: 12px; color: #7a8da5; margin-bottom: 12px;">SKU: ${p.sku}</div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+            <div>
+              <div style="font-size: 10px; color: #7a8da5; text-transform: uppercase;">Stock</div>
+              <div style="font-size: 20px; color: ${p.quantity <= p.reorderPoint ? '#ff6b00' : '#4caf50'}; font-weight: 700;">${p.quantity || 0}</div>
+            </div>
+            <div>
+              <div style="font-size: 10px; color: #7a8da5; text-transform: uppercase;">Demand</div>
+              <div style="font-size: 20px; color: #0096ff; font-weight: 700;">${(p.demandScore || 0).toFixed(1)}</div>
+            </div>
+          </div>
+          
+          <div style="font-size: 11px; color: #7a8da5; margin-bottom: 4px;">
+            📍 ${p.location || 'UNASSIGNED'}
+          </div>
+          
+          <div style="font-size: 11px; color: #7a8da5;">
+            📦 ${p.category || 'N/A'} | ${p.weight || 0}kg
+          </div>
+          
+          ${p.lowStock ? `
+            <div style="margin-top: 12px; padding: 8px; background: rgba(255, 107, 0, 0.1); border: 1px solid rgba(255, 107, 0, 0.3); border-radius: 6px; text-align: center; font-size: 11px; color: #ff6b00; font-weight: 700;">
+              ⚠️ LOW STOCK
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+    }
+    
+    // Render recent activity
+    function renderRecentActivity(activities) {
+      const container = document.getElementById('recent-activity');
+      
+      if (!activities || activities.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: #7a8da5;">No recent activity</div>';
+        return;
+      }
+      
+      container.innerHTML = activities.map(activity => {
+        const date = new Date(activity.timestamp);
+        return `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid rgba(0, 150, 255, 0.1);">
+            <div>
+              <div style="color: #0096ff; font-weight: 600;">${activity.name}</div>
+              <div style="font-size: 12px; color: #7a8da5;">SKU: ${activity.sku}</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="color: ${activity.type === 'IN' ? '#4caf50' : '#ff6b00'}; font-weight: 700;">
+                ${activity.type === 'IN' ? '+' : '-'}${activity.quantity}
+              </div>
+              <div style="font-size: 11px; color: #7a8da5;">${date.toLocaleTimeString()}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // Filter products
+    function filterProducts() {
+      const velocityFilter = document.getElementById('filter-velocity').value;
+      const stockFilter = document.getElementById('filter-stock').value;
+      const searchTerm = document.getElementById('search-products').value.toLowerCase();
+      
+      let filtered = [...warehouseProducts];
+      
+      if (velocityFilter) {
+        filtered = filtered.filter(p => p.velocityClass === velocityFilter);
+      }
+      
+      if (stockFilter === 'low') {
+        filtered = filtered.filter(p => p.quantity <= p.reorderPoint);
+      }
+      
+      if (searchTerm) {
+        filtered = filtered.filter(p =>
+          p.name.toLowerCase().includes(searchTerm) ||
+          p.sku.toLowerCase().includes(searchTerm) ||
+          p.barcode.toLowerCase().includes(searchTerm)
+        );
+      }
+      
+      renderProducts(filtered);
+    }
+    
+    // Open barcode scanner
+    // Camera and QR scanner variables
+    let scannerStream = null;
+    let scannerVideo = null;
+    let scannerCanvas = null;
+    let scannerContext = null;
+    let scanningActive = false;
+    let lastScanAt = 0;
+    const scanIntervalMs = 200;
+
+    function openBarcodeScanner() {
+      document.getElementById('barcode-scanner-modal').style.display = 'flex';
+      document.getElementById('scan-result').style.display = 'none';
+      document.getElementById('scan-barcode').value = '';
+      startCameraScanner();
+    }
+    
+    // Start camera for QR scanning
+    async function startCameraScanner() {
+      try {
+        scannerVideo = document.getElementById('scanner-video');
+        scannerCanvas = document.getElementById('scanner-canvas');
+        scannerContext = scannerCanvas.getContext('2d', { willReadFrequently: true });
+        scannerVideo.setAttribute('playsinline', 'true');
+
+        if (!window.isSecureContext) {
+          document.getElementById('scan-status').textContent = '✗ Camera requires HTTPS or localhost';
+          document.getElementById('scan-status').style.background = 'rgba(255, 107, 0, 0.9)';
+          return;
+        }
+        
+        // Request camera access
+        scannerStream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: { ideal: 'environment' },
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          }
+        });
+
+        scannerVideo.srcObject = scannerStream;
+        await scannerVideo.play();
+        scanningActive = true;
+        lastScanAt = 0;
+
+        requestAnimationFrame(scanQrFromVideo);
+
+        document.getElementById('scan-status').textContent = '✓ Camera Ready - Point at QR code';
+        document.getElementById('scan-status').style.background = 'rgba(76, 175, 80, 0.9)';
+      } catch (error) {
+        console.error('Camera access error:', error);
+        document.getElementById('scan-status').textContent = '✗ Camera access denied';
+        document.getElementById('scan-status').style.background = 'rgba(255, 107, 0, 0.9)';
+      }
+    }
+
+    function scanQrFromVideo() {
+      if (!scanningActive || !scannerVideo || !scannerCanvas) return;
+
+      const now = performance.now();
+      if (now - lastScanAt < scanIntervalMs) {
+        requestAnimationFrame(scanQrFromVideo);
+        return;
+      }
+
+      if (scannerVideo.readyState === scannerVideo.HAVE_ENOUGH_DATA) {
+        scannerCanvas.width = scannerVideo.videoWidth;
+        scannerCanvas.height = scannerVideo.videoHeight;
+        scannerContext.drawImage(scannerVideo, 0, 0, scannerCanvas.width, scannerCanvas.height);
+
+        const imageData = scannerContext.getImageData(0, 0, scannerCanvas.width, scannerCanvas.height);
+        const result = jsQR(imageData.data, imageData.width, imageData.height, {
+          inversionAttempts: 'attemptBoth'
+        });
+
+        if (result && result.data) {
+          handleDetectedBarcode(result.data);
+          return;
+        }
+      }
+
+      lastScanAt = now;
+      requestAnimationFrame(scanQrFromVideo);
+    }
+    
+    // Handle detected barcode
+    function handleDetectedBarcode(barcode) {
+      if (!barcode) return;
+      
+      scanningActive = false;
+      document.getElementById('scan-barcode').value = barcode;
+      document.getElementById('scan-status').textContent = `✓ Detected: ${barcode}`;
+      document.getElementById('scan-status').style.background = 'rgba(76, 175, 80, 0.9)';
+      
+      // Auto-process after short delay
+      setTimeout(() => {
+        processScan();
+      }, 500);
+    }
+    
+    // Close barcode scanner
+    function closeBarcodeScanner() {
+      scanningActive = false;
+      
+      // Stop camera
+      if (scannerStream) {
+        scannerStream.getTracks().forEach(track => track.stop());
+        scannerStream = null;
+      }
+      
+      document.getElementById('barcode-scanner-modal').style.display = 'none';
+      document.getElementById('scan-barcode').value = '';
+      document.getElementById('scan-quantity').value = '1';
+      document.getElementById('scan-result').style.display = 'none';
+    }
+    
+    // Process scan
+    async function processScan() {
+      const barcode = document.getElementById('scan-barcode').value.trim();
+      const type = document.getElementById('scan-type').value;
+      const quantity = parseInt(document.getElementById('scan-quantity').value);
+      
+      if (!barcode) {
+        showScanResult('Please enter or scan a barcode', 'error');
+        return;
+      }
+      
+      try {
+        const response = await fetch(`${WAREHOUSE_API}/scan`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ barcode, type, quantity })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          showScanResult(`✓ ${type === 'IN' ? 'Inbound' : 'Outbound'}: ${data.product.name} (${quantity} units)`, 'success');
+          const suggested = getSuggestedLocationForProduct(data.product) || data.product.location;
+          showWarehousePathFromLocation(suggested, type);
+          setTimeout(() => {
+            closeBarcodeScanner();
+            loadWarehouseData();
+          }, 1500);
+        } else {
+          showScanResult(`✗ ${data.error}`, 'error');
+          scanningActive = true;
+          requestAnimationFrame(scanQrFromVideo);
+        }
+      } catch (error) {
+        showScanResult(`✗ Error: ${error.message}`, 'error');
+        scanningActive = true;
+        requestAnimationFrame(scanQrFromVideo);
+      }
+    }
+    
+    // Show scan result
+    function showScanResult(message, type) {
+      const resultDiv = document.getElementById('scan-result');
+      resultDiv.style.display = 'block';
+      resultDiv.textContent = message;
+      resultDiv.style.background = type === 'success' ? 
+        'rgba(76, 175, 80, 0.1)' : 
+        'rgba(255, 107, 0, 0.1)';
+      resultDiv.style.border = `1px solid ${type === 'success' ? 
+        'rgba(76, 175, 80, 0.3)' : 
+        'rgba(255, 107, 0, 0.3)'}`;
+      resultDiv.style.color = type === 'success' ? '#4caf50' : '#ff6b00';
+    }
+    
+    // Refresh warehouse data
+    async function refreshWarehouseData() {
+      document.getElementById('warehouse-status').textContent = '⏳ Refreshing...';
+      await loadWarehouseData();
+      document.getElementById('warehouse-status').textContent = '✅ Connected to Warehouse';
+    }
+    
+    // Optimize warehouse
+    async function optimizeWarehouse() {
+      if (!confirm('This will optimize storage locations based on demand. Continue?')) {
+        return;
+      }
+      
+      try {
+        document.getElementById('warehouse-status').textContent = '⚡ Optimizing...';
+        
+        const response = await fetch(`${WAREHOUSE_API}/products/optimize`, {
+          method: 'POST'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          showNotification(`✓ Optimized: ${data.recommendations.length} relocations suggested`);
+          await loadWarehouseData();
+          document.getElementById('warehouse-status').textContent = '✅ Connected to Warehouse';
+        } else {
+          showNotification(`✗ Optimization failed`, 'error');
+        }
+      } catch (error) {
+        console.error('Optimization error:', error);
+        showNotification(`✗ Error: ${error.message}`, 'error');
+      }
+    }
+    
+    // Show notification
+    function showNotification(message, type = 'info') {
+      console.log(`[Notification] ${message}`);
+      // You can enhance this with a toast notification UI
+      const color = type === 'warning' ? '#ffc107' : type === 'error' ? '#ff6b00' : '#4caf50';
+      const statusEl = document.getElementById('warehouse-status');
+      const originalText = statusEl.textContent;
+      statusEl.textContent = message;
+      statusEl.style.color = color;
+      setTimeout(() => {
+        statusEl.textContent = originalText;
+        statusEl.style.color = '';
+      }, 3000);
+    }
+    
+    // Show new product form (placeholder)
+    function showNewProductForm() {
+      alert('New product form - To be implemented with full form UI');
+      // You can expand this with a modal form similar to barcode scanner
+    }
+    
+    // Initialize warehouse when tab is opened
+    document.querySelectorAll(".nav-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        if (e.target.dataset.view === "warehouse") {
+          connectWarehouse();
+        }
+      });
+    });
+
+    setupWarehouseMapControls();
+    
+    connect();
+  </script>
+</body>
+</html>
